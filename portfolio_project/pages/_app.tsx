@@ -1,13 +1,16 @@
-import '../styles/globals.css'
-import { ChakraProvider } from '@chakra-ui/react'
-import Home from  "."
+/** @format */
+
+import "../styles/globals.css";
+import { ChakraProvider } from "@chakra-ui/react";
+import Home from ".";
+import Signin from "./signin";
 
 function MyApp({ Component, pageProps }) {
-  return( <ChakraProvider  >
-    {Component.authPage ?  <Component {...pageProps}/> : <Home  {...pageProps}/> }
-
-  </ChakraProvider>)
+  return (
+    <ChakraProvider>
+      <Component {...pageProps} />
+    </ChakraProvider>
+  );
 }
 
-
-export default MyApp
+export default MyApp;

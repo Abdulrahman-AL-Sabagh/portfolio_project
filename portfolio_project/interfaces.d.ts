@@ -10,4 +10,9 @@ export interface IForm {
 export interface MyInput {
   name: string;
   type: string;
+  validation: {
+    required: boolean;
+    minLength?: number;
+    pattern?:  ValidationRule<RegExp>
+  };
 }

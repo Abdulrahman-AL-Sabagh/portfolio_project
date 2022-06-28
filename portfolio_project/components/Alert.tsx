@@ -14,18 +14,30 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import Signup from "./Signup";
+import {
+  FieldValues,
+  FormProvider,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 
 const Alert: FC<{
-  submit: Function;
+  submit: SubmitHandler<FieldValues>;
   AlertBody?: ReactElement<typeof Signup>;
   title: string;
 }> = ({ AlertBody, submit, title }) => {
-  const [handler, setHandler] = useState<Function | undefined>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
+  const methods = useForm();
+  const {
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset,
+  } = methods;
   return (
     <Box>
-      <Button width={"full"} onClick={onOpen} >
+      <Button width={"full"} onClick={onOpen}>
         {title}
       </Button>
       <AlertDialog
@@ -40,25 +52,31 @@ const Alert: FC<{
         <AlertDialogContent height={"max-content"}>
           <AlertDialogHeader>Discard Changes?</AlertDialogHeader>
           <AlertDialogCloseButton />
-          <AlertDialogBody>{AlertBody}</AlertDialogBody>
-          <AlertDialogFooter>
-            <Button
-              ref={cancelRef}
-              onClick={onClose}
-              background="red.500"
-              color={"white"}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={() => submit()}
-              color={"white"}
-              background={"green.400"}
-              ml={3}
-            >
-              Submit
-            </Button>
-          </AlertDialogFooter>
+          <FormProvider {...methods}>
+            <form onSubmit={(e) => handleSubmit(submit)(e)}>
+              <AlertDialogBody>{AlertBody}</AlertDialogBody>
+              <AlertDialogFooter>
+                <Button
+                  ref={cancelRef}
+                  onClick={() => {
+                    onClose();
+                  }}
+                  background="red.500"
+                  color={"white"}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  color={"white"}
+                  background={"green.400"}
+                  ml={3}
+                >
+                  Submit
+                </Button>
+              </AlertDialogFooter>
+            </form>
+          </FormProvider>
         </AlertDialogContent>
       </AlertDialog>
     </Box>

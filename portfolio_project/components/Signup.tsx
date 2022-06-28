@@ -1,31 +1,50 @@
 /** @format */
 
-import { Flex, Input } from "@chakra-ui/react";
+import { Box, Flex, Input, Text } from "@chakra-ui/react";
 
-import React, { FC, Dispatch, SetStateAction, ChangeEvent } from "react";
-import { IForm, MyInput } from "../interfaces";
+import React, { FC } from "react";
+import { useFormContext } from "react-hook-form";
+import { MyInput } from "../interfaces";
+import { DevTool } from "@hookform/devtools";
 
-const Signup: FC<{
-  form: IForm;
-  setForm: Dispatch<SetStateAction<IForm>>;
-  handleChange(e: ChangeEvent<HTMLInputElement>): void;
-}> = ({ form, setForm, handleChange: handleChnage }) => {
+const Signup: FC = () => {
+  const {
+    register: registerSignup,
+    formState: { errors: errorsSignup },
+    control
+  } = useFormContext();
   const myInputs: MyInput[] = [
     {
       name: "name",
       type: "text",
+      validation: {
+        minLength: 3,
+        required: true,
+      },
     },
     {
       name: "email",
       type: "email",
+      validation: {
+        required: true,
+        pattern: /^(\S){3,}@([A-z]){3,}.([A-z]\S\D{1,})$/,
+      },
     },
     {
       name: "password",
       type: "password",
+      validation: {
+        required: true,
+        minLength: 3,
+      },
     },
     {
       name: "confirmPassword",
       type: "password",
+      validation: {
+        required: true,
+        minLength: 3,
+      },
     },
   ];
 
@@ -37,19 +56,33 @@ const Signup: FC<{
       direction="column"
       width={"full"}
     >
-      {myInputs.map(({ name, type }) => (
-        <Input
-          key={name}
-          placeholder={name}
-          name={name}
-          type={type}
-          size={"lg"}
-          margin="5px"
-          variant={"flushed"}
-          isRequired
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChnage(e)}
-        />
+      {myInputs.map(({ name, type, validation }) => (
+        <Box key={name}>
+          <Input
+            placeholder={name}
+            {...registerSignup(name, validation)}
+            type={type}
+            size={"lg"}
+            margin="5px"
+            variant={"flushed"}
+            isRequired
+          />
+          {errorsSignup[name]?.type === "required" && (
+            <Text color={"red.400"}>This field is required</Text>
+          )}
+
+          {errorsSignup[name]?.type === "minLength" && (
+            <Text color={"red.400"}>
+              {name} must contain {validation.minLength} characters
+            </Text>
+          )}
+
+          {errorsSignup[name]?.type === "pattern" && (
+            <Text color={"red.400"}>Not a real {name}</Text>
+          )}
+        </Box>
       ))}
+      <DevTool control={control}/>
     </Flex>
   );
 };
