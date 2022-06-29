@@ -6,12 +6,17 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.ACCESS_TOKEN;
+  const token = request.cookies.get("ACCESS_TOKEN");
+
   console.log(token);
-  console.log(request.nextUrl.pathname)
   const url = new URL("/signin", request.url);
-  return !token ? NextResponse.rewrite(url) : NextResponse.next();
+  if (token && request.nextUrl.pathname === "/signin") {
+    return NextResponse.rewrite(new URL("/", request.url));
+  }
+  if (!token) {
+    return !token && NextResponse.rewrite(url);
+  }
 }
 export const config = {
-  matcher: ["/"],
+  matcher: ["/", "/signin"],
 };

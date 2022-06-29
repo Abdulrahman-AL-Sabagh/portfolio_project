@@ -21,9 +21,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       {
         name: user.name,
         email: user.email,
-        password: user.password,
+
       },
-      "secret",
+      process.env.TOKEN,
       { expiresIn: "2h" }
     );
     res.setHeader(

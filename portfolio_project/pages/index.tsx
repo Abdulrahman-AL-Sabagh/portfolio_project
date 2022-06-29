@@ -1,8 +1,12 @@
 /** @format */
-import jwt from "jsonwebtoken";
+import { url } from "inspector";
+import jwt, { verify } from "jsonwebtoken";
 import { GetServerSideProps } from "next";
-const Home = () => {
-  return <div> Hello  </div>;
+import { NextRequest, NextResponse } from "next/server";
+const Home = ({ token }) => {
+  const {name,email} = verify(token.ACCESS_TOKEN,process.env.TOKEN)
+  console.log(verify(token.ACCESS_TOKEN,process.env.TOKEN));
+  return <div>Hello {name}</div>;
 };
 export default Home;
 
