@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.ACCESS_TOKEN;
   console.log(token);
   console.log(request.nextUrl.pathname)
-  const url = new URL("/", request.url);
+  const url = new URL("/signin", request.url);
   return !token ? NextResponse.rewrite(url) : NextResponse.next();
 }
 export const config = {
