@@ -1,12 +1,20 @@
 /** @format */
 import { url } from "inspector";
-import jwt, { verify } from "jsonwebtoken";
+import jwt, { Secret, verify } from "jsonwebtoken";
 import { GetServerSideProps } from "next";
 import { NextRequest, NextResponse } from "next/server";
-const Home = ({ token }) => {
-  const {name,email} = verify(token.ACCESS_TOKEN,process.env.TOKEN)
-  console.log(verify(token.ACCESS_TOKEN,process.env.TOKEN));
-  return <div>Hello {name}</div>;
+import { FC } from "react";
+const Home: FC<{ token: { ACCESS_TOKEN: string } }> = ({ token }) => {
+  const { name, email } = jwt.decode(token.ACCESS_TOKEN) as {
+    name: string;
+    email: string;
+  };
+
+  return (
+    <div>
+      Hello {name} Your email is {email}
+    </div>
+  );
 };
 export default Home;
 

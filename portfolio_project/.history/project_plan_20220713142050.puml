@@ -1,0 +1,76 @@
+@startuml
+left to right direction
+class User{
+    -id:int
+    -name:string
+    -email:string
+    -password:string
+    -avatar:cloudnairyId
+    -profileBackground:image
+    -dateOfBirth:Date
+    -job:string
+    -location:string
+    -status:String
+    -aboutUser:String
+    -gender:String
+}
+
+
+
+class UserFriend{
+    -userId:int
+    -friendId:int
+
+}
+class OtherSocialMedia {
+    -userId:int
+    -link:string
+    -icon:Icon
+}
+class Post{
+    -id:int
+    -publishedAt:Date
+    -title:string
+    -image:cloudnairyId
+}
+class UserPost{
+    -userId:int
+    -postId:int
+}
+
+
+class List {
+    -id:int
+    -name:string
+    -userId:int
+}
+class Task{
+    -id:int
+    -listId:int
+    -title:int
+    -description:int
+    -deadline:int
+    -titleColor:string
+}
+class BookmarkedPost{
+
+}
+class LikedPost{
+    userId:int
+    
+
+}
+
+User "1" --> "*" List
+User "1" --> "*" UserPost
+User "1" --> "*" BookmarkedPost
+User "1" --> "*" OtherSocialMedia
+User "1" --> "*" UserFriend
+
+Post "1" --> "*" UserPost
+Post "1" --> "*" BookmarkedPost
+
+List "1" --> "*" Task
+
+
+@enduml

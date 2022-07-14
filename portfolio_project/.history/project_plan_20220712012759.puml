@@ -1,0 +1,24 @@
+@startuml 
+left to right direction
+class User{
+    -id:int
+    -name:string
+    -email:string
+    -password:string
+    -avatar:cloudnairyId
+}
+class Post{
+    -id:int
+    -publishedAt:Date
+    -
+}
+class UserPost{
+    -userId:int
+    -postId:int
+
+} 
+
+User "1" --> "*" UserPost
+Post "1" --> "*" UserPost
+
+@enduml

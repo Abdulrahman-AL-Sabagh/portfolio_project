@@ -1,0 +1,6 @@
+@startuml allinone
+left to right direction
+class User{}
+class Post{}
+class 
+@enduml

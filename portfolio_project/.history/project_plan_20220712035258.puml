@@ -1,0 +1,43 @@
+@startuml
+left to right direction
+class User{
+    -id:int
+    -name:string
+    -email:string
+    -password:string
+    -avatar:cloudnairyId
+    -profileBackground:
+}
+class Post{
+    -id:int
+    -publishedAt:Date
+    -title:string
+    -image:cloudnairyId
+}
+class UserPost{
+    -userId:int
+    -postId:int
+
+}
+
+
+class List {
+    -id:int
+    -name:string
+    -userId:int
+}
+class Task{
+    -id:int
+    -listId:int
+    -title:int
+    -description:int
+    -deadline:int
+    -titleColor:string
+}
+
+User "1" --> "*" List 
+List "1" --> "*" Task
+User "1" --> "*" UserPost
+Post "1" --> "*" UserPost
+
+@enduml

@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int        @id @default(autoincrement())
+  name              String
+  email             String     @unique
+  password          String
+  avatar            String?
+  profileBackground String?
+  dateOfBirth       DateTime?
+  job               String?
+  location          String?
+  status            String?
+  aboutUser         String?
+  gender            String?
+  lists             List[]
+  posts             UserPost[]
+
+
+}
+
+model List {
+  id         Int    @id @default(autoincrement())
+  title      String @unique
+  titleColor String
+  userId     Int
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks      Task[]
+  color      String
+}
+
+model Task {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  deadLine    DateTime?
+  titleColor  String?
+  listId      Int
+  list        List      @relation(fields: [listId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id          Int      @id @default(autoincrement())
+  publishedAt DateTime @default(now())
+  title       String
+  description String
+  image       String?
+}
+
+model UserPost {
+  userId Int
+  postId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation() 
+  @@unique([postId, userId])
+}
+
+model LikedPost {
+  userId Int
+  postId Int
+
+  @@unique([postId, userId])
+}
+
+model BookmarkedPost {
+  userId Int
+  postId Int
+
+  @@unique([postId, userId])
+}

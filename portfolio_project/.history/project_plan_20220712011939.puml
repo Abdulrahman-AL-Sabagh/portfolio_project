@@ -1,0 +1,12 @@
+@startuml allinone
+left to right direction
+class User{
+    -
+-name:string
+-email:string
+-password:string
+-avatar:cloudnairyId
+}
+class Post{}
+class 
+@enduml
