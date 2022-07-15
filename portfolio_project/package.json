@@ -18,9 +18,10 @@
     "@hookform/devtools": "^4.1.0",
     "@prisma/client": "^3.15.2",
     "@storybook/addon-jest": "^6.5.9",
-    "apollo-server": "^3.10.0",
+    "apollo-server-micro": "^3.10.0",
     "bcrypt": "^5.0.1",
     "cookie": "^0.5.0",
+    "cors": "^2.8.5",
     "eslint-plugin-jest": "^26.5.3",
     "eslint-plugin-storybook": "^0.5.12",
     "framer-motion": "^6.3.11",
@@ -28,11 +29,14 @@
     "jest": "^28.1.1",
     "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
+    "micro": "^9.3.4",
     "next": "^12.2.0",
     "next-connect": "^0.12.2",
+    "phosphor-react": "^1.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.32.2"
+    "react-hook-form": "^7.32.2",
+    "react-icons": "^4.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",
