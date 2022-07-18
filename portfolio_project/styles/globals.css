@@ -14,3 +14,8 @@ a {
 * {
   box-sizing: border-box;
 }
+button,input,textarea{
+  border: 0;
+  outline: none;
+
+}

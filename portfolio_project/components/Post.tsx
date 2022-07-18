@@ -3,7 +3,6 @@
 import { Avatar, Container, Text, Image, Flex } from "@chakra-ui/react";
 import React, { FC, useState } from "react";
 import {
-  IconWeight,
   BookBookmark,
   DotsThreeVertical,
   ThumbsUp,
@@ -13,14 +12,16 @@ import {
 import COLORS from "../color";
 import RoundedIcon from "./RoundedIcon";
 import {
-  ICONSDEFAULTSETTINGS,
-  ACTIVATEDICONSSETTINGS,
+  DEFAULT_ICONS_SETTINGS,
+  ACTIVATED_ICONS_SETTINGS,
   PostIcons,
+  myIconProps,
+  IconSettingsValuesTypes,
 } from "../icons";
 import IconWithText from "./IconWithText";
+import CommentSection from "./CommentSection";
 
-type IconWithTextTypes = typeof IconWithText.defaultProps;
-
+type icons = { [K in PostIcons]: IconSettingsValuesTypes };
 const Post: FC<{
   userName: string;
   userAvatar: string;
@@ -28,43 +29,49 @@ const Post: FC<{
   publishedAt: string;
   postContent: string;
 }> = ({ userName, userAvatar, publishedAt, postImage, postContent }) => {
-  const [iconChanges, setIconChanges] = useState({
-    bookmark: ICONSDEFAULTSETTINGS.bookmark,
-    like: ICONSDEFAULTSETTINGS.like,
-    comment: ICONSDEFAULTSETTINGS.comment,
-    share: ICONSDEFAULTSETTINGS.share,
+  const [iconChanges, setIconChanges] = useState<icons>({
+    bookmark: DEFAULT_ICONS_SETTINGS.bookmark,
+    like: DEFAULT_ICONS_SETTINGS.like,
+    comment: DEFAULT_ICONS_SETTINGS.comment,
+    share: DEFAULT_ICONS_SETTINGS.share,
+    moreDetails: DEFAULT_ICONS_SETTINGS.moreDetails,
   });
+
+  const [commentsVisibility, setCommentsVisibility] =
+    useState<"block" | "none">("none");
 
   function changeIconSettings(name: PostIcons) {
     setIconChanges((prevState) => ({
       ...prevState,
       [name]:
-        iconChanges[name] === ICONSDEFAULTSETTINGS[name]
-          ? ACTIVATEDICONSSETTINGS[name]
-          : ICONSDEFAULTSETTINGS[name],
+        iconChanges[name] === DEFAULT_ICONS_SETTINGS[name]
+          ? ACTIVATED_ICONS_SETTINGS[name]
+          : DEFAULT_ICONS_SETTINGS[name],
     }));
-    console.table(iconChanges);
   }
 
-  const interactionIcons: IconWithTextTypes[] = [
+  const interactionIcons: myIconProps[] = [
     {
       icon: ThumbsUp,
-      changeIconSettings: changeIconSettings,
-      iconName: "like",
+      handleClick: () => changeIconSettings("like"),
       weight: iconChanges.like.weight,
       color: iconChanges.like.color,
+      iconName: "like",
     },
     {
       icon: ChatText,
-      changeIconSettings: changeIconSettings,
       iconName: "comment",
+      handleClick: () => {
+        setCommentsVisibility(commentsVisibility === "none" ? "block" : "none");
+        changeIconSettings("comment");
+      },
       weight: iconChanges.comment.weight,
       color: iconChanges.comment.color,
     },
     {
       icon: ArrowBendDoubleUpLeft,
-      changeIconSettings: changeIconSettings,
       iconName: "share",
+      handleClick: () => changeIconSettings("share"),
       weight: iconChanges.share.weight,
       color: iconChanges.share.color,
     },
@@ -97,16 +104,18 @@ const Post: FC<{
         </Flex>
         <Flex justifyContent={"space-around"} gap={10}>
           <RoundedIcon
-            iconName="bookmark"
-            changeIconSettings={changeIconSettings}
-            weight={iconChanges.bookmark.weight}
+            handleClick={() => changeIconSettings("bookmark")}
+            weight={iconChanges.bookmark.weight || "light"}
             color={iconChanges.bookmark.color}
             icon={BookBookmark}
+            iconName={"like"}
           />
           <RoundedIcon
-            iconName="more details"
-            weight="bold"
+            handleClick={() => changeIconSettings("moreDetails")}
+            weight={iconChanges.moreDetails.weight}
+            color={iconChanges.moreDetails.color}
             icon={DotsThreeVertical}
+            iconName={"moreDetails"}
           />
         </Flex>
       </Flex>
@@ -115,22 +124,30 @@ const Post: FC<{
         <Text fontSize={24}>{postContent}</Text>
       </Container>
       <Image src={postImage} alt={"bla bla"} width={"full"} height={"auto"} />
+
       <Flex
-        px={20}
-        borderBottomRadius={20}
-        background={COLORS.primary}
+        flexDirection={"column"}
         width={"full"}
-        height={100}
-        max-height={100}
-        justifyContent={"space-around"}
+        height={"fit-content"}
+        background={COLORS.primary}
+        borderBottomRadius={20}
       >
-        {interactionIcons &&
-          interactionIcons.map((interactionIcon, index) => {
-            return (
-              //@ts-ignore
-              <IconWithText key={index} {...interactionIcon} />
-            );
-          })}
+        <Flex
+          height={100}
+          max-height={100}
+          justifyContent={"space-around"}
+          width={"full"}
+          px={20}
+        >
+          {interactionIcons.map((interactionIcon) => (
+            <IconWithText
+              key={interactionIcon?.iconName}
+              {...interactionIcon}
+            />
+          ))}
+        </Flex>
+
+        <CommentSection visibility={commentsVisibility} />
       </Flex>
     </Container>
   );

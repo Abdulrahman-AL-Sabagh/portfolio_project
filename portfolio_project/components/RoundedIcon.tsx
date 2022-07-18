@@ -1,24 +1,14 @@
 /** @format */
 
 import { Button, Center } from "@chakra-ui/react";
-import { IconProps, IconWeight } from "phosphor-react";
 import React, { FC } from "react";
 import COLORS from "../color";
-
-const RoundedIcon: FC<{
-  icon: React.ForwardRefExoticComponent<
-    IconProps & React.RefAttributes<SVGSVGElement>
-  >;
-
-  changeIconSettings?: Function;
-  iconName: string;
-  color?: string;
-  weight: IconWeight;
-}> = ({ icon, changeIconSettings, color, weight,iconName }) => {
+import { myIconProps } from "../icons";
+const RoundedIcon: FC<myIconProps> = ({ icon, handleClick, color, weight }) => {
   const Icon = icon;
   return (
     <Button
-      onClick={() => changeIconSettings !== undefined && changeIconSettings(iconName)}
+      onClick={() => handleClick()}
       background={"transparent"}
       color="inherit"
       outline={"none"}
@@ -32,9 +22,9 @@ const RoundedIcon: FC<{
       >
         <Icon
           size={48}
-          color={color === undefined ? COLORS.placeholder : color}
+          color={color}
           weight={weight}
-        ></Icon>
+        />
       </Center>
     </Button>
   );

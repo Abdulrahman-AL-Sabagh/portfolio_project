@@ -68,7 +68,7 @@ class LikedPost{
 }
 
 
-class Comments {
+class Comment {
     id:int
     userId:int
     postId:int
@@ -82,8 +82,8 @@ User "1" --> "*" BookmarkedPost
 User "1" --> "*" OtherSocialMedia
 User "1" --> "*" UserFriend
 User "1" --> "*"LikedPost
-User "1" --> "*" Comments
-Post "1" --> "*" Comments
+User "1" --> "*" Comment
+Post "1" --> "*" Comment
 UserFriend "*" <-- "1" User
 Post "1" --> "*" UserPost
 Post "1" --> "*" BookmarkedPost

@@ -2,19 +2,16 @@
 
 import React, { FC } from "react";
 import { Flex, Button, Text, Center } from "@chakra-ui/react";
-import { IconProps, IconWeight } from "phosphor-react";
-import COLORS from "../color";
+import { myIconProps } from "../icons";
 
-const IconWithText: FC<{
-  icon: React.ForwardRefExoticComponent<
-    IconProps & React.RefAttributes<SVGSVGElement>
-  >;
-  changeIconSettings?: Function;
-  iconName: string;
-  color?: string;
-  weight: IconWeight;
-  text?: string;
-}> = ({ icon, changeIconSettings, iconName, color, weight, text }) => {
+const IconWithText: FC<myIconProps> = ({
+  icon,
+  handleClick,
+  iconName,
+  color,
+  weight,
+  text,
+}) => {
   const Icon = icon;
   return (
     <Button
@@ -22,18 +19,16 @@ const IconWithText: FC<{
       color={"inherit"}
       outline="none"
       borderWidth={0}
-      onClick={() =>
-        changeIconSettings !== undefined && changeIconSettings(iconName)
-      }
+      onClick={() => handleClick()}
     >
       <Center>
-        <Flex direction={"column"} justifyContent="center" alignItems={"center"}>
-          <Icon
-            size={48}
-            weight={weight}
-            color={color === undefined ? COLORS.placeholder : color}
-          />
-          <Text>
+        <Flex
+          direction={"column"}
+          justifyContent="center"
+          alignItems={"center"}
+        >
+          <Icon size={48} weight={weight} color={color} />
+          <Text color={color}>
             {text} {iconName}
           </Text>
         </Flex>

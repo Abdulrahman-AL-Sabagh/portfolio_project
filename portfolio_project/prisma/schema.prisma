@@ -22,7 +22,7 @@ model User {
   gender            String?
   lists             List[]
 
-  posts                UserPost[]
+  posts                Post[]
   LikedPosts           LikedPost[]
   BookmarkedPost       BookmarkedPost[]
   friends              UserFriend[]     @relation(name: "USER_FRIEND_USERID_FK")
@@ -30,6 +30,7 @@ model User {
   comments             Comment[]
 
 
+  OtherSocialMedia OtherSocialMedia[]
 }
 
 model List {
@@ -58,19 +59,11 @@ model Post {
   title          String
   description    String
   image          String?
-  user           UserPost[]
   LikedPost      LikedPost[]
   BookmarkedPost BookmarkedPost[]
   comments       Comment[]
-}
-
-model UserPost {
-  userId Int
-  postId Int
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  @@id([postId, userId])
+  userId         Int
+  postedBy       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model LikedPost {
@@ -98,6 +91,7 @@ model OtherSocialMedia {
 
   link String
   Icon String
+  user User   @relation(fields: [userId], references: [id])
 }
 
 model UserFriend {
@@ -110,7 +104,7 @@ model UserFriend {
 }
 
 model Comment {
-  id          Int
+  id          Int @id @default(autoincrement())
   userId      Int
   postId      Int
   content     String
@@ -119,5 +113,4 @@ model Comment {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  @@id([id, userId, postId])
 }
