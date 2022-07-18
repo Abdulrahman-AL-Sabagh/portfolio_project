@@ -1,4 +1,0 @@
-@startuml allinone
-
-class User{}
-@enduml
