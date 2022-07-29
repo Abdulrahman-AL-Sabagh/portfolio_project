@@ -1,7 +1,10 @@
 /** @format */
 import { gql } from "apollo-server-micro";
+import { GraphQLScalarType, Kind } from "graphql";
 
 const typeDefs = gql`
+  scalar Date
+
   type User {
     id: Int!
     name: String!
@@ -9,22 +12,19 @@ const typeDefs = gql`
     password: String!
     avatar: String
     profileBackground: String
-    dateOfBirth: String
+    dateOfBirth: Date
     job: String
     status: String
     aboutUser: String
+    location: String
     gender: String
     posts: [Post!]!
     likes: [LikedPost!]!
     bookmarks: [BookmarkedPost!]!
-    friends: [Friend!]!
+    friends: [User!]!
     lists: [List!]!
   }
 
-  type Friend {
-    user: User!
-    friend: User!
-  }
   type List {
     id: Int!
     user: User!
@@ -42,10 +42,11 @@ const typeDefs = gql`
   }
   type Post {
     id: Int!
+    userId: Int!
     title: String
     description: String!
     image: String
-    publishedAt: String!
+    publishedAt: Date!
     publishedBy: User!
     comments: [Comment!]!
     likes: [LikedPost!]!
@@ -54,8 +55,8 @@ const typeDefs = gql`
   type Comment {
     publishedBy: User!
     post: Post!
-    publishedAt: String
-    content: String
+    publishedAt: Date!
+    content: String!
   }
   type LikedPost {
     post: Post!
@@ -70,13 +71,43 @@ const typeDefs = gql`
     hello: String
     user(id: Int!): User!
     users: [User!]!
-    friend: [Friend!]!
-    lists(id: Int!): [List]!
-    userPosts(id: Int!): [Post!]!
     posts: [Post!]!
-    comments: [Comment!]!
-    likedPosts: [LikedPost!]!
+    post(id: Int!): Post!
+  }
+  type Mutation {
+    addUser(input: AddUserInput!): User!
+  }
+
+  input AddUserInput {
+    name: String!
+    email: String!
+    password: String!
+    avatar: String
+    profileBackground: String
+    dateOfBirth: Date
+    job: String
+    status: String
+    aboutUser: String
+    location: String
+    gender: String
   }
 `;
+
+export const dateScalar = new GraphQLScalarType({
+  name: "Date",
+  description: "Date custom scalar type",
+  serialize(value: any) {
+    return new Date(value); //  outgoing
+  },
+  parseValue(value: any) {
+    return new Date(value); //  incoming
+  },
+  parseLiteral(ast: any) {
+    if (ast.kind === Kind.INT) {
+      return new Date(parseInt(ast.value, 10));
+    }
+    return null;
+  },
+});
 
 export default typeDefs;

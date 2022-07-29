@@ -1,6 +1,7 @@
 /** @format */
 
-
+import { dateScalar } from "./type-defs";
+/** @format */
 
 import list from "./resolvers/queries/list_related/list";
 import task from "./resolvers/queries/list_related/task";
@@ -11,13 +12,12 @@ import queryResolver from "./resolvers/queries/query";
 import friend from "./resolvers/queries/user_related/friend";
 import user from "./resolvers/queries/user_related/user";
 
-
 /** @format */
 
 let resolvers = {
+  Date: dateScalar,
   Query: queryResolver,
   User: user,
-  Friend: friend,
   Post: post,
   BookmarkedPost: bookmarkedPost,
   Comment: comment,

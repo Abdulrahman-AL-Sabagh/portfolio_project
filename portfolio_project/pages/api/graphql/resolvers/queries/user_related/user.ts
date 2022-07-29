@@ -12,11 +12,29 @@ const user = {
     });
   },
   friends: async ({ id }: Id) => {
-    return await prisma.userFriend.findMany({
-      where: {
-        userId: id,
+    console.log(id)
+    const friends = await prisma.userFriend.findMany({
+      select: {
+        friend: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            status: true,
+            aboutUser: true,
+            avatar: true,
+            job: true,
+            location: true,
+            gender: true,
+            dateOfBirth: true,
+            profileBackground: true,
+          },
+        },
       },
+      where: { userId: id },
     });
+    console.log(friends)
+    return friends
   },
   bookmarks: async ({ id }: Id) => {
     return await prisma.bookmarkedPost.findMany({

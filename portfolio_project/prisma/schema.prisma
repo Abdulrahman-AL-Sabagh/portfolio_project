@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id                Int       @id @default(autoincrement())
+  id                String    @id @default(uuid())
   name              String
   email             String    @unique
   password          String
@@ -20,8 +20,8 @@ model User {
   status            String?
   aboutUser         String?
   gender            String?
-  lists             List[]
 
+  lists                List[]
   posts                Post[]
   LikedPosts           LikedPost[]
   BookmarkedPost       BookmarkedPost[]
@@ -29,32 +29,31 @@ model User {
   friendsOfUserFriends UserFriend[]     @relation(name: "USER_FRIEND_FRIENDID_FK")
   comments             Comment[]
 
-
   OtherSocialMedia OtherSocialMedia[]
 }
 
 model List {
-  id         Int    @id @default(autoincrement())
+  id         String @id @default(uuid())
   title      String @unique
   titleColor String
-  userId     Int
+  userId     String
   user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   tasks      Task[]
   color      String
 }
 
 model Task {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   title       String
   description String?
   deadLine    DateTime?
   titleColor  String?
-  listId      Int
+  listId      String
   list        List      @relation(fields: [listId], references: [id], onDelete: Cascade)
 }
 
 model Post {
-  id             Int              @id @default(autoincrement())
+  id             String           @id @default(uuid())
   publishedAt    DateTime         @default(now())
   title          String
   description    String
@@ -62,31 +61,33 @@ model Post {
   LikedPost      LikedPost[]
   BookmarkedPost BookmarkedPost[]
   comments       Comment[]
-  userId         Int
+  userId         String
   postedBy       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model LikedPost {
-  userId Int
-  postId Int
+  userId String
+  postId String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
   @@id([postId, userId])
 }
 
 model BookmarkedPost {
-  userId Int
-  postId Int
+  userId String
+  postId String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
   @@id([postId, userId])
 }
 
 model OtherSocialMedia {
-  id     Int    @id @default(autoincrement())
-  userId Int
+  id     String @id @default(uuid())
+  userId String
   name   String
 
   link String
@@ -95,22 +96,22 @@ model OtherSocialMedia {
 }
 
 model UserFriend {
-  userId   Int
-  friendId Int
+  userId   String
+  friendId String
 
   user   User @relation(name: "USER_FRIEND_USERID_FK", fields: [userId], references: [id], onDelete: Cascade)
   friend User @relation(name: "USER_FRIEND_FRIENDID_FK", fields: [friendId], references: [id], onDelete: Cascade)
+
   @@id([userId, friendId])
 }
 
 model Comment {
-  id          Int @id @default(autoincrement())
-  userId      Int
-  postId      Int
+  id          String   @id @default(uuid())
+  userId      String
+  postId      String
   content     String
   publishedAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-
 }

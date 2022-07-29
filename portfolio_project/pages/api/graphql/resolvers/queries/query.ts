@@ -2,10 +2,11 @@
 import prisma from "../../../../../lib/prisma";
 import { Id } from "../../types";
 const queryResolver = {
+  hello: async () => "hello",
   users: async () => {
     return await prisma.user.findMany();
   },
-  user: async (_: any, { id }: Id, context: any) => {
+  user: async (_: any, { id }: Id) => {
     return await prisma.user.findUnique({
       where: { id },
     });
@@ -13,9 +14,11 @@ const queryResolver = {
   posts: async () => {
     return await prisma.post.findMany();
   },
-  likedPosts: async () => {
-    return await prisma.likedPost.findMany();
+  post: async (_: any, { id }: Id) => {
+    return await prisma.post.findUnique({
+      where: { id },
+    });
   },
 };
 
-export default queryResolver
+export default queryResolver;
