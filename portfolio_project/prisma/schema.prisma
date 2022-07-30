@@ -7,6 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Gender {
+  M
+  W
+}
+
+enum Status {
+  MARRIED
+  SINGLE
+}
+
 model User {
   id                String    @id @default(uuid())
   name              String
@@ -14,12 +24,12 @@ model User {
   password          String
   avatar            String?
   profileBackground String?
-  dateOfBirth       DateTime?
+  birthday          DateTime? @map("birthday")
   job               String?
   location          String?
-  status            String?
+  status            Status?
   aboutUser         String?
-  gender            String?
+  gender            Gender?
 
   lists                List[]
   posts                Post[]

@@ -5,20 +5,20 @@ import { vEmptyString, vOptionalString } from "./../../../../lib/validators";
 /** @format */
 
 import { uuid } from "uuidv4";
-import User from "../User";
 import Task from "./Task";
+import { List } from "@prisma/client";
 
-export default class List {
+export default class ListEntity {
   private readonly _id: string;
-  private readonly _user: User;
+  private readonly _userId: string;
   private _title: string;
-  private _titleColor?: string;
-  private _color?: string;
+  private _titleColor: string | null;
+  private _color: string | null;
   private readonly _tasks: Task[];
 
-  constructor(user: User, title: string, titleColor?: string, color?: string) {
+  constructor({ userId, title, titleColor, color }: List) {
     this._id = uuid();
-    this._user = user;
+    this._userId = userId;
     this._title = title;
     this._titleColor = titleColor;
     this._color = color;
@@ -32,29 +32,29 @@ export default class List {
   public get id(): string {
     return this._id;
   }
-  public get user(): User {
-    return this._user;
+  public get userId(): string {
+    return this._userId;
   }
   public get title(): string {
     return this._title;
   }
 
-  public get titleColor(): string | undefined {
+  public get titleColor(): string | null {
     return this._titleColor;
   }
 
-  public get color(): string | undefined {
+  public get color(): string | null {
     return this._color;
   }
 
   public set title(value: string) {
     this._title = vEmptyString.parse(value);
   }
-  public set titleColor(value: string | undefined) {
+  public set titleColor(value: string | null) {
     this._titleColor = vOptionalString.parse(value);
   }
 
-  public set color(value: string | undefined) {
+  public set color(value: string | null) {
     this._color = vOptionalString.parse(value);
   }
 }

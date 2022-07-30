@@ -1,11 +1,10 @@
+import { LikedPost } from '@prisma/client';
 /** @format */
 
-import Post from "./Post";
-import User from "../User";
-import PostReaction from "./PostReactions";
+import PostReactionEntity from "./PostReactions";
 
-export default class Like extends PostReaction {
-  constructor(user: User, post: Post) {
-    super(user, post);
+export default class LikeEntity extends PostReactionEntity {
+  constructor(like: LikedPost) {
+    super(like);
   }
 }

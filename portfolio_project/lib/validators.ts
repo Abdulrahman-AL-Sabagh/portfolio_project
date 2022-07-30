@@ -8,19 +8,19 @@ export const vEmptyString = z
   .trim()
   .min(1);
 
-export const vOptionalString = vEmptyString.optional();
+export const vOptionalString = vEmptyString.nullable();
 
 export const vDeadline = z
   .date()
   .min(new Date(new Date().setMinutes(new Date().getMinutes() + 10)))
-  .optional();
+  .nullable();
 
 export const vBirthday = z
   .date()
   .max(new Date(new Date().setFullYear(new Date().getFullYear() - 6)))
-  .optional();
+  .nullable();
 export const vName = z.string().trim().min(3);
-export const vOptionalName = vName.optional();
+export const vOptionalName = vName.nullable();
 export const vUrl = z
   .string({
     invalid_type_error: "This is not a url",
@@ -30,5 +30,6 @@ export const vUrl = z
 //TODO Add error messages
 export const vPassword = z.string().trim().min(8);
 export const vEmail = z.string().trim().email();
+export const vId = z.string().uuid({message: "Invalid Id"});
 
 //TODO TEST PASSWORD AND EMAIL

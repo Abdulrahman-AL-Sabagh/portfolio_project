@@ -1,29 +1,29 @@
 /** @format */
 
 import { vOptionalString, vEmptyString } from "./../../../../lib/validators";
-import User from "../User";
-import Bookmark from "./Bookmark";
-import Like from "./Like";
-import PostComment from "./PostComment";
-import { uuid } from "uuidv4";
+import BookmarkEntity from "./Bookmark";
+import LikeEntity from "./Like";
+import CommentEntity from "./PostComment";
+import { Post } from "@prisma/client";
 
-export default class Post {
+export default class PostEntity {
   readonly #id: string;
-  readonly #user: User;
-  #title?: string;
+  readonly #userId: string | null;
+  #title: string | null;
   #description: string;
-  #image?: string;
-  #likes: Like[];
-  readonly #bookmarks: Bookmark[];
-  readonly #comments: PostComment[];
+  #publishedAt: Date | null;
+  #image: string | null;
+  #likes: LikeEntity[];
+  readonly #bookmarks: BookmarkEntity[];
+  readonly #comments: CommentEntity[];
 
-  constructor(user: User, description: string, title?: string, image?: string) {
-    this.#id = uuid();
-    this.#user = user;
+  constructor({ id, userId, title, description, image, publishedAt }: Post) {
+    this.#id = id;
+    this.#userId = userId;
     this.#title = title;
     this.#description = description;
     this.#image = image;
-
+    this.#publishedAt = publishedAt ?? new Date(Date.now());
     this.#likes = [];
     this.#bookmarks = [];
     this.#comments = [];
@@ -33,11 +33,11 @@ export default class Post {
     return this.#id;
   }
 
-  public get user(): User {
-    return this.#user;
+  public get user(): string | null {
+    return this.#userId;
   }
 
-  public get title(): string | undefined {
+  public get title(): string | null {
     return this.#title;
   }
 
@@ -45,26 +45,26 @@ export default class Post {
     return this.#description;
   }
 
-  public get image(): string | undefined {
+  public get image(): string | null {
     return this.#image;
   }
 
-  public get likes(): Like[] {
+  public get likes(): LikeEntity[] {
     return this.#likes;
   }
 
-  public get bookmarks(): Bookmark[] {
+  public get bookmarks(): BookmarkEntity[] {
     return this.#bookmarks;
   }
 
-  public get comments(): PostComment[] {
+  public get comments(): CommentEntity[] {
     return this.#comments;
   }
 
-  public set title(title: string | undefined) {
+  public set title(title: string | null) {
     this.#title = vOptionalString.parse(title);
   }
-  public set image(image: string | undefined) {
+  public set image(image: string | null) {
     this.#image = vOptionalString.parse(image);
   }
   public set description(description: string) {

@@ -1,16 +1,21 @@
 /** @format */
-import { vEmptyString } from "./../../../../lib/validators";
-import User from "../User";
-import Post from "./Post";
-import PostReaction from "./PostReactions";
 
-export default class PostComment extends PostReaction {
+/** @format */
+import { vEmptyString } from "./../../../../lib/validators";
+
+import PostReactionEntity from "./PostReactions";
+import { Comment } from "@prisma/client";
+
+export default class CommentEntity extends PostReactionEntity {
+  private readonly _id: string;
   private _content: string;
   private readonly _publishedAt: Date;
 
-  constructor(user: User, post: Post, content: string) {
-    super(user, post);
-    this._publishedAt = new Date(Date.now());
+  constructor({ userId, postId, content, publishedAt, id }: Comment) {
+    super({ userId, postId });
+
+    this._id = id;
+    this._publishedAt = publishedAt ?? new Date(Date.now());
     this._content = content;
   }
 
@@ -19,6 +24,9 @@ export default class PostComment extends PostReaction {
   }
   public get content(): string {
     return this._content;
+  }
+  public get id(): string {
+    return this._id;
   }
   public set content(value: string) {
     this._content = vEmptyString.parse(value);

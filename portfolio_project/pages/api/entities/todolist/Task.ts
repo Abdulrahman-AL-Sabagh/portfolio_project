@@ -1,50 +1,43 @@
 /** @format */
-
-import List from "./List";
+import ListEntity from "./List";
 import { uuid } from "uuidv4";
 import {
   vOptionalString,
   vEmptyString,
   vDeadline,
 } from "../../../../lib/validators";
+import { Task } from "@prisma/client";
 
-export default class Task {
+export default class TaskEntity {
   private readonly _id: string;
   private _title: string;
-  private _description?: string;
-  private _deadLine?: Date;
-  private _titleColor?: string;
-  private readonly _list: List;
-  constructor(
-    id: string,
-    title: string,
-    list: List,
-    deadLine?: Date,
-    titleColor?: string,
-    description?: string
-  ) {
+  private _description: string | null;
+  private _deadLine: Date | null;
+  private _titleColor: string | null;
+  private readonly _listId: string;
+  constructor({ id, title, listId, deadLine, titleColor, description }: Task) {
     // vId.parse(id);
     this._id = uuid();
-    this._list = list;
+    this._listId = listId;
     this._title = title;
-    this.description = description;
-    this.deadLine = deadLine;
-    this.titleColor = titleColor;
+    this._description = description ?? null;
+    this._deadLine = deadLine ?? null;
+    this._titleColor = titleColor ?? null;
   }
 
-  public get list(): List {
-    return this._list;
+  public get listId(): string {
+    return this._listId;
   }
-  
-  public get titleColor(): string | undefined {
+
+  public get titleColor(): string | null {
     return this._titleColor;
   }
 
-  public get deadLine(): Date | undefined {
+  public get deadLine(): Date | null {
     return this._deadLine;
   }
 
-  public get description(): string | undefined {
+  public get description(): string | null {
     return this._description;
   }
 
@@ -56,7 +49,7 @@ export default class Task {
     return this._id;
   }
 
-  public set description(value: string | undefined) {
+  public set description(value: string | null) {
     this._description = vOptionalString.parse(value);
   }
 
@@ -64,11 +57,11 @@ export default class Task {
     this._title = vEmptyString.parse(value);
   }
 
-  public set deadLine(value: Date | undefined) {
+  public set deadLine(value: Date | null) {
     this._deadLine = vDeadline.parse(value);
   }
 
-  public set titleColor(value: string | undefined) {
+  public set titleColor(value: string | null) {
     this._titleColor = vOptionalString.parse(value);
   }
 }

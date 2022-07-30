@@ -1,27 +1,21 @@
 /** @format */
 
-import { uuid } from "uuidv4";
-import User from "../User";
-import Post from "./Post";
+import { BookmarkedPost, LikedPost } from "@prisma/client";
+/** @format */
 
-export default class PostReaction {
-  private readonly _id: string;
-  private readonly _user: User;
-  private readonly _post: Post;
+export default class PostReactionEntity {
+  private readonly _user: string | null;
+  private readonly _post: string | null;
 
-  constructor(user: User, post: Post) {
-    this._id = uuid();
-    this._user = user;
-    this._post = post;
+  constructor({ userId, postId }: BookmarkedPost | LikedPost) {
+    this._user = userId;
+    this._post = postId;
   }
 
-  public get id(): string {
-    return this._id;
-  }
-  public get user(): User {
+  public get user(): string | null {
     return this._user;
   }
-  public get post(): Post {
+  public get post(): string | null {
     return this._post;
   }
 }

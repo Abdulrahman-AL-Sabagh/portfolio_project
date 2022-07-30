@@ -1,11 +1,10 @@
 /** @format */
+import { BookmarkedPost } from "@prisma/client";
 
-import User from "../User";
-import Post from "./Post"
-import PostReaction from "./PostReactions";
+import PostReactionEntity from "./PostReactions";
 
-export default class Bookmark extends PostReaction {
-  constructor(user: User, post: Post) {
-    super( user, post);
+export default class BookmarkEntity extends PostReactionEntity {
+  constructor(bookmark: BookmarkedPost) {
+    super(bookmark);
   }
 }
