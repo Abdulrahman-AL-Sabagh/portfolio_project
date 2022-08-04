@@ -2,11 +2,11 @@
 
 import { vId } from "../../../../lib/validators";
 import UserEntity from "../../entities/User";
-import { UserRepoFunctions } from "../repo-types";
+import { Context } from "../prismaContext";
 
 const findOne = async (
   id: string,
-  prisma: UserRepoFunctions
+  ctx: Context
 ): Promise<UserEntity | null> => {
   try {
     vId.parse(id);
@@ -14,7 +14,7 @@ const findOne = async (
     throw error;
   }
 
-  const user = await prisma.findUnique({
+  const user = await ctx.prisma.user.findUnique({
     where: { id },
   });
   if (!user) return null;

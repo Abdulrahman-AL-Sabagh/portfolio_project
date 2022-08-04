@@ -1,5 +1,8 @@
 /** @format */
 
+import { vOptionalString } from "./../../../lib/validators";
+/** @format */
+
 import {
   vName,
   vUrl,
@@ -7,7 +10,7 @@ import {
   vOptionalName,
   vPassword,
   vEmail,
-  vEmptyString,
+  vId,
 } from "./../../../lib/validators";
 
 import ListEntity from "./todolist/List";
@@ -15,22 +18,21 @@ import PostEntity from "./post/Post";
 import LikeEntity from "./post/Like";
 import BookmarkEntity from "./post/Bookmark";
 import CommentEntity from "./post/PostComment";
-import { User,Gender,Status } from "@prisma/client";
-
+import { User, Gender, Status } from "@prisma/client";
 
 export default class UserEntity {
   private readonly _id: string;
-  private _name: string;
-  private _email: string;
-  private _password: string;
-  private _avatar: string | null;
-  private _profileBackground: string | null;
-  private _birthday: Date | null;
-  private _job: string | null;
-  private _location: string | null;
-  private _status: Status | null;
-  private _gender: Gender | null;
-  private _aboutUser: string | null;
+  private _name: string = "";
+  private _email: string = "";
+  private _password: string = "";
+  private _avatar: string | null = null;
+  private _profileBackground: string | null = null;
+  private _birthday: Date | null = null;
+  private _job: string | null = null;
+  private _location: string | null = null;
+  private _status: Status | null = null;
+  private _gender: Gender | null = null;
+  private _aboutUser: string | null = null;
 
   private readonly _lists: ListEntity[];
   private readonly _posts: PostEntity[];
@@ -55,18 +57,18 @@ export default class UserEntity {
       aboutUser,
     } = user;
 
-    this._id = id;
-    this._name = name;
-    this._email = email;
-    this._password = password;
-    this._avatar = avatar;
-    this._profileBackground = profileBackground;
-    this._birthday = birthday;
-    this._job = job;
-    this._location = location;
-    this._status = status;
-    this._gender = gender;
-    this._aboutUser = aboutUser;
+    this._id = vId.parse(id);
+    this.name = name;
+    this.email = email;
+    this.password = password;
+    this.avatar = avatar;
+    this.profileBackground = profileBackground;
+    this.birthday = birthday;
+    this.job = job;
+    this.location = location;
+    this.status = status;
+    this.gender = gender;
+    this.aboutUser = aboutUser;
 
     this._lists = [];
     this._posts = [];
@@ -139,7 +141,7 @@ export default class UserEntity {
     this._email = vEmail.parse(value);
   }
   public set password(value: string) {
-    this.password = vPassword.parse(value);
+    this._password = vPassword.parse(value);
   }
   public set avatar(value: string | null) {
     this._avatar = vUrl.parse(value);
@@ -163,6 +165,6 @@ export default class UserEntity {
     this._gender = value;
   }
   public set aboutUser(value: string | null) {
-    this._aboutUser = vEmptyString.parse(value);
+    this._aboutUser = vOptionalString.parse(value);
   }
 }

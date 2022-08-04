@@ -1,8 +1,8 @@
 /** @format */
 
-import { UserRepoFunctions } from "./../repo-types.d";
+import { UserDelegate } from "./../repo-types.d";
 
-const findMany = async (prisma: UserRepoFunctions) => {
+const findMany = async (prisma: UserDelegate) => {
   return await prisma.findMany();
 };
 

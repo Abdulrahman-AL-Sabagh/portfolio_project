@@ -53,7 +53,7 @@ model Task {
 model Post {
   id             String           @id @default(uuid())
   publishedAt    DateTime         @default(now())
-  title          String
+  title          String?
   description    String
   image          String?
   userId         String

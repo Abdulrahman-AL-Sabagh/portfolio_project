@@ -1,17 +1,14 @@
 /** @format */
 
+import { Context } from "./../prismaContext";
+/** @format */
+
 import { User } from "@prisma/client";
 import UserEntity from "../../entities/User";
-import { UserRepoFunctions } from "../repo-types";
 import { allUserData } from "../UserRepository";
 
-
-
-const create = async (
-  userData: User,
-  prisma: UserRepoFunctions
-): Promise<UserEntity> => {
-  const emailExists: User | null = await prisma.findUnique({
+const create = async (userData: User , ctx: Context): Promise<UserEntity> => {
+  const emailExists: User | null = await ctx.prisma.user.findUnique({
     where: { email: userData.email },
   });
   if (emailExists) {
@@ -20,7 +17,7 @@ const create = async (
 
   try {
     const user = new UserEntity(userData);
-    await prisma.create({
+    await ctx.prisma.user.create({
       data: allUserData(user),
     });
     return user;

@@ -1,6 +1,10 @@
 /** @format */
 
-import { vOptionalString, vEmptyString } from "./../../../../lib/validators";
+import {
+  vOptionalString,
+  vEmptyString,
+  vId,
+} from "./../../../../lib/validators";
 import BookmarkEntity from "./Bookmark";
 import LikeEntity from "./Like";
 import CommentEntity from "./PostComment";
@@ -8,21 +12,21 @@ import { Post } from "@prisma/client";
 
 export default class PostEntity {
   readonly #id: string;
-  readonly #userId: string | null;
-  #title: string | null;
-  #description: string;
-  #publishedAt: Date | null;
-  #image: string | null;
+  readonly #userId: string;
+  #title: string | null = "";
+  #description: string = "";
+  readonly #publishedAt: Date ;
+  #image: string | null = "";
   #likes: LikeEntity[];
   readonly #bookmarks: BookmarkEntity[];
   readonly #comments: CommentEntity[];
 
   constructor({ id, userId, title, description, image, publishedAt }: Post) {
-    this.#id = id;
-    this.#userId = userId;
-    this.#title = title;
-    this.#description = description;
-    this.#image = image;
+    this.#id = vId.parse(id);
+    this.#userId = vId.parse(userId);
+    this.title = title;
+    this.description = description;
+    this.image = image;
     this.#publishedAt = publishedAt ?? new Date(Date.now());
     this.#likes = [];
     this.#bookmarks = [];
@@ -33,7 +37,7 @@ export default class PostEntity {
     return this.#id;
   }
 
-  public get user(): string | null {
+  public get userId(): string {
     return this.#userId;
   }
 
@@ -47,6 +51,9 @@ export default class PostEntity {
 
   public get image(): string | null {
     return this.#image;
+  }
+  public get publishedAt(): Date  {
+    return this.#publishedAt;
   }
 
   public get likes(): LikeEntity[] {
@@ -68,6 +75,6 @@ export default class PostEntity {
     this.#image = vOptionalString.parse(image);
   }
   public set description(description: string) {
-    this.description = vEmptyString.parse(description);
+    this.#description = vEmptyString.parse(description);
   }
 }

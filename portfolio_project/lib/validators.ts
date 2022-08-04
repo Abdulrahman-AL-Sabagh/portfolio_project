@@ -6,7 +6,7 @@ export const vEmptyString = z
     required_error: "This field is required",
   })
   .trim()
-  .min(1);
+  .min(1)
 
 export const vOptionalString = vEmptyString.nullable();
 
@@ -26,10 +26,11 @@ export const vUrl = z
     invalid_type_error: "This is not a url",
   })
   .url()
-  .trim();
+  .trim()
+  .nullable();
 //TODO Add error messages
-export const vPassword = z.string().trim().min(8);
+export const vPassword = z.string().trim().min(8).max(256);
 export const vEmail = z.string().trim().email();
-export const vId = z.string().uuid({message: "Invalid Id"});
+export const vId = z.string().uuid({ message: "Invalid Id" });
 
 //TODO TEST PASSWORD AND EMAIL
