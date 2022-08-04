@@ -1,7 +1,7 @@
 /** @format */
 
 import jwt from "jsonwebtoken";
-import prisma from "../../lib/prisma";
+import prisma from "../../prisma";
 import bcrypt from "bcrypt";
 import cookie from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";

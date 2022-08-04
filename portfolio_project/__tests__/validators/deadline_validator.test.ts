@@ -13,8 +13,8 @@ describe("Deadline validator", () => {
       expect(error).toBeInstanceOf(ZodError);
     }
   });
-  it("Should not fail if undefined it is undefined", () => {
-    expect(vDeadline.parse(undefined)).toBeUndefined();
+  it("Should not fail if the given value is null", () => {
+    expect(vDeadline.parse(null)).toBeNull();
   });
 
   it("Should pass if the deadline is in or after 10 minutes from now", () => {

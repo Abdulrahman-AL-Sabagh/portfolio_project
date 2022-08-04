@@ -27,7 +27,7 @@ describe("Name validator", () => {
       expect(error).toBeInstanceOf(ZodError);
     }
   });
-  it("Should pass if undefined is given and the optional name function is used", () => {
-    expect(vOptionalName.parse(undefined)).toBeUndefined();
+  it("Should pass if null is given and the optional name function is used", () => {
+    expect(vOptionalName.parse(null)).toBeNull();
   });
 });

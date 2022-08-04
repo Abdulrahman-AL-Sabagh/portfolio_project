@@ -7,7 +7,7 @@ describe("URL validator", () => {
     const url = vUrl.parse("https://www.google.at/");
     expect(url).toBe("https://www.google.at/");
   });
-
+  
   it("Should not pass if the given value is not a url", () => {
     try {
       vUrl.parse("name");

@@ -15,8 +15,8 @@ describe("Birthday Validator", () => {
     }
   });
 
-  it("Should pass if the given value is undefined", () => {
-    expect(vBirthday.parse(undefined)).toBeUndefined();
+  it("Should pass if the given value is null", () => {
+    expect(vBirthday.parse(null)).toBeNull();
   });
 
   it("Should pass if the years of the given value are greater or equal to seven", () => {

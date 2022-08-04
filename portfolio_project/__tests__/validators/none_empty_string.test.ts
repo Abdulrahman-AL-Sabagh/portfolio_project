@@ -25,8 +25,8 @@ describe("None emptys string tests", () => {
     }
   });
 
-  it("Should pass if the assigned value is undefined and the optional function is given", () => {
-    expect(vOptionalString.parse(undefined)).toBeUndefined();
+  it("Should pass if the assigned value is null and the optional function is given", () => {
+    expect(vOptionalString.parse(null)).toBeNull();
   });
 });
 

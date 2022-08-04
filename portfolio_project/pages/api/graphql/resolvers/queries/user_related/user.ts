@@ -1,6 +1,6 @@
 /** @format */
 
-import prisma from "../../../../../../lib/prisma";
+import prisma from "../../../../../../prisma";
 
 import { Id } from "../../../types";
 const user = {
