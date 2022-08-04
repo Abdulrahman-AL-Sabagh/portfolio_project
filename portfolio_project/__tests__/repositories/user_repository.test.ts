@@ -1,7 +1,6 @@
 /** @format */
 
-import { v4 } from "uuid";
-import UserEntity from "../../pages/api/entities/User";
+import { userToAdd } from "../../test_data";
 import UserRepository from "../../pages/api/repositories/UserRepository";
 import {
   MockContext,
@@ -12,20 +11,6 @@ import {
 
 let mockCtx: MockContext;
 let ctx: Context;
-const userToAdd = new UserEntity({
-  name: "Abudi",
-  password: "abcdefghijklmnopqrstuvwxyz",
-  email: "test400@user.com",
-  aboutUser: null,
-  id: v4(),
-  avatar: null,
-  birthday: null,
-  gender: "M",
-  job: null,
-  location: null,
-  profileBackground: null,
-  status: null,
-});
 
 //let user: UserEntity;
 

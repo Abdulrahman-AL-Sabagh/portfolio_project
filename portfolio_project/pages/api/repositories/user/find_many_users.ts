@@ -1,9 +1,10 @@
 /** @format */
 
-import { UserDelegate } from "./../repo-types.d";
+import { Context } from "./../prismaContext";
+/** @format */
 
-const findMany = async (prisma: UserDelegate) => {
-  return await prisma.findMany();
+const findMany = async (ctx: Context) => {
+  return await ctx.prisma.user.findMany();
 };
 
 export default findMany;
