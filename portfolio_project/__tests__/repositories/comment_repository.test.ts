@@ -22,7 +22,7 @@ const commentParam = {
 const commentToAdd = new CommentEntity(commentParam);
 
 describe("Comment to add", () => {
-  beforeAll(() => {
+  beforeEach(() => {
     mockCtx = createMockContext();
     ctx = mockCtx as unknown as Context;
   });

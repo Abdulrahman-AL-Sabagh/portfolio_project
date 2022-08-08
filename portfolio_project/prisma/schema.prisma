@@ -14,15 +14,15 @@ model User {
   password             String
   avatar               String?
   aboutUser            String?
-  job                  String? 
+  job                  String?
   location             String?
   profileBackground    String?
   birthday             DateTime?
   gender               Gender?
   status               Status?
-  BookmarkedPost       BookmarkedPost[]
+  BookmarkedPost       Bookmark[]
   comments             Comment[]
-  LikedPosts           LikedPost[]
+  LikedPosts           Like[]
   lists                List[]
   OtherSocialMedia     OtherSocialMedia[]
   posts                Post[]
@@ -33,9 +33,9 @@ model User {
 model List {
   id         String @id @default(uuid())
   title      String @unique
-  titleColor String
+  titleColor String?
   userId     String
-  color      String
+  color      String?
   user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   tasks      Task[]
 }
@@ -58,23 +58,23 @@ model Post {
   image          String?
   userId         String
   postedBy       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  BookmarkedPost BookmarkedPost[]
+  BookmarkedPost Bookmark[]
   comments       Comment[]
-  LikedPost      LikedPost[]
+  LikedPost      Like[]
 }
 
-model LikedPost {
-  userId String
-  postId String
+model Like {
+  userId String @unique
+  postId String @unique
   post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([postId, userId])
 }
 
-model BookmarkedPost {
-  userId String
-  postId String
+model Bookmark {
+  userId String @unique
+  postId String @unique
   post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 

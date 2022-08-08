@@ -3,9 +3,8 @@
 import { Context } from "../prismaContext";
 import { Comment } from "@prisma/client";
 import CommentEntity from "../../entities/post/PostComment";
-import UserRepository from "../UserRepository";
-import PostRepository from "../PostRepository";
 import { allCommentData } from "../CommentRepository";
+import { checkIfUserAndPostExist } from "../helpers";
 
 const create = async (
   commentData: Comment,
@@ -13,11 +12,7 @@ const create = async (
 ): Promise<CommentEntity> => {
   const { userId, postId } = commentData;
 
-  const user = UserRepository.findOne(userId, ctx);
-  const post = PostRepository.findOne(postId, ctx);
-
-  if (!user) throw new Error("User not found");
-  if (!post) throw new Error("Post not found");
+  await checkIfUserAndPostExist(userId, postId, ctx);
   const comment = await ctx.prisma.comment.create({
     data: allCommentData(commentData),
   });
