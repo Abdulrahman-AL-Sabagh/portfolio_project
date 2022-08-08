@@ -1,6 +1,6 @@
 import CommentEntity from "@entities/post/PostComment";
+import { Context } from "@repos/prismaContext";
 import findOne from "./find_one_comment";
-import { Context } from "../prismaContext";
 
 const deleteOne = async (id: string, ctx: Context): Promise<CommentEntity> => {
     const comment = await findOne(id, ctx);

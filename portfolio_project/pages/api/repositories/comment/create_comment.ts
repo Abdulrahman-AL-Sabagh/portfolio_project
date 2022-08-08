@@ -2,9 +2,9 @@
 
 import CommentEntity from "@entities/post/PostComment";
 import { Comment } from "@prisma/client";
-import { Context } from "../prismaContext";
-import { allCommentData } from "../CommentRepository";
-import { checkIfUserAndPostExist } from "../helpers";
+import { Context } from "@repos/prismaContext";
+import { allCommentData } from "@repos/CommentRepository";
+import { checkIfUserAndPostExist } from "@repos/helpers";
 
 const create = async (
   commentData: Comment,

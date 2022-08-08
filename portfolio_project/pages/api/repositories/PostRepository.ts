@@ -7,7 +7,6 @@ import findOne from "./post/find_one_post";
 import update from "./post/update_post";
 import deleteOne from "./post/delete_post";
 
-
 export const allPostData = (postData: Post) => {
   try {
     const validatedPostData = new PostEntity(postData);
@@ -24,8 +23,6 @@ export const allPostData = (postData: Post) => {
     throw error;
   }
 };
-
-
 
 const PostRepository = {
   create,
