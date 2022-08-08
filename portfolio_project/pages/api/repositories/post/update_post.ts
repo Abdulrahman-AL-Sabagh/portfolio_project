@@ -1,10 +1,10 @@
 /** @format */
 
 import { Post } from "@prisma/client";
-import PostEntity from "../../entities/post/Post";
+import PostEntity from "@entities/post/Post";
+import findOne from "./find_one_post";
 import { allPostData } from "../PostRepository";
 import { Context } from "../prismaContext";
-import findOne from "./find_one_post";
 
 const update = async (post: Post, ctx: Context): Promise<PostEntity> => {
   const foundPost = await findOne(post.id, ctx);

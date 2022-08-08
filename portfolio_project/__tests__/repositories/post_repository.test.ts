@@ -1,11 +1,7 @@
 /** @format */
 
-import PostRepository from "../../pages/api/repositories/PostRepository";
-import {
-  MockContext,
-  Context,
-  createMockContext,
-} from "../../pages/api/repositories/prismaContext";
+import PostRepository from "@repos/PostRepository";
+import { MockContext, Context, createMockContext } from "@repos/prismaContext";
 import { userToAdd, postToAdd } from "../../test_data";
 
 let mockCtx: MockContext;

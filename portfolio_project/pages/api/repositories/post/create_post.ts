@@ -1,5 +1,5 @@
 import { Post } from "@prisma/client";
-import PostEntity from "../../entities/post/Post";
+import PostEntity from "@entities/post/Post";
 import { allPostData } from "../PostRepository";
 import { Context } from "../prismaContext";
 import UserRepository from "../UserRepository";

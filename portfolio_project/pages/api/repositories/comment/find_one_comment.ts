@@ -1,6 +1,6 @@
-import { vId } from "../../../../lib/validators";
-import CommentEntity from "../../entities/post/PostComment";
-import { Context } from "../prismaContext";
+import { vId } from "@lib/validators";
+import CommentEntity from "@entities/post/PostComment";
+import { Context } from "@repos/prismaContext";
 
 const findOne = async (
     id: string,

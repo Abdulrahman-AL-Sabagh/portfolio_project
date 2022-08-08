@@ -3,7 +3,7 @@
 import { ZodError } from "zod";
 /** @format */
 
-import { vName, vOptionalName } from "./../../lib/validators";
+import { vName, vOptionalName } from "@lib/validators";
 
 describe("Name validator", () => {
   it("Should throw an error if an empty value is given", () => {

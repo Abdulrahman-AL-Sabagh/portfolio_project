@@ -1,6 +1,6 @@
 /** @format */
 import { Bookmark } from "@prisma/client";
-import { vId } from "../../../../lib/validators";
+import { vId } from "@lib/validators";
 
 export default class BookmarkEntity {
   private readonly _userId: string;

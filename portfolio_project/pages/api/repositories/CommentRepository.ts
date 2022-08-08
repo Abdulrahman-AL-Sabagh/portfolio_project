@@ -1,6 +1,6 @@
 /** @format */
 
-import CommentEntity from "../entities/post/PostComment";
+import CommentEntity from "@entities/post/PostComment";
 import { Comment } from "@prisma/client";
 import findOne from "./comment/find_one_comment";
 import create from "./comment/create_comment";

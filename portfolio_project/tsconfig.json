@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@entities/*": ["pages/api/entities/*"],
+      "@repos/*":["pages/api/repositories/*"],
+      "@lib/*":["lib/*"]
+    },
     "target": "ES6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

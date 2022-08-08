@@ -1,7 +1,7 @@
 /** @format */
 
 import { ZodError } from "zod";
-import { vEmail } from "../../lib/validators";
+import { vEmail } from "@lib/validators";
 
 describe("Email validator", () => {
   it("Should throw an Error if email is empty", () => {

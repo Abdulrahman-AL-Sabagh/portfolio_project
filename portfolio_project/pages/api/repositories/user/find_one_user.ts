@@ -1,7 +1,7 @@
 /** @format */
 
-import { vId } from "../../../../lib/validators";
-import UserEntity from "../../entities/User";
+import { vId } from "@lib/validators";
+import UserEntity from "@entities/User";
 import { Context } from "../prismaContext";
 
 const findOne = async (

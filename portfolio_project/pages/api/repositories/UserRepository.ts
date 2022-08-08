@@ -1,13 +1,13 @@
 /** @format */
 
+import { hashSync } from "bcrypt";
 import { User } from "@prisma/client";
+import UserEntity from "@entities/User";
 import create from "./user/create_user";
 import findOne from "./user/find_one_user";
 import update from "./user/update_user";
 import findMany from "./user/find_many_users";
 import deleteOne from "./user/delete_user";
-import UserEntity from "../entities/User";
-import { hashSync } from "bcrypt";
 
 export function allUserData(user: User) {
   let validatedUser: UserEntity;

@@ -1,8 +1,8 @@
 /** @format */
 
-import { Context } from "../prismaContext";
+import CommentEntity from "@entities/post/PostComment";
 import { Comment } from "@prisma/client";
-import CommentEntity from "../../entities/post/PostComment";
+import { Context } from "../prismaContext";
 import { allCommentData } from "../CommentRepository";
 import { checkIfUserAndPostExist } from "../helpers";
 

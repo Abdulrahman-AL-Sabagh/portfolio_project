@@ -1,8 +1,8 @@
-import CommentEntity from "../../entities/post/PostComment";
+import { Comment } from "@prisma/client";
+import CommentEntity from "@entities/post/PostComment";
 import { allCommentData } from "../CommentRepository";
 import { Context } from "../prismaContext";
 import findOne from "./find_one_comment";
-import { Comment } from "@prisma/client";
 
 const update = async (
     commentData: Comment,

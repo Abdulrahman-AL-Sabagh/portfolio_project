@@ -1,27 +1,27 @@
 /** @format */
 
-import { vEmptyString, vOptionalString } from "./../../../../lib/validators";
-
-/** @format */
-
-import { uuid } from "uuidv4";
+import {
+  vEmptyString,
+  vId,
+  vOptionalString,
+} from "@lib/validators";
 import Task from "./Task";
 import { List } from "@prisma/client";
 
 export default class ListEntity {
   private readonly _id: string;
   private readonly _userId: string;
-  private _title: string;
-  private _titleColor: string | null;
-  private _color: string | null;
+  private _title: string = "";
+  private _titleColor: string | null = "";
+  private _color: string | null = "";
   private readonly _tasks: Task[];
 
-  constructor({ userId, title, titleColor, color }: List) {
-    this._id = uuid();
-    this._userId = userId;
-    this._title = title;
-    this._titleColor = titleColor;
-    this._color = color;
+  constructor({ id, userId, title, titleColor, color }: List) {
+    this._id = vId.parse(id);
+    this._userId = vId.parse(userId);
+    this.title = title;
+    this.titleColor = titleColor;
+    this.color = color;
 
     this._tasks = [];
   }

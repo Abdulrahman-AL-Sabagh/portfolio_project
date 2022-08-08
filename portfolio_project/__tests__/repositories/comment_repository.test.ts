@@ -1,14 +1,14 @@
 /** @format */
 
-import { postToAdd, userToAdd } from "../../test_data";
 import {
   Context,
   createMockContext,
   MockContext,
-} from "../../pages/api/repositories/prismaContext";
-import CommentRepository from "../../pages/api/repositories/CommentRepository";
-import CommentEntity from "../../pages/api/entities/post/PostComment";
+} from "@repos/prismaContext";
+import CommentRepository from "@repos/CommentRepository";
+import CommentEntity from "@entities/post/PostComment";
 import { v4 } from "uuid";
+import { postToAdd, userToAdd } from "../../test_data";
 let mockCtx: MockContext;
 let ctx: Context;
 

@@ -4,11 +4,11 @@ import {
   vOptionalString,
   vEmptyString,
   vId,
-} from "./../../../../lib/validators";
+} from "@lib/validators";
+import { Post } from "@prisma/client";
 import BookmarkEntity from "./Bookmark";
 import LikeEntity from "./Like";
 import CommentEntity from "./PostComment";
-import { Post } from "@prisma/client";
 
 export default class PostEntity {
   readonly #id: string;

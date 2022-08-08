@@ -3,7 +3,7 @@
 import { ZodError } from "zod";
 /** @format */
 
-import { vBirthday } from "./../../lib/validators";
+import { vBirthday } from "@lib/validators";
 /** @format */
 
 describe("Birthday Validator", () => {

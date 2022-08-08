@@ -1,6 +1,6 @@
 /** @format */
 
-import { vOptionalString, vEmptyString } from "./../../lib/validators";
+import { vOptionalString, vEmptyString } from "@lib/validators";
 import { ZodError } from "zod";
 
 describe("None emptys string tests", () => {

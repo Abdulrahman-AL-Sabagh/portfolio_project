@@ -1,6 +1,6 @@
 /** @format */
 
-import UserEntity from "../../entities/User";
+import UserEntity from "@entities/User";
 import findOne from "./find_one_user";
 import { Context } from "../prismaContext";
 

@@ -1,12 +1,8 @@
 /** @format */
 
 import { userToAdd } from "../../test_data";
-import UserRepository from "../../pages/api/repositories/UserRepository";
-import {
-  MockContext,
-  Context,
-  createMockContext,
-} from "../../pages/api/repositories/prismaContext";
+import UserRepository from "@repos/UserRepository";
+import { MockContext, Context, createMockContext } from "@repos/prismaContext";
 ///let user: UserEntity;
 
 let mockCtx: MockContext;

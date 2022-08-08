@@ -1,7 +1,7 @@
 /** @format */
 
 import { ZodError } from "zod";
-import { vUrl } from "../../lib/validators";
+import { vUrl } from "@lib/validators";
 describe("URL validator", () => {
   it("Should pass if the given value is a url", () => {
     const url = vUrl.parse("https://www.google.at/");

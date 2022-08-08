@@ -1,7 +1,7 @@
 /** @format */
 
 import { Like } from "@prisma/client";
-import { vId } from "../../../../lib/validators";
+import { vId } from "@lib/validators";
 
 export default class LikeEntity {
   private readonly _userId: string;

@@ -1,7 +1,7 @@
 /** @format */
 
 import { Post } from "@prisma/client";
-import PostEntity from "../entities/post/Post";
+import PostEntity from "@entities/post/Post";
 import create from "./post/create_post";
 import findOne from "./post/find_one_post";
 import update from "./post/update_post";

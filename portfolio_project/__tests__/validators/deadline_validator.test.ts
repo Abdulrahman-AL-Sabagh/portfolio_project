@@ -1,7 +1,7 @@
 /** @format */
 
 import { ZodError } from "zod";
-import { vDeadline } from "../../lib/validators";
+import { vDeadline } from "@lib/validators";
 /** @format */
 
 describe("Deadline validator", () => {

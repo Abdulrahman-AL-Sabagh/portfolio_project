@@ -1,4 +1,4 @@
-import PostEntity from "../../entities/post/Post";
+import PostEntity from "@entities/post/Post";
 import { Context } from "../prismaContext";
 import findOne from "./find_one_post";
 

@@ -3,7 +3,7 @@
 import { ZodError } from "zod";
 /** @format */
 
-import { vPassword } from "./../../lib/validators";
+import { vPassword } from "@lib/validators";
 describe("Password Validator", () => {
   it("Should throw an Error if password is empty", () => {
     try {

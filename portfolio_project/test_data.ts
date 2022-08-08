@@ -1,7 +1,7 @@
 /** @format */
 
-import PostEntity from "./pages/api/entities/post/Post";
-import UserEntity from "./pages/api/entities/User";
+import PostEntity from "@entities/post/Post";
+import UserEntity from "@entities/User";
 import { v4 } from "uuid";
 export const userToAdd = new UserEntity({
   name: "Abudi",

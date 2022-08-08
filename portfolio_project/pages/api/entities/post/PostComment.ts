@@ -1,10 +1,9 @@
 /** @format */
 
 /** @format */
-import { vEmptyString, vId } from "./../../../../lib/validators";
-
-import PostReactionEntity from "./PostReactions";
+import { vEmptyString, vId } from "@lib/validators";
 import { Comment } from "@prisma/client";
+
 
 export default class CommentEntity {
   private readonly _id: string;

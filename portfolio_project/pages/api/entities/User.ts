@@ -1,6 +1,6 @@
 /** @format */
 
-import { vOptionalString } from "./../../../lib/validators";
+import { vOptionalString } from "@lib/validators";
 /** @format */
 
 import {
@@ -11,7 +11,7 @@ import {
   vPassword,
   vEmail,
   vId,
-} from "./../../../lib/validators";
+} from "@lib/validators";
 
 import ListEntity from "./todolist/List";
 import PostEntity from "./post/Post";

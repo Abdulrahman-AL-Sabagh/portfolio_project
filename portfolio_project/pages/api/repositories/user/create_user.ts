@@ -1,13 +1,10 @@
 /** @format */
-
-import { Context } from "./../prismaContext";
-/** @format */
-
 import { User } from "@prisma/client";
-import UserEntity from "../../entities/User";
+import UserEntity from "@entities/User";
+import { Context } from "../prismaContext";
 import { allUserData } from "../UserRepository";
 
-const create = async (userData: User , ctx: Context): Promise<UserEntity> => {
+const create = async (userData: User, ctx: Context): Promise<UserEntity> => {
   const emailExists: User | null = await ctx.prisma.user.findUnique({
     where: { email: userData.email },
   });

@@ -1,11 +1,10 @@
 /** @format */
-import ListEntity from "./List";
 import { uuid } from "uuidv4";
 import {
   vOptionalString,
   vEmptyString,
   vDeadline,
-} from "../../../../lib/validators";
+} from "@lib/validators";
 import { Task } from "@prisma/client";
 
 export default class TaskEntity {
