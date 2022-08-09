@@ -1,27 +1,23 @@
 /** @format */
 import { uuid } from "uuidv4";
-import {
-  vOptionalString,
-  vEmptyString,
-  vDeadline,
-} from "@lib/validators";
+import { vOptionalString, vEmptyString, vDeadline, vId } from "@lib/validators";
 import { Task } from "@prisma/client";
 
 export default class TaskEntity {
   private readonly _id: string;
   private _title: string;
-  private _description: string | null;
-  private _deadLine: Date | null;
-  private _titleColor: string | null;
+  private _description: string | null = "";
+  private _deadLine: Date | null = null;
+  private _titleColor: string | null = "";
   private readonly _listId: string;
   constructor({ id, title, listId, deadLine, titleColor, description }: Task) {
     // vId.parse(id);
-    this._id = uuid();
-    this._listId = listId;
+    this._id = vId.parse(id);
+    this._listId = vId.parse(listId);
     this._title = title;
-    this._description = description ?? null;
-    this._deadLine = deadLine ?? null;
-    this._titleColor = titleColor ?? null;
+    this.description = description;
+    this.deadLine = deadLine;
+    this.titleColor = titleColor;
   }
 
   public get listId(): string {

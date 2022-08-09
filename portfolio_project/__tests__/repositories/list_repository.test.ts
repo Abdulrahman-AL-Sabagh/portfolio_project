@@ -1,23 +1,14 @@
 /** @format */
 
 import { MockContext, createMockContext, Context } from "@repos/prismaContext";
-import { userToAdd } from "test_data";
+import { userToAdd,listToAdd } from "test_data";
 import ListRepository from "@repos/ListRepository";
-import { List } from ".prisma/client";
-import { v4 } from "uuid";
-import ListEntity from "@entities/todolist/List";
-let ctx: Context;
+
 let mockCtx: MockContext;
+let ctx:Context; 
 let mockList: any;
 
-const listData: List = {
-  id: v4(),
-  title: "Superlist",
-  color: "Magenta",
-  titleColor: "black",
-  userId: userToAdd.id,
-};
-const listToAdd = new ListEntity(listData);
+
 
 describe("List Repository", () => {
   beforeEach(() => {
@@ -30,7 +21,7 @@ describe("List Repository", () => {
     mockCtx.prisma.user.findUnique.mockResolvedValue(userToAdd);
     mockList.create.mockResolvedValue(listToAdd);
 
-    const list = await ListRepository.create(listData, ctx);
+    const list = await ListRepository.create(listToAdd, ctx);
     expect(list).toEqual(listToAdd);
   });
 

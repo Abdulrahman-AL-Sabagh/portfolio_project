@@ -1,12 +1,20 @@
 /** @format */
+import UserRepository from "@repos/UserRepository";
 import { gql } from "apollo-server-micro";
 import { GraphQLScalarType, Kind } from "graphql";
+import prisma from "@lib/prisma";
+import PostRepository from "@repos/PostRepository";
+import CommentRepository from "@repos/CommentRepository";
+import TaskRepository from "@repos/TaskRepository";
+import ListRepository from "@repos/ListRepository";
+import { Context } from "@repos/prismaContext";
+import { User } from "@prisma/client";
 
 const typeDefs = gql`
   scalar Date
 
   type User {
-    id: Int!
+    id: ID!
     name: String!
     email: String!
     password: String!
@@ -19,63 +27,65 @@ const typeDefs = gql`
     location: String
     gender: String
     posts: [Post!]!
-    likes: [LikedPost!]!
-    bookmarks: [BookmarkedPost!]!
+    likes: [Like!]!
+    bookmarks: [Bookmark!]!
     friends: [User!]!
     lists: [List!]!
   }
-
-  type List {
-    id: Int!
-    user: User!
-    title: String!
-    tasks: [Task!]!
-    color: String!
-  }
-  type Task {
-    id: Int!
-    title: String!
-    description: String!
-    deadLine: String!
-    titleColor: String!
-    list: List!
-  }
   type Post {
-    id: Int!
-    userId: Int!
+    id: ID!
+    user: User!
     title: String
     description: String!
     image: String
     publishedAt: Date!
-    publishedBy: User!
     comments: [Comment!]!
-    likes: [LikedPost!]!
-    bookmarks: [BookmarkedPost!]!
+    likes: [Like!]!
+    bookmarks: [Bookmark!]!
   }
+
+  type List {
+    id: ID!
+    user: User!
+    title: String!
+    tasks: [Task!]!
+    color: String
+    titleColor: String
+  }
+  type Task {
+    id: ID!
+    title: String!
+    deadLine: String!
+    list: List!
+    titleColor: String
+    description: String
+  }
+
   type Comment {
     publishedBy: User!
     post: Post!
     publishedAt: Date!
     content: String!
   }
-  type LikedPost {
+  type Like {
     post: Post!
     user: User!
   }
-  type BookmarkedPost {
+  type Bookmark {
     post: Post!
     user: User!
   }
 
   type Query {
-    hello: String
-    user(id: Int!): User!
-    users: [User!]!
-    posts: [Post!]!
-    post(id: Int!): Post!
+    user(id: ID!): User!
+    post(id: ID!): Post!
+    list(id: ID!): List!
+    task(id: ID!): Task!
   }
-  type Mutation {
-    addUser(input: AddUserInput!): User!
+  type Mutation{
+    addUser:(user:AddUserInput!): User
+    updateUser:(user:AddUserInput!, id: ID!): User
+    deleteUser:(id:ID!): User
   }
 
   input AddUserInput {
@@ -92,6 +102,27 @@ const typeDefs = gql`
     gender: String
   }
 `;
+
+export const resolvers = {
+  Query: {
+    user: (_: never, args: { id: string }, ctx: { db: Context }) =>
+      UserRepository.findOne(args.id, ctx.db),
+    post: (_: never, args: { id: string }, ctx: { db: Context }) =>
+      PostRepository.findOne(args.id, ctx.db),
+    task: (_: never, args: { id: string }, ctx: { db: Context }) =>
+      TaskRepository.findOne(args.id, ctx.db),
+    list: (_: never, args: { id: string }, ctx: { db: Context }) =>
+      ListRepository.findOne(args.id, ctx.db),
+  },
+  Mutation: {
+    addUser: (_: never, args: { user: User }, ctx: { db: Context }) =>
+      UserRepository.create(args.user, ctx.db),
+    updateUser: (_: never, args: { user: User }, ctx: { db: Context }) =>
+      UserRepository.update(args.user, ctx.db),
+    deleteUser: (_: never, args: { id: string }, ctx: { db: Context }) =>
+      UserRepository.deleteOne(args.id, ctx.db),
+  },
+};
 
 export const dateScalar = new GraphQLScalarType({
   name: "Date",

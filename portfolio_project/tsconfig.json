@@ -2,8 +2,8 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@entities/*": ["pages/api/entities/*"],
-      "@repos/*":["pages/api/repositories/*"],
+      "@entities/*": ["business/entities/*"],
+      "@repos/*":["business/repositories/*"],
       "@lib/*":["lib/*"]
     },
     "target": "ES6",

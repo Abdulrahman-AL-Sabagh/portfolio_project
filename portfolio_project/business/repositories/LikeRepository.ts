@@ -5,11 +5,7 @@ import LikeEntity from "@entities/post/Like";
 import { Context } from "./prismaContext";
 import { checkIfUserAndPostExist } from "./helpers";
 
-
-const update = async (
-  likeData: Like,
-  ctx: Context,
-): Promise<LikeEntity> => {
+const update = async (likeData: Like, ctx: Context): Promise<LikeEntity> => {
   let like: Like;
 
   const foundLike = await findOne(likeData, ctx);
@@ -21,17 +17,13 @@ const update = async (
   return new LikeEntity(like);
 };
 
-const findOne = async (
-  likeData: { userId: string; postId: string },
-  ctx: Context
-): Promise<Like | null> => {
+const findOne = async (likeData: Like, ctx: Context): Promise<Like | null> => {
   try {
     const { userId, postId } = likeData;
     await checkIfUserAndPostExist(userId, postId, ctx);
     const like = await ctx.prisma.like.findUnique({ where: likeData });
-    if (!like) {
-      return null;
-    }
+    if (!like) return null;
+
     return new LikeEntity(like);
   } catch (error) {
     throw error;

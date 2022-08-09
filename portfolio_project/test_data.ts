@@ -1,6 +1,7 @@
 /** @format */
 
 import PostEntity from "@entities/post/Post";
+import ListEntity from "@entities/todolist/List";
 import UserEntity from "@entities/User";
 import { v4 } from "uuid";
 export const userToAdd = new UserEntity({
@@ -24,5 +25,14 @@ export const postToAdd = new PostEntity({
   image: "https://example.com",
   publishedAt: new Date(),
   title: "A title",
+  userId: userToAdd.id,
+});
+
+
+export const listToAdd = new ListEntity({
+  id: v4(),
+  title: "Superlist",
+  color: "Magenta",
+  titleColor: "black",
   userId: userToAdd.id,
 });
