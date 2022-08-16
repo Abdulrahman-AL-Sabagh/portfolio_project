@@ -11,7 +11,7 @@ let mockCtx: MockContext;
 let ctx: Context;
 const likeData = {
   postId: postToAdd.id,
-  userId: userToAdd.id,
+  userId: userToAdd.#id,
 };
 let likeMock: any;
 let like: LikeEntity = new LikeEntity(likeData);

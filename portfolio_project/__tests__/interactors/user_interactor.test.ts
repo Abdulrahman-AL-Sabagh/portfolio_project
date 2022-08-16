@@ -1,6 +1,6 @@
 /** @format */
 
-import { userToAdd } from "../../test_data";
+import { userToAdd } from "test_data";
 import UserRepository from "@repos/UserRepository";
 import { MockContext, Context, createMockContext } from "@repos/prismaContext";
 ///let user: UserEntity;
@@ -24,7 +24,7 @@ describe("User repository", () => {
   it("Should find a user who has the provided id", async () => {
     // The return value of findUniuqe should be userToadd this time
     mockCtx.prisma.user.findUnique.mockResolvedValue(userToAdd);
-    const foundUser = await UserRepository.findOne(userToAdd.id, ctx);
+    const foundUser = await UserRepository.findOne(userToAdd.#id, ctx);
     expect(foundUser).toEqual(userToAdd);
   });
 
@@ -32,7 +32,7 @@ describe("User repository", () => {
     mockCtx.prisma.user.findUnique.mockResolvedValue(userToAdd);
     mockCtx.prisma.user.delete.mockResolvedValue(userToAdd);
 
-    const deletedUser = await UserRepository.deleteOne(userToAdd.id, ctx);
+    const deletedUser = await UserRepository.deleteOne(userToAdd.#id, ctx);
     expect(mockCtx.prisma.user.findUnique).toHaveBeenCalled();
     expect(deletedUser).toEqual(userToAdd);
   });

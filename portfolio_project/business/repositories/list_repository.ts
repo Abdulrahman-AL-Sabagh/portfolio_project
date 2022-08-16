@@ -6,7 +6,7 @@ import deleteOne from "./list/delete_one_list";
 import  findOne  from "./list/find_one_list";
 import update from "./list/update_list";
 import create from "./list/create_list"
-export const allListData = (list: List) => {
+export const validateList = (list: List) => {
   try {
     const validList = new ListEntity(list);
     const { id, title, titleColor, userId, color } = validList;

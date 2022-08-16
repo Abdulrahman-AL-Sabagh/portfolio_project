@@ -1,16 +1,9 @@
 /** @format */
 
-import { List } from "@prisma/client";
-import ListEntity from "@entities/todolist/List";
-import { allListData } from "../ListRepository";
-import { Context } from "../prismaContext";
-import UserRepository from "../UserRepository";
+import { CreateOrUpdate } from "@repos/repo_types";
 
-const create = async (listData: List, ctx: Context): Promise<ListEntity> => {
-  const userExists = UserRepository.findOne(listData.id, ctx);
-  if (!userExists) throw new Error("User not found");
-  const list = await ctx.prisma.list.create({ data: allListData(listData) });
-  return new ListEntity(list);
+const create: CreateOrUpdate<"list"> = async ({ data, ctx }) => {
+  return await ctx.prisma.list.create({ data });
 };
 
 export default create;

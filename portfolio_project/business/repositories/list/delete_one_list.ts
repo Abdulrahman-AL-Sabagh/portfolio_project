@@ -1,15 +1,9 @@
-import ListEntity from "@entities/todolist/List";
-import { Context } from "../prismaContext";
-import  findOne  from "./find_one_list";
+/** @format */
 
- const deleteOne = async (
-    id: string,
-    ctx: Context
-  ): Promise<ListEntity> => {
-    const listExists = await findOne(id, ctx);
-    if (!listExists) throw new Error("List not found");
-    const list = await ctx.prisma.list.delete({ where: { id } });
-    return new ListEntity(list);
-  };
-  
-  export default deleteOne;
+import { Delete } from "@repos/repo_types";
+
+const deleteOne: Delete<"list"> = async ({ id, ctx }) => {
+  return await ctx.prisma.list.delete({ where: { id } });
+};
+
+export default deleteOne;

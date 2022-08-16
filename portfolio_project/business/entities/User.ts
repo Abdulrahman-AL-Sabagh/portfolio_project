@@ -21,18 +21,18 @@ import CommentEntity from "./post/PostComment";
 import { User, Gender, Status } from "@prisma/client";
 
 export default class UserEntity {
-  private readonly _id: string;
-  private _name: string = "";
-  private _email: string = "";
-  private _password: string = "";
-  private _avatar: string | null = null;
-  private _profileBackground: string | null = null;
-  private _birthday: Date | null = null;
-  private _job: string | null = null;
-  private _location: string | null = null;
-  private _status: Status | null = null;
-  private _gender: Gender | null = null;
-  private _aboutUser: string | null = null;
+  readonly #id: string;
+  #name: string = "";
+  #email: string = "";
+  #password: string = "";
+  #avatar: string | null = null;
+  #profileBackground: string | null = null;
+  #birthday: Date | null = null;
+  #job: string | null = null;
+  #location: string | null = null;
+  #status: Status | null = null;
+  #gender: Gender | null = null;
+  #aboutUser: string | null = null;
 
   private readonly _lists: ListEntity[];
   private readonly _posts: PostEntity[];
@@ -57,7 +57,7 @@ export default class UserEntity {
       aboutUser,
     } = user;
 
-    this._id = vId.parse(id);
+    this.#id = vId.parse(id);
     this.name = name;
     this.email = email;
     this.password = password;
@@ -79,7 +79,7 @@ export default class UserEntity {
   }
 
   public get id(): string {
-    return this._id;
+    return this.#id;
   }
   public get lists(): ListEntity[] {
     return this._lists;
@@ -101,70 +101,70 @@ export default class UserEntity {
   }
 
   public get name(): string {
-    return this._name;
+    return this.#name;
   }
   public get email(): string {
-    return this._email;
+    return this.#email;
   }
   public get password(): string {
-    return this._password;
+    return this.#password;
   }
   public get avatar(): string | null {
-    return this._avatar;
+    return this.#avatar;
   }
   public get profileBackground(): string | null {
-    return this._profileBackground;
+    return this.#profileBackground;
   }
   public get birthday() {
-    return this._birthday;
+    return this.#birthday;
   }
   public get job(): string | null {
-    return this._job;
+    return this.#job;
   }
   public get location(): string | null {
-    return this._location;
+    return this.#location;
   }
   public get status(): Status | null {
-    return this._status;
+    return this.#status;
   }
   public get gender(): Gender | null {
-    return this._gender;
+    return this.#gender;
   }
   public get aboutUser(): string | null {
-    return this._aboutUser;
+    return this.#aboutUser;
   }
 
   public set name(value: string) {
-    this._name = vName.parse(value);
+    this.#name = vName.parse(value);
   }
   public set email(value: string) {
-    this._email = vEmail.parse(value);
+    this.#email = vEmail.parse(value);
   }
   public set password(value: string) {
-    this._password = vPassword.parse(value);
+    this.#password = vPassword.parse(value);
   }
   public set avatar(value: string | null) {
-    this._avatar = vUrl.parse(value);
+    this.#avatar = vUrl.parse(value);
   }
   public set profileBackground(value: string | null) {
-    this._profileBackground = vUrl.parse(value);
+    this.#profileBackground = vUrl.parse(value);
   }
   public set birthday(value: Date | null) {
-    this._birthday = vBirthday.parse(value);
+    this.#birthday = vBirthday.parse(value);
   }
   public set job(value: string | null) {
-    this._job = vOptionalName.parse(value);
+    this.#job = vOptionalName.parse(value);
   }
   public set location(value: string | null) {
-    this._location = vOptionalName.parse(value);
+    this.#location = vOptionalName.parse(value);
   }
   public set status(value: Status | null) {
-    this._status = value;
+    this.#status = value;
   }
   public set gender(value: Gender | null) {
-    this._gender = value;
+    this.#gender = value;
   }
   public set aboutUser(value: string | null) {
-    this._aboutUser = vOptionalString.parse(value);
+    this.#aboutUser = vOptionalString.parse(value);
   }
 }

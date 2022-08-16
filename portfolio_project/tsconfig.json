@@ -4,7 +4,8 @@
     "paths": {
       "@entities/*": ["business/entities/*"],
       "@repos/*":["business/repositories/*"],
-      "@lib/*":["lib/*"]
+      "@lib/*":["lib/*"],
+      "@interactors/*": ["business/interactors/*"]
     },
     "target": "ES6",
     "lib": ["dom", "dom.iterable", "esnext"],

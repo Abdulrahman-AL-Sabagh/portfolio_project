@@ -1,24 +1,11 @@
 /** @format */
+import { User } from "@prisma/client";
+import { Find, IdFilter, TextParams, TextSearch } from "@repos/repo_types";
 
-import { vId } from "@lib/validators";
-import UserEntity from "@entities/User";
-import { Context } from "../prismaContext";
-
-const findOne = async (
-  id: string,
-  ctx: Context
-): Promise<UserEntity | null> => {
-  try {
-    vId.parse(id);
-  } catch (error) {
-    throw error;
-  }
-
-  const user = await ctx.prisma.user.findUnique({
-    where: { id },
-  });
-  if (!user) return null;
-  return new UserEntity(user);
+export const findOneById: Find<"user"> = async ({ id, ctx }) => {
+  return await ctx.prisma.user.findUnique({ where: { id } });
 };
 
-export default findOne;
+export const findOneByEmail: TextSearch<"user"> = async ({ text, ctx }) => {
+  return await ctx.prisma.user.findUnique({ where: { email: text } });
+};

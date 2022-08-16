@@ -25,7 +25,7 @@ export const postToAdd = new PostEntity({
   image: "https://example.com",
   publishedAt: new Date(),
   title: "A title",
-  userId: userToAdd.id,
+  userId: userToAdd.#id,
 });
 
 
@@ -34,5 +34,5 @@ export const listToAdd = new ListEntity({
   title: "Superlist",
   color: "Magenta",
   titleColor: "black",
-  userId: userToAdd.id,
+  userId: userToAdd.#id,
 });

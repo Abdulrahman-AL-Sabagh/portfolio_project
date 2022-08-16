@@ -1,14 +1,13 @@
 /** @format */
-import UserRepository from "@repos/UserRepository";
+
 import { gql } from "apollo-server-micro";
 import { GraphQLScalarType, Kind } from "graphql";
-import prisma from "@lib/prisma";
-import PostRepository from "@repos/PostRepository";
-import CommentRepository from "@repos/CommentRepository";
-import TaskRepository from "@repos/TaskRepository";
-import ListRepository from "@repos/ListRepository";
 import { Context } from "@repos/prismaContext";
 import { User } from "@prisma/client";
+import userInteractor from "business/interactors/user_interactor";
+import postInteractor from "business/interactors/post_interactor";
+import taskInteractor from "business/interactors/task_interactor";
+import listInteractor from "business/interactors/list_interactor";
 
 const typeDefs = gql`
   scalar Date
@@ -105,22 +104,22 @@ const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    user: (_: never, args: { id: string }, ctx: { db: Context }) =>
-      UserRepository.findOne(args.id, ctx.db),
-    post: (_: never, args: { id: string }, ctx: { db: Context }) =>
-      PostRepository.findOne(args.id, ctx.db),
-    task: (_: never, args: { id: string }, ctx: { db: Context }) =>
-      TaskRepository.findOne(args.id, ctx.db),
-    list: (_: never, args: { id: string }, ctx: { db: Context }) =>
-      ListRepository.findOne(args.id, ctx.db),
+    user: (_: never, args: { id: string }, ctx: Context) =>
+      userInteractor.findOneById({ id: args.id, ctx }),
+    post: (_: never, args: { id: string }, ctx: Context) =>
+      postInteractor.findOneById({ id: args.id, ctx }),
+    task: (_: never, args: { id: string }, ctx: Context) =>
+      taskInteractor.findOneById({ id: args.id, ctx }),
+    list: (_: never, args: { id: string }, ctx: Context) =>
+      listInteractor.findOneById({ id: args.id, ctx }),
   },
   Mutation: {
-    addUser: (_: never, args: { user: User }, ctx: { db: Context }) =>
-      UserRepository.create(args.user, ctx.db),
-    updateUser: (_: never, args: { user: User }, ctx: { db: Context }) =>
-      UserRepository.update(args.user, ctx.db),
-    deleteUser: (_: never, args: { id: string }, ctx: { db: Context }) =>
-      UserRepository.deleteOne(args.id, ctx.db),
+    addUser: (_: never, args: { user: User }, ctx: Context) =>
+      userInteractor.create({ data: args.user, ctx }),
+    updateUser: (_: never, args: { user: User }, ctx: Context) =>
+      userInteractor.update({ data: args.user, ctx }),
+    deleteUser: (_: never, args: { id: string }, ctx: Context) =>
+      userInteractor.deleteOne({ id: args.id, ctx }),
   },
 };
 

@@ -14,7 +14,7 @@ let ctx: Context;
 
 const commentParam = {
   id: v4(),
-  userId: userToAdd.id,
+  userId: userToAdd.#id,
   postId: postToAdd.id,
   content: "Hello",
   publishedAt: new Date(),
@@ -53,7 +53,7 @@ describe("Comment to add", () => {
     const  comment = await CommentRepository.deleteOne(commentToAdd.id,ctx)
     expect(comment).toEqual(commentToAdd);
     mockCtx.prisma.comment.findUnique.mockResolvedValue(null);
-    expect(CommentRepository.findOne(userToAdd.id,ctx)).not.toEqual(commentToAdd)
+    expect(CommentRepository.findOne(userToAdd.#id,ctx)).not.toEqual(commentToAdd)
 
   });
 });

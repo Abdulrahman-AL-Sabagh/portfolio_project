@@ -1,19 +1,9 @@
-import { vId } from "@lib/validators";
-import CommentEntity from "@entities/post/PostComment";
-import { Context } from "@repos/prismaContext";
+/** @format */
 
-const findOne = async (
-    id: string,
-    ctx: Context
-  ): Promise<CommentEntity | null> => {
-    try {
-      vId.parse(id);
-    } catch (error) {
-      throw error;
-    }
-    const comment = await ctx.prisma.comment.findUnique({ where: { id } });
-    if (!comment) return null;
-    return new CommentEntity(comment);
-  };
+import { Find } from "@repos/repo_types";
 
-  export default findOne;
+const findOneById: Find<"comment"> = async ({ id, ctx }) => {
+  return await ctx.prisma.comment.findUnique({ where: { id } });
+};
+
+export default findOneById;

@@ -1,62 +1,62 @@
 /** @format */
-import { uuid } from "uuidv4";
+
 import { vOptionalString, vEmptyString, vDeadline, vId } from "@lib/validators";
 import { Task } from "@prisma/client";
 
 export default class TaskEntity {
-  private readonly _id: string;
-  private _title: string;
-  private _description: string | null = "";
-  private _deadLine: Date | null = null;
-  private _titleColor: string | null = "";
-  private readonly _listId: string;
+  readonly #id: string;
+  #title: string;
+  #description: string | null = "";
+  #deadLine: Date | null = null;
+  #titleColor: string | null = "";
+  readonly #listId: string;
   constructor({ id, title, listId, deadLine, titleColor, description }: Task) {
     // vId.parse(id);
-    this._id = vId.parse(id);
-    this._listId = vId.parse(listId);
-    this._title = title;
+    this.#id = vId.parse(id);
+    this.#listId = vId.parse(listId);
+    this.#title = title;
     this.description = description;
     this.deadLine = deadLine;
     this.titleColor = titleColor;
   }
 
   public get listId(): string {
-    return this._listId;
+    return this.#listId;
   }
 
   public get titleColor(): string | null {
-    return this._titleColor;
+    return this.#titleColor;
   }
 
   public get deadLine(): Date | null {
-    return this._deadLine;
+    return this.#deadLine;
   }
 
   public get description(): string | null {
-    return this._description;
+    return this.#description;
   }
 
   public get title(): string {
-    return this._title;
+    return this.#title;
   }
 
   public get id(): string {
-    return this._id;
+    return this.#id;
   }
 
   public set description(value: string | null) {
-    this._description = vOptionalString.parse(value);
+    this.#description = vOptionalString.parse(value);
   }
 
   public set title(value: string) {
-    this._title = vEmptyString.parse(value);
+    this.#title = vEmptyString.parse(value);
   }
 
   public set deadLine(value: Date | null) {
-    this._deadLine = vDeadline.parse(value);
+    this.#deadLine = vDeadline.parse(value);
   }
 
   public set titleColor(value: string | null) {
-    this._titleColor = vOptionalString.parse(value);
+    this.#titleColor = vOptionalString.parse(value);
   }
 }

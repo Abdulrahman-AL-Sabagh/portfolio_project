@@ -3,7 +3,7 @@
 import { Context, MockContext, createMockContext } from "@repos/prismaContext";
 import BookmarkEntity from "@entities/post/Bookmark";
 import { Bookmark } from "@prisma/client";
-import BookmarkRepository from "@repos/BookmarkRepository";
+import bookmarkInteractor from "@interactors/bookmark_interactor"
 import { postToAdd, userToAdd } from "test_data";
 
 let mockCtx: MockContext;

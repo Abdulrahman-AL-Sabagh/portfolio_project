@@ -14,7 +14,7 @@ describe("Post repository", () => {
   it("Should create a post", async () => {
     mockCtx.prisma.user.findUnique.mockResolvedValue(userToAdd);
     mockCtx.prisma.post.create.mockResolvedValue(postToAdd);
-    const post = await PostRepository.create(postToAdd, userToAdd.id, ctx);
+    const post = await PostRepository.create(postToAdd, userToAdd.#id, ctx);
     expect(ctx.prisma.user.findUnique).toHaveBeenCalled();
 
     expect(post).toEqual(postToAdd);
