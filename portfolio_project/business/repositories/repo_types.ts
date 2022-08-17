@@ -10,6 +10,7 @@ import {
   Like,
   Task,
 } from "@prisma/client";
+import { InteractivityProps } from "@chakra-ui/react";
 
 export interface IdFilter {
   id: string;
@@ -35,7 +36,7 @@ type Schemas = {
   task: Task;
 };
 
-type Interactions = { like: Like; comment: Comment; bookmark: Bookmark };
+type Interactions = { like: Like; bookmark: Bookmark };
 
 //Return values
 
@@ -48,22 +49,25 @@ type FindInteractionValue<K extends keyof Interactions> = Promise<
 >;
 //Find and Delete for all
 export type Find<K extends keyof Schemas> = (filter: IdFilter) => FindValue<K>;
-
-export type Delete<K extends keyof Schemas> = (
-  filter: IdFilter
-) => ReturnValue<K>;
+export type FindAll<K extends "user" | "post"> = (
+  ctx: Context
+) => FindManyValue<K>;
 
 export type TextSearch<K extends keyof Schemas> = (
   filter: TextParams
 ) => FindValue<K>;
 
 export type FindMany<K extends keyof Schemas> = (
-  ctx: Context
+  filter: IdFilter
 ) => FindManyValue<K>;
 
 export type TextSerachMany<K extends keyof Schemas> = (
   filter: TextParams
 ) => FindManyValue<K>;
+
+export type Delete<K extends keyof Schemas> = (
+  filter: IdFilter
+) => ReturnValue<K>;
 
 //Find and Delete for Interactions
 
@@ -74,9 +78,9 @@ export type FindInteraction<K extends keyof Interactions> = (
   filter: InteractionParams
 ) => FindInteractionValue<K>;
 
-export type FindManyInteractions<K extends keyof Interactions> = (
+export type FindManyComments<K extends "comment"> = (
   filter: InteractionParams
-) => FindInteractionValue<K>;
+) => Promise<(Schemas[K])[]>;
 
 // Schema CREATE AND UPDATE TYPE DEFS
 export type SchemaType<K extends keyof Schemas> = {
@@ -91,3 +95,5 @@ export type CreateOrUpdate<K extends keyof Schemas> = (
 //Post
 
 // Like
+
+//Find all users, posts

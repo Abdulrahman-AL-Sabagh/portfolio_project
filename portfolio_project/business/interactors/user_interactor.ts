@@ -11,8 +11,9 @@ import {
   TextSerachMany,
   CreateOrUpdate,
   FindMany,
+  FindAll,
 } from "@repos/repo_types";
-import UserRepository from "@repos/UserRepository";
+import UserRepository from "@repos/user_repository";
 import { hashSync } from "bcrypt";
 
 function validateUser(user: User) {
@@ -86,9 +87,14 @@ const checkIfUserExists: Find<"user"> = async ({ id, ctx }) => {
   return userExists;
 };
 
+const findAll:FindAll<"user">= async(ctx) => {
+  return await UserRepository.findAll(ctx);
+}
+
 const userInteractor = {
   findOneById,
   findMany,
+  findAll,
   findManyByName,
   create,
   update,

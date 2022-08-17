@@ -1,6 +1,6 @@
 /** @format */
-import { User } from "@prisma/client";
-import { Find, IdFilter, TextParams, TextSearch } from "@repos/repo_types";
+
+import { Find, TextSearch } from "@repos/repo_types";
 
 export const findOneById: Find<"user"> = async ({ id, ctx }) => {
   return await ctx.prisma.user.findUnique({ where: { id } });

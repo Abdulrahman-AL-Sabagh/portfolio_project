@@ -3,8 +3,8 @@
 import PostEntity from "@entities/post/Post";
 import { vId } from "@lib/validators";
 import { Post } from "@prisma/client";
-import PostRepository from "@repos/PostRepository";
-import { CreateOrUpdate, Delete, Find } from "@repos/repo_types";
+import PostRepository from "@repos/post_repository";
+import { CreateOrUpdate, Delete, Find, FindAll } from "@repos/repo_types";
 import userInteractor from "./user_interactor";
 
 const postNotFound = new Error("Post not found");
@@ -52,12 +52,18 @@ const checkIfPostExists: Find<"post"> = async ({ id, ctx }) => {
   if (!postExists) throw postNotFound;
   return postExists;
 };
+
+const findAll:FindAll<"post"> = async (ctx) => {
+    return await PostRepository.findAll(ctx)
+}
+
 const postInteractor = {
   create,
   findOneById,
   update,
   deleteOne,
   checkIfPostExists,
+  findAll,
 
   errors: {
     postNotFound,

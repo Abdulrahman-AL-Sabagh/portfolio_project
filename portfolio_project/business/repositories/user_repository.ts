@@ -1,15 +1,23 @@
 /** @format */
 import { findOneById, findOneByEmail } from "./user/find_one_user";
-import { findMany, findManyByName } from "./user/find_many_users";
+import {  findManyByName, findMany } from "./user/find_many_users";
 import create from "./user/create_user";
 import update from "./user/update_user";
 import deleteOne from "./user/delete_user";
+import { FindAll } from "./repo_types";
+
+const findAll: FindAll<"user"> = (ctx) => {
+  return ctx.prisma.user.findMany();
+};
+
+
 
 const UserRepository = {
   create,
   findOneById,
   update,
   deleteOne,
+  findAll,
   findMany,
   findOneByEmail,
   findManyByName,

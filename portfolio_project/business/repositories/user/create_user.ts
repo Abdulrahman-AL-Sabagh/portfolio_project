@@ -1,9 +1,8 @@
 /** @format */
-import { User } from "@prisma/client";
 import { CreateOrUpdate } from "@repos/repo_types";
 
-const create:CreateOrUpdate = async ({ data, ctx }): Promise<User> => {
-  return await ctx.prisma.user.create({ data });
+const create: CreateOrUpdate<"user"> = ({ data, ctx }) => {
+  return ctx.prisma.user.create({ data });
 };
 
 export default create;

@@ -2,7 +2,7 @@
 
 import LikeEntity from "@entities/post/Like";
 import { Context, MockContext, createMockContext } from "@repos/prismaContext";
-import LikeRepository from "@repos/LikeRepository";
+import LikeRepository from "@repos/like_repository";
 import { postToAdd, userToAdd } from "../../test_data";
 
 
@@ -11,7 +11,7 @@ let mockCtx: MockContext;
 let ctx: Context;
 const likeData = {
   postId: postToAdd.id,
-  userId: userToAdd.#id,
+  userId: userToAdd.id,
 };
 let likeMock: any;
 let like: LikeEntity = new LikeEntity(likeData);
@@ -35,7 +35,7 @@ describe("Like Repository", () => {
     );
     expect(deletedLike).toEqual(like);
     likeMock.findUnique.mockResolvedValue(null);
-    const foundLike = await LikeRepository.findOne(likeData, ctx);
+    const foundLike = await likeInteractor.findOne({data: likeData, ctx});
     expect(foundLike).toBe(null);
   });
 

@@ -3,7 +3,9 @@
 import {
   CreateOrUpdate,
   DeleteInteraction,
+  Find,
   FindInteraction,
+  FindMany,
 } from "./repo_types";
 const create: CreateOrUpdate<"bookmark"> = async ({ data, ctx }) => {
   return await ctx.prisma.bookmark.create({ data });
@@ -21,6 +23,17 @@ const findOne: FindInteraction<"bookmark"> = async ({
   ctx,
 }) => {
   return await ctx.prisma.bookmark.findUnique({ where: { userId, postId } });
+};
+
+const findMnayByUserId: FindMany<"bookmark"> = ({ id, ctx }) => {
+  return ctx.prisma.bookmark.findMany({
+    where: { userId: id },
+  });
+};
+const findMnayByPostId: FindMany<"bookmark"> = ({ id, ctx }) => {
+  return ctx.prisma.bookmark.findMany({
+    where: { postId: id },
+  });
 };
 const BookmarkRepository = {
   findOne,
