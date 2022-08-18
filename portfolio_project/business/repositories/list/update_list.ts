@@ -2,7 +2,7 @@
 
 import { CreateOrUpdate } from "@repos/repo_types";
 const update: CreateOrUpdate<"list"> = async ({ data, ctx }) => {
-  return await ctx.prisma.list.update({
+  return await ctx.db.list.update({
     where: { id: data.id },
     data,
   });

@@ -1,5 +1,5 @@
 /** @format */
-import { Prisma } from "@prisma/client";
+import { Prisma, Task } from "@prisma/client";
 import {
   CreateOrUpdate,
   Delete,
@@ -9,37 +9,37 @@ import {
 } from "./repo_types";
 
 const create: CreateOrUpdate<"task"> = ({ data, ctx }) => {
-  return ctx.prisma.task.create({ data });
+  return ctx.db.task.create({ data });
 };
 
 const findOneById: Find<"task"> = ({ id, ctx }) => {
-  return ctx.prisma.task.findUnique({ where: { id } });
+  return ctx.db.task.findUnique({ where: { id } });
 };
 
 const update: CreateOrUpdate<"task"> = ({ data, ctx }) => {
-  return ctx.prisma.task.update({
+  return ctx.db.task.update({
     where: { id: data.id },
     data,
   });
 };
 
 const deleteOne: Delete<"task"> = ({ id, ctx }) => {
-  return ctx.prisma.task.delete({ where: { id } });
+  return ctx.db.task.delete({ where: { id } });
 };
 
 const findMany: FindMany<"task"> = ({ id, ctx }) => {
-  return ctx.prisma.task.findMany({ where: { listId: id } });
+  return ctx.db.task.findMany({ where: { listId: id } });
 };
 const findByTitle: TextSerachMany<"task"> = ({ text, ctx }) => {
   const filter = `%${text}%`;
-  return ctx.prisma.$queryRaw(
+  return ctx.db.$queryRaw(
     Prisma.sql`SELECT * FROM TASK WHERE title LIKE ${filter} `
-  );
+  ) as Promise<Task[]>;
 };
 
 const findByDescription: TextSerachMany<"task"> = ({ text, ctx }) => {
   const filter = `%${text}%`;
-  return ctx.prisma.$queryRaw(
+  return ctx.db.$queryRaw(
     Prisma.sql`SELECT * FROM TASK WHERE description LIKE ${filter} `
   );
 };

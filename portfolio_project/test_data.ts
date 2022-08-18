@@ -2,9 +2,10 @@
 
 import PostEntity from "@entities/post/Post";
 import ListEntity from "@entities/todolist/List";
-import UserEntity from "@entities/User";
+import { List, User } from "@prisma/client";
+
 import { v4 } from "uuid";
-export const userToAdd = new UserEntity({
+export const userData: User = {
   name: "Abudi",
   password: "12345678",
   email: "test400@user.com",
@@ -17,22 +18,21 @@ export const userToAdd = new UserEntity({
   location: null,
   profileBackground: null,
   status: null,
-});
+};
 
-export const postToAdd = new PostEntity({
+export const postData = {
   id: v4(),
   description: "hello World",
   image: "https://example.com",
   publishedAt: new Date(),
   title: "A title",
-  userId: userToAdd.#id,
-});
+  userId: userData.id,
+};
 
-
-export const listToAdd = new ListEntity({
+export const listData: List = {
   id: v4(),
   title: "Superlist",
   color: "Magenta",
   titleColor: "black",
-  userId: userToAdd.#id,
-});
+  userId: userData.id,
+};

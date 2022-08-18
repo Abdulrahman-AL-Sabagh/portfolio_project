@@ -1,9 +1,9 @@
 /** @format */
 import { Delete } from "@repos/repo_types";
 
-const deleteOne: Delete = async ({ id, ctx }) => {
+const deleteOne: Delete<"post"> = async ({ id, ctx }) => {
   
-  return await ctx.prisma.post.delete({ where: { id } });
+  return await ctx.db.post.delete({ where: { id } });
   
 };
 

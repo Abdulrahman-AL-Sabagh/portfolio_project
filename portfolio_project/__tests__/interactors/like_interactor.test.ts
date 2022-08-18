@@ -2,62 +2,58 @@
 
 import LikeEntity from "@entities/post/Like";
 import { Context, MockContext, createMockContext } from "@repos/prismaContext";
-import LikeRepository from "@repos/like_repository";
-import { postToAdd, userToAdd } from "../../test_data";
-
-
+import likeInteractor from "@interactors/like_interactor";
+import { postData, userData } from "../../test_data";
+import { InteractionParams } from "@repos/repo_types";
 
 let mockCtx: MockContext;
 let ctx: Context;
-const likeData = {
-  postId: postToAdd.id,
-  userId: userToAdd.id,
+const data = {
+  postId: postData.id,
+  userId: userData.id,
 };
 let likeMock: any;
-let like: LikeEntity = new LikeEntity(likeData);
-
+let handlerParams: InteractionParams;
 describe("Like Repository", () => {
   beforeEach(() => {
     mockCtx = createMockContext();
     ctx = mockCtx as unknown as Context;
-    likeMock = mockCtx.prisma.like;
-    mockCtx.prisma.user.findUnique.mockResolvedValue(userToAdd);
-    mockCtx.prisma.post.findUnique.mockResolvedValue(postToAdd);
-    likeMock.create.mockResolvedValue(like);
-    likeMock.delete.mockResolvedValue(like);
+    likeMock = mockCtx.db.like;
+    mockCtx.db.user.findUnique.mockResolvedValue(userData);
+    mockCtx.db.post.findUnique.mockResolvedValue(postData);
+    likeMock.create.mockResolvedValue(data);
+    likeMock.delete.mockResolvedValue(data);
+    handlerParams = { data, ctx };
   });
 
   it("Should delete a like if it exists", async () => {
-    likeMock.findUnique.mockResolvedValue(like);
-    let deletedLike: LikeEntity | null = await LikeRepository.update(
-      likeData,
-      ctx
-    );
-    expect(deletedLike).toEqual(like);
+    likeMock.findUnique.mockResolvedValue(data);
+    let deletedLike = await likeInteractor.update(handlerParams);
+    expect(deletedLike).toEqual(data);
     likeMock.findUnique.mockResolvedValue(null);
-    const foundLike = await likeInteractor.findOne({data: likeData, ctx});
+    const foundLike = await likeInteractor.findOneById(handlerParams);
     expect(foundLike).toBe(null);
   });
 
   it("Should create a like if it not exists", async () => {
     likeMock.findUnique.mockResolvedValueOnce(null);
 
-    const likeToAdd = await LikeRepository.update(likeData, ctx);
-    expect(likeToAdd).toEqual(like);
-    expect(mockCtx.prisma.like.create).toBeCalled();
+    const likeToAdd = await likeInteractor.update(handlerParams);
+    expect(likeToAdd).toEqual(data);
+    expect(mockCtx.db.like.create).toBeCalled();
   });
 
   it("Should return a like if it exists", async () => {
-    likeMock.findUnique.mockResolvedValue(like);
+    likeMock.findUnique.mockResolvedValue(data);
 
-    const foundLike = await LikeRepository.findOne(likeData, ctx);
-    expect(foundLike).toEqual(like);
+    const foundLike = await likeInteractor.findOneById(handlerParams);
+    expect(foundLike).toEqual(data);
   });
 
   it("Should return null if a like does not exists", async () => {
     likeMock.findUnique.mockResolvedValue(null);
 
-    const foundLike = await LikeRepository.findOne(likeData, ctx);
+    const foundLike = await likeInteractor.findOneById(handlerParams);
     expect(foundLike).toBe(null);
   });
 });

@@ -8,21 +8,21 @@ import deleteOne from "./post/delete_post";
 import { FindAll, FindMany, TextSerachMany } from "./repo_types";
 
 const findAll: FindAll<"post"> = (ctx) => {
-  return ctx.prisma.post.findMany({});
+  return ctx.db.post.findMany({});
 };
 const findMany: FindMany<"post"> = ({ id, ctx }) => {
-  return ctx.prisma.post.findMany({ where: { userId: id } });
+  return ctx.db.post.findMany({ where: { userId: id } });
 };
 
 const findByTitle: TextSerachMany<"post"> = ({ text, ctx }) => {
   const filter = `%${text}%`;
-  return ctx.prisma.$queryRaw(
+  return ctx.db.$queryRaw(
     Prisma.sql`SELECT * FROM POST WHERE title LIKE ${filter}`
   );
 };
 const findByContent: TextSerachMany<"post"> = ({ text, ctx }) => {
   const filter = `%${text}%`;
-  return ctx.prisma.$queryRaw(
+  return ctx.db.$queryRaw(
     Prisma.sql`SELECT * FROM POST WHERE content LIKE ${filter}`
   );
 };

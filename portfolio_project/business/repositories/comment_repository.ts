@@ -9,28 +9,27 @@ import { FindMany, FindManyComments, TextSerachMany } from "./repo_types";
 
 const findByContent: TextSerachMany<"comment"> = ({ text, ctx }) => {
   const filter = `%${text}%`;
-  return ctx.prisma.$queryRaw(
+  return ctx.db.$queryRaw(
     Prisma.sql`SELECT * FROM COMMENT where content LIKE ${filter} `
   );
 };
 
 const findUserComments: FindMany<"comment"> = ({ id, ctx }) => {
-  return ctx.prisma.comment.findMany({
+  return ctx.db.comment.findMany({
     where: { userId: id },
   });
 };
 const findPostComments: FindMany<"comment"> = ({ id, ctx }) => {
-  return ctx.prisma.comment.findMany({
+  return ctx.db.comment.findMany({
     where: { postId: id },
   });
 };
 const findUserCommentsOnPost: FindManyComments<"comment"> = ({
-  userId,
-  postId,
+  data,
   ctx,
 }) => {
-  return ctx.prisma.comment.findMany({
-    where: { userId, postId },
+  return ctx.db.comment.findMany({
+    where: { ...data },
   });
 };
 const CommentRepository = {

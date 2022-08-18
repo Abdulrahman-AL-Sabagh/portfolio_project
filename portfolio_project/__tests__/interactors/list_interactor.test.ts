@@ -1,56 +1,59 @@
 /** @format */
 
 import { MockContext, createMockContext, Context } from "@repos/prismaContext";
-import { userToAdd,listToAdd } from "test_data";
-import ListRepository from "@repos/ListRepository";
+import { userData, listData } from "test_data";
+import listInteractor from "@interactors/list_interactor";
+import { createAndUpdateParam,  IdFilter } from "@repos/repo_types";
 
 let mockCtx: MockContext;
-let ctx:Context; 
+let ctx: Context;
 let mockList: any;
 
-
-
+let idFilter: IdFilter;
+let createOrUpdateParams: createAndUpdateParam<"list">;
 describe("List Repository", () => {
   beforeEach(() => {
     mockCtx = createMockContext();
     ctx = mockCtx as unknown as Context;
-    mockList = mockCtx.prisma.list;
+    mockList = mockCtx.db.list;
+    idFilter= {id:listData.id,ctx};
+    createOrUpdateParams= {data: listData,ctx}
   });
 
   it("Should a list create a list", async () => {
-    mockCtx.prisma.user.findUnique.mockResolvedValue(userToAdd);
-    mockList.create.mockResolvedValue(listToAdd);
+    mockCtx.db.user.findUnique.mockResolvedValue(userData);
+    mockList.create.mockResolvedValue(listData);
 
-    const list = await ListRepository.create(listToAdd, ctx);
-    expect(list).toEqual(listToAdd);
+    const list = await listInteractor.create(createOrUpdateParams);
+    expect(list).toEqual(listData);
   });
 
   it("Should find a list using the provided id ", async () => {
-    mockList.findUnique.mockResolvedValue(listToAdd);
+    mockList.findUnique.mockResolvedValue(listData);
 
-    const list = await ListRepository.findOne(listToAdd.id, ctx);
-    expect(list).toEqual(listToAdd);
+    const list = await listInteractor.findOneById(idFilter);
+    expect(list).toEqual(listData);
   });
 
   it("Should update a list if it exists", async () => {
-    const listToUpdate = listToAdd;
+    const listToUpdate = listData;
     listToUpdate.title = "Hello";
-    mockList.findUnique.mockResolvedValue(listToAdd);
+    mockList.findUnique.mockResolvedValue(listData);
     mockList.update.mockResolvedValue(listToUpdate);
 
-    const list = await ListRepository.update(listToUpdate, ctx);
+    const list = await listInteractor.update(createOrUpdateParams);
     expect(list).toEqual(listToUpdate);
   });
 
   it("Should delete a list if it exists", async () => {
-    mockList.findUnique.mockResolvedValue(listToAdd);
-    mockList.delete.mockResolvedValue(listToAdd);
+    mockList.findUnique.mockResolvedValue(listData);
+    mockList.delete.mockResolvedValue(listData);
 
-    const list = await ListRepository.deleteOne(listToAdd.id, ctx);
-    expect(list).toEqual(listToAdd);
+    const list = await listInteractor.deleteOne(idFilter);
+    expect(list).toEqual(listData);
 
     mockList.findUnique.mockResolvedValue(null);
-    const foundList = await ListRepository.findOne(listToAdd.id, ctx);
+    const foundList = await listInteractor.findOneById(idFilter);
     expect(foundList).toEqual(null);
   });
 });

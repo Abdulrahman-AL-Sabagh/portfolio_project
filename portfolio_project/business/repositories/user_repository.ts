@@ -7,7 +7,7 @@ import deleteOne from "./user/delete_user";
 import { FindAll } from "./repo_types";
 
 const findAll: FindAll<"user"> = (ctx) => {
-  return ctx.prisma.user.findMany();
+  return ctx.db.user.findMany();
 };
 
 

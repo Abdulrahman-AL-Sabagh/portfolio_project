@@ -1,59 +1,59 @@
 /** @format */
 
-import {
-  Context,
-  createMockContext,
-  MockContext,
-} from "@repos/prismaContext";
-import CommentRepository from "@repos/CommentRepository";
-import CommentEntity from "@entities/post/PostComment";
+import { Context, createMockContext, MockContext } from "@repos/prismaContext";
+import commentInteractor from "@interactors/comment_interactor";
 import { v4 } from "uuid";
-import { postToAdd, userToAdd } from "../../test_data";
+import { postData, userData } from "test_data";
+import { createAndUpdateParam, IdFilter } from "@repos/repo_types";
+
 let mockCtx: MockContext;
 let ctx: Context;
-
-const commentParam = {
+let idFilter: IdFilter;
+let createAndUpdateParams: createAndUpdateParam<"comment">;
+let mockComment: any;
+const data = {
   id: v4(),
-  userId: userToAdd.#id,
-  postId: postToAdd.id,
+  userId: userData.id,
+  postId: postData.id,
   content: "Hello",
   publishedAt: new Date(),
 };
-const commentToAdd = new CommentEntity(commentParam);
 
 describe("Comment to add", () => {
   beforeEach(() => {
     mockCtx = createMockContext();
     ctx = mockCtx as unknown as Context;
+    mockComment = mockCtx.db.comment;
+    createAndUpdateParams = { data, ctx };
+    idFilter = { id: data.id, ctx };
   });
 
   it("Should create a comment", async () => {
-    mockCtx.prisma.user.findUnique.mockResolvedValue(userToAdd);
-    mockCtx.prisma.post.findUnique.mockResolvedValue(postToAdd);
-    mockCtx.prisma.comment.create.mockResolvedValue(commentToAdd);
-    const comment = await CommentRepository.create(commentToAdd, ctx);
-    expect(comment).toEqual(commentToAdd);
+    mockCtx.db.user.findUnique.mockResolvedValue(userData);
+    mockCtx.db.post.findUnique.mockResolvedValue(postData);
+    mockComment.create.mockResolvedValue(data);
+    const comment = await commentInteractor.create(createAndUpdateParams);
+    expect(comment).toEqual(data);
   });
   it("Should find a comment using the provided id", async () => {
-    mockCtx.prisma.comment.findUnique.mockResolvedValue(commentToAdd);
-    const comment = await CommentRepository.findOne(commentToAdd.id,ctx)
-    expect(comment).toEqual(commentToAdd)
+    mockComment.findUnique.mockResolvedValue(data);
+    const comment = await commentInteractor.findOneById(idFilter);
+    expect(comment).toEqual(data);
   });
   it("Should  a comment if it exists", async () => {
-    mockCtx.prisma.comment.findUnique.mockResolvedValue(commentToAdd);
-    const commentToUpdate = commentToAdd;
+    mockComment.findUnique.mockResolvedValue(data);
+    const commentToUpdate = data;
     commentToUpdate.content = "WOW";
-    mockCtx.prisma.comment.update.mockResolvedValue(commentToAdd);
-    const comment = await CommentRepository.update(commentToUpdate, ctx);
+    mockComment.update.mockResolvedValue(data);
+    const comment = await commentInteractor.update(createAndUpdateParams);
     expect(comment).toEqual(commentToUpdate);
   });
   it("Should delete a comment if it exists", async () => {
-    mockCtx.prisma.comment.findUnique.mockResolvedValue(commentToAdd);
-    mockCtx.prisma.comment.delete.mockResolvedValue(commentToAdd);
-    const  comment = await CommentRepository.deleteOne(commentToAdd.id,ctx)
-    expect(comment).toEqual(commentToAdd);
-    mockCtx.prisma.comment.findUnique.mockResolvedValue(null);
-    expect(CommentRepository.findOne(userToAdd.#id,ctx)).not.toEqual(commentToAdd)
-
+    mockComment.findUnique.mockResolvedValue(data);
+    mockComment.delete.mockResolvedValue(data);
+    const comment = await commentInteractor.deleteOne(idFilter);
+    expect(comment).toEqual(data);
+    mockComment.findUnique.mockResolvedValue(null);
+    expect(commentInteractor.findOneById(idFilter)).not.toEqual(data);
   });
 });

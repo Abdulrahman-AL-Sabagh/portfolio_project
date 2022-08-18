@@ -1,7 +1,7 @@
 /** @format */
 
 import UserEntity from "@entities/User";
-import { vEmail, vEmptyString, vId } from "@lib/validators";
+import { vEmptyString, vId } from "@lib/validators";
 import { User } from "@prisma/client";
 const userNotFound = new Error("User not found");
 const emailTaken = new Error("Email taken");
@@ -14,43 +14,52 @@ import {
   FindAll,
 } from "@repos/repo_types";
 import UserRepository from "@repos/user_repository";
-import { hashSync } from "bcrypt";
 
 function validateUser(user: User) {
-  let validatedUser: UserEntity;
   try {
-    validatedUser = new UserEntity(user);
+    const {
+      id,
+      name,
+      email,
+      avatar,
+      aboutUser,
+      birthday,
+      gender,
+      job,
+      password,
+      location,
+      profileBackground,
+      status,
+    } = new UserEntity(user);
+    return {
+      id,
+      name,
+      email,
+      avatar,
+      aboutUser,
+      birthday,
+      gender,
+      job,
+      password,
+      location,
+      profileBackground,
+      status,
+    };
   } catch (error) {
     throw error;
   }
-  return {
-    name: validatedUser.name,
-    email: validatedUser.email,
-    password: hashSync(validatedUser.password, 10),
-    avatar: validatedUser.avatar,
-    aboutUser: validatedUser.aboutUser,
-    birthday: validatedUser.birthday,
-    gender: validatedUser.gender,
-    job: validatedUser.job,
-    status: validatedUser.status,
-    location: validatedUser.location,
-    profileBackground: validatedUser.profileBackground,
-  };
 }
 
 const create: CreateOrUpdate<"user"> = async ({ data, ctx }) => {
-  try {
-    vEmail.parse(data.email);
-    const userExists = await UserRepository.findOneByEmail({
-      text: data.email,
-      ctx,
-    });
-    if (userExists) throw emailTaken;
-    return await UserRepository.create({ data: validateUser(data), ctx });
-  } catch (error) {
-    throw error;
-  }
+  const validUser = validateUser(data);
+  const userExists = await UserRepository.findOneByEmail({
+    text: data.email,
+    ctx,
+  });
+  if (userExists) throw emailTaken;
+  return await UserRepository.create({ data: validUser, ctx });
 };
+
 const findOneById: Find<"user"> = async ({ id, ctx }) => {
   try {
     vId.parse(id);
@@ -59,8 +68,8 @@ const findOneById: Find<"user"> = async ({ id, ctx }) => {
     throw error;
   }
 };
-const findMany: FindMany<"user"> = async (ctx) => {
-  return await UserRepository.findMany(ctx);
+const findMany: FindMany<"user"> = async ({ id, ctx }) => {
+  return await UserRepository.findMany({ id, ctx });
 };
 const findManyByName: TextSerachMany<"user"> = async ({ ctx, text }) => {
   try {
@@ -73,12 +82,12 @@ const findManyByName: TextSerachMany<"user"> = async ({ ctx, text }) => {
 };
 
 const update: CreateOrUpdate<"user"> = async ({ ctx, data }) => {
-  checkIfUserExists({ id: data.id, ctx });
+  await checkIfUserExists({ id: data.id, ctx });
   return await UserRepository.update({ ctx, data: validateUser(data) });
 };
 
 const deleteOne: Delete<"user"> = async ({ ctx, id }): Promise<User> => {
-  checkIfUserExists({ id, ctx });
+  await checkIfUserExists({ id, ctx });
   return await UserRepository.deleteOne({ id, ctx });
 };
 const checkIfUserExists: Find<"user"> = async ({ id, ctx }) => {
@@ -87,9 +96,9 @@ const checkIfUserExists: Find<"user"> = async ({ id, ctx }) => {
   return userExists;
 };
 
-const findAll:FindAll<"user">= async(ctx) => {
+const findAll: FindAll<"user"> = async (ctx) => {
   return await UserRepository.findAll(ctx);
-}
+};
 
 const userInteractor = {
   findOneById,

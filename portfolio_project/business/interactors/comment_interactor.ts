@@ -2,12 +2,12 @@
 
 import CommentEntity from "@entities/post/PostComment";
 import { vId } from "@lib/validators";
-import CommentRepository from "@repos/CommentRepository";
+import CommentRepository from "@repos/comment_repository";
 import { CreateOrUpdate, Delete, Find } from "@repos/repo_types";
 import postInteractor from "./post_interactor";
 import userInteractor from "./user_interactor";
 import { Comment } from "@prisma/client";
-import { validate } from "graphql";
+
 export const validateComment = (comment: Comment) => {
   try {
     const validComment = new CommentEntity(comment);
@@ -24,8 +24,8 @@ export const validateComment = (comment: Comment) => {
 };
 
 const create: CreateOrUpdate<"comment"> = async ({ data, ctx }) => {
-  await userInteractor.checkIfUserExists({ id: data.id, ctx });
-  await postInteractor.checkIfPostExists({ id: data.id, ctx });
+  await userInteractor.checkIfUserExists({ id: data.userId, ctx });
+  await postInteractor.checkIfPostExists({ id: data.postId, ctx });
 
   return await CommentRepository.create({ data: validateComment(data), ctx });
 };

@@ -20,11 +20,7 @@ const RoundedIcon: FC<myIconProps> = ({ icon, handleClick, color, weight }) => {
         height={80}
         background={COLORS.secondary}
       >
-        <Icon
-          size={48}
-          color={color}
-          weight={weight}
-        />
+        <Icon size={48} color={color} weight={weight} />
       </Center>
     </Button>
   );

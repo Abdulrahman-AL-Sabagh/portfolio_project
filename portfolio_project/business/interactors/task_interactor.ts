@@ -1,10 +1,16 @@
 /** @format */
 
 import TaskEntity from "@entities/todolist/Task";
-import { vId } from "@lib/validators";
+import { vEmptyString, vId } from "@lib/validators";
 import { Task } from "@prisma/client";
-import { CreateOrUpdate, Delete, Find } from "@repos/repo_types";
-import TaskRepository from "@repos/TaskRepository";
+import {
+  CreateOrUpdate,
+  Delete,
+  Find,
+  FindMany,
+  TextSerachMany,
+} from "@repos/repo_types";
+import TaskRepository from "@repos/task_repository";
 import listInteractor from "./list_interactor";
 
 const validateTask = (data: Task) => {
@@ -41,6 +47,32 @@ const deleteOne: Delete<"task"> = async ({ id, ctx }) => {
   return TaskRepository.deleteOne({ id, ctx });
 };
 
+const findMany: FindMany<"task"> = ({ id, ctx }) => {
+  try {
+    vId.parse(id);
+    return TaskRepository.findMany({ id, ctx });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const findByTitle: TextSerachMany<"task"> = ({ text, ctx }) => {
+  try {
+    vEmptyString.parse(text);
+    return TaskRepository.findByTitle({ text, ctx });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const findByDescription: TextSerachMany<"task"> = async ({ text, ctx }) => {
+  try {
+    vEmptyString.parse(text);
+    return TaskRepository.findByDescription({ text, ctx });
+  } catch (error) {
+    throw error;
+  }
+};
 const checkIfTaskExists: Find<"task"> = async ({ id, ctx }) => {
   const taskExists = await findOneById({ id, ctx });
   if (!taskExists) throw new Error("Task not found");
@@ -52,6 +84,9 @@ const taskInteractor = {
   findOneById,
   update,
   deleteOne,
+  findByTitle,
+  findMany,
+  findByDescription,
   checkIfTaskExists,
 };
 

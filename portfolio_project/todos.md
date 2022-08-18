@@ -1,37 +1,4 @@
 
-
-- [x] Refactor each Repository:
-
-  * [x] Refactor UserRepository
-  * [x] Refactor PostRepostiory
-  * [x] Refactor TaskRepository
-  * [x] Refactor ListRepository
-  * [x] Refactor LikeRepostiory
-  * [x] Refactor CommentRepository
-  * [x] Refactor BookmarkRepository
-  
-
-
-- [x] Implement interactors for each Entity:
- 
-  * [x] UserInteractor - [x] With validation
-  * [x] PostInteractor - [x] With validation
-  * [x] TaskInteractor - [x] With validation
-  * [x] ListInteractor - [x] With validation
-  * [x] LikeInteractor - [x] With validation
-  * [x] CommentInteractor - [x] With validation
-  * [x] BookmarkInteractor - [x] With validation
- 
-- [x] Replace the underscores with hashtags in each entity
- 
-- [x] UserEntity
-- [x] PostEntity
-- [x] TaskEntity
-- [x] ListEntity
-- [x] LikeEntity
-- [x] CommentEntity
-- [x] BookmarkEntity
-----------------------------------------------------
  
 - [ ] update the tests
 
@@ -44,9 +11,15 @@
   * [x] PostRepostiory
   * [x] TaskRepository
   * [x] ListRepository
-  * [x] LikeRepostiory  
-  * [x] CommentRepository  
-  * [x] BookmarkRepository
+  * [x] LikeRepostiory:
+      * [x] All User likes
+      * [x] All post likes  
+  * [x] CommentRepository :
+      * [x] All Post Comments
+      * [x] All User comments
+      * [x] All User comments on a post
+  * [x] BookmarkRepository:
+     * [x]All User Bookmarks
   
   
   implement text Seacrh for : 
@@ -59,13 +32,43 @@
 
   - update interactors:
 
-  * [] UserInteractor
-  * [ ] PostInteractor
-  * [ ] TaskInteractor
-  * [ ] ListInteractor
-  * [ ] LikeInteractor
-  * [ ] CommentInteractor
+  * [x] UserInteractor : 
+     * [x] CRUD
+     * [x] Check if exists
+     * [x] find all
+  
+  * [x] PostInteractor:
+    * [x] CRUD
+    * [x] Check if exists
+    * [x] find all
+    * [x] Findmany
+    * [x] findall
+    * [x]TextSearch:
+      * [x] by title
+      * [x] by content
+
+  * [x] TaskInteractor: 
+    * [x] CRUD
+    * [x] Check if exists
+    * [x] Findmany
+    * [x] Text Search:
+      * [x] by title
+      * [x] by content
+  
+  * [x] ListInteractor
+    * [x] CRUD
+    * [x] Check if exists
+    * [x] Findmany
+    * [x] TextSearch:
+      * [x] title 
+
+  * [x] CommentInteractor
+    * [x] CRUD
+    * [x] Check if exists
+
+
   * [ ] BookmarkInteractor
+  * [ ] LikeInteractor
   
 
 

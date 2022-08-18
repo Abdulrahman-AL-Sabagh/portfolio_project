@@ -3,41 +3,29 @@
 import {
   CreateOrUpdate,
   DeleteInteraction,
-  Find,
   FindInteraction,
   FindMany,
 } from "./repo_types";
-const create: CreateOrUpdate<"bookmark"> = async ({ data, ctx }) => {
-  return await ctx.prisma.bookmark.create({ data });
+const create: CreateOrUpdate<"bookmark"> = ({ data, ctx }) => {
+  return ctx.db.bookmark.create({ data });
 };
-const deleteOne: DeleteInteraction<"bookmark"> = async ({
-  userId,
-  postId,
-  ctx,
-}) => {
-  return await ctx.prisma.bookmark.delete({ where: { userId, postId } });
+const deleteOne: DeleteInteraction<"bookmark"> = ({ data, ctx }) => {
+  return ctx.db.bookmark.delete({ where: { ...data } });
 };
-const findOne: FindInteraction<"bookmark"> = async ({
-  userId,
-  postId,
-  ctx,
-}) => {
-  return await ctx.prisma.bookmark.findUnique({ where: { userId, postId } });
+const findOne: FindInteraction<"bookmark"> = ({ data, ctx }) => {
+  return ctx.db.bookmark.findUnique({ where: { ...data } });
 };
 
-const findMnayByUserId: FindMany<"bookmark"> = ({ id, ctx }) => {
-  return ctx.prisma.bookmark.findMany({
+const findManyByUserId: FindMany<"bookmark"> = ({ id, ctx }) => {
+  return ctx.db.bookmark.findMany({
     where: { userId: id },
   });
 };
-const findMnayByPostId: FindMany<"bookmark"> = ({ id, ctx }) => {
-  return ctx.prisma.bookmark.findMany({
-    where: { postId: id },
-  });
-};
+
 const BookmarkRepository = {
   findOne,
   deleteOne,
   create,
+  findManyByUserId,
 };
 export default BookmarkRepository;

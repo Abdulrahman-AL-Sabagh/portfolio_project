@@ -17,12 +17,12 @@ export const validateList = (list: List) => {
 };
 
 const findMany: FindMany<"list"> = ({ id, ctx }) => {
-  return ctx.prisma.list.findMany({ where: { userId: id } });
+  return ctx.db.list.findMany({ where: { userId: id } });
 };
 
 const findByTitle: TextSerachMany<"list"> = ({ text, ctx }) => {
   const filter = `%${text}%`;
-  return ctx.prisma.$queryRaw(
+  return ctx.db.$queryRaw(
     Prisma.sql`SELECT * FROM LIST where title LIKE ${filter}`
   );
 };

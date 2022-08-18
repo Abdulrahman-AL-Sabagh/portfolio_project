@@ -10,7 +10,6 @@ import {
   Like,
   Task,
 } from "@prisma/client";
-import { InteractivityProps } from "@chakra-ui/react";
 
 export interface IdFilter {
   id: string;
@@ -21,8 +20,10 @@ export interface TextParams {
   ctx: Context;
 }
 export interface InteractionParams {
-  userId: string;
-  postId: string;
+  data: {
+    userId: string;
+    postId: string;
+  };
   ctx: Context;
 }
 
@@ -42,7 +43,7 @@ type Interactions = { like: Like; bookmark: Bookmark };
 
 type ReturnValue<K extends keyof Schemas> = Promise<Schemas[K]>;
 type InteractionValue<K extends keyof Interactions> = Promise<Interactions[K]>;
-type FindManyValue<K extends keyof Schemas> = Promise<Array<Schemas[K]>>;
+type FindManyValue<K extends keyof Schemas> = Promise<Schemas[K][]>;
 type FindValue<K extends keyof Schemas> = Promise<Schemas[K] | null>;
 type FindInteractionValue<K extends keyof Interactions> = Promise<
   Interactions[K] | null
@@ -80,16 +81,16 @@ export type FindInteraction<K extends keyof Interactions> = (
 
 export type FindManyComments<K extends "comment"> = (
   filter: InteractionParams
-) => Promise<(Schemas[K])[]>;
+) => Promise<Schemas[K][]>;
 
 // Schema CREATE AND UPDATE TYPE DEFS
-export type SchemaType<K extends keyof Schemas> = {
+export type createAndUpdateParam<K extends keyof Schemas> = {
   data: Schemas[K];
   ctx: Context;
 };
 //User
 export type CreateOrUpdate<K extends keyof Schemas> = (
-  args: SchemaType<K>
+  args: createAndUpdateParam<K>
 ) => Promise<Schemas[K]>;
 
 //Post

@@ -8,31 +8,27 @@ import {
 } from "./repo_types";
 
 const create: CreateOrUpdate<"like"> = async ({ data, ctx }) => {
-  return await ctx.prisma.like.create({ data });
+  return await ctx.db.like.create({ data });
 };
 
-const findOne: FindInteraction<"like"> = async ({ userId, postId, ctx }) => {
-  return await ctx.prisma.like.findUnique({ where: { userId, postId } });
+const findOne: FindInteraction<"like"> = async ({ data, ctx }) => {
+  return await ctx.db.like.findUnique({ where: { ...data } });
 };
 
 const findManyByUserId: FindMany<"like"> = ({ id, ctx }) => {
-  return ctx.prisma.like.findMany({
+  return ctx.db.like.findMany({
     where: { userId: id },
   });
 };
 
 const findManyByPostId: FindMany<"like"> = ({ id, ctx }) => {
-  return ctx.prisma.like.findMany({
+  return ctx.db.like.findMany({
     where: { postId: id },
   });
 };
 
-const deleteOne: DeleteInteraction<"like"> = async ({
-  userId,
-  postId,
-  ctx,
-}) => {
-  return await ctx.prisma.like.delete({ where: { userId, postId } });
+const deleteOne: DeleteInteraction<"like"> = ({ data, ctx }) => {
+  return ctx.db.like.delete({ where: { ...data } });
 };
 
 const LikeRepository = {

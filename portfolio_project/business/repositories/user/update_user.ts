@@ -1,11 +1,10 @@
 /** @format */
 
-
-import { UpdateType } from "@repos/repo_types";
+import { CreateOrUpdate } from "@repos/repo_types";
 import { User } from "@prisma/client";
 
-const update: UpdateType = async ({ data, ctx }): Promise<User> => {
-  return await ctx.prisma.user.update({
+const update: CreateOrUpdate<"user"> = ({ data, ctx }): Promise<User> => {
+  return ctx.db.user.update({
     data,
     where: { id: data.id },
   });
