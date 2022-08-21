@@ -16,15 +16,17 @@ export const validateList = (list: List) => {
   }
 };
 
-const findMany: FindMany<"list"> = ({ id, ctx }) => {
-  return ctx.db.list.findMany({ where: { userId: id } });
+const findMany: FindMany<"list"> = async ({ id, ctx }) => {
+  return { data: await ctx.db.list.findMany({ where: { userId: id } }) };
 };
 
-const findByTitle: TextSerachMany<"list"> = ({ text, ctx }) => {
+const findByTitle: TextSerachMany<"list"> = async ({ text, ctx }) => {
   const filter = `%${text}%`;
-  return ctx.db.$queryRaw(
-    Prisma.sql`SELECT * FROM LIST where title LIKE ${filter}`
-  );
+  return {
+    data: await ctx.db.$queryRaw(
+      Prisma.sql`SELECT * FROM LIST where title LIKE ${filter}`
+    ) ?? [],
+  };
 };
 
 const ListRepository = {

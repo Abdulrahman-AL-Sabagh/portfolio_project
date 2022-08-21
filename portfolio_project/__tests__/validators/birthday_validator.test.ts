@@ -1,22 +1,14 @@
 /** @format */
 
-import { ZodError } from "zod";
-/** @format */
-
 import { vBirthday } from "@lib/validators";
-/** @format */
 
 describe("Birthday Validator", () => {
   it("Should not pass if the years of the given value are not greater or equal to seven", () => {
-    try {
-      vBirthday.parse(new Date());
-    } catch (error) {
-      expect(error).toBeInstanceOf(ZodError);
-    }
+    expect(vBirthday.safeParse(new Date()).success).toBeFalsy();
   });
 
   it("Should pass if the given value is null", () => {
-    expect(vBirthday.parse(null)).toBeNull();
+    expect(vBirthday.safeParse(null).success).toBeTruthy();
   });
 
   it("Should pass if the years of the given value are greater or equal to seven", () => {
@@ -25,7 +17,6 @@ describe("Birthday Validator", () => {
     );
     const date = new Date(subtractSevenYears);
 
-    expect(vBirthday.parse(date)).toBeInstanceOf(Date)
+    expect(vBirthday.safeParse(date).success).toBeTruthy();
   });
 });
-     

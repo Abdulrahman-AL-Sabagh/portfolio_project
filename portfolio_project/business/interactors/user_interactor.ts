@@ -1,10 +1,8 @@
 /** @format */
-
 import UserEntity from "@entities/User";
-import { vEmptyString, vId } from "@lib/validators";
+import { vEmail } from "@lib/validators";
 import { User } from "@prisma/client";
-const userNotFound = new Error("User not found");
-const emailTaken = new Error("Email taken");
+import { emailTaken, invalidSearchParam, userNotFound } from "./errors";
 import {
   Find,
   Delete,
@@ -12,8 +10,10 @@ import {
   CreateOrUpdate,
   FindMany,
   FindAll,
+  IdFilter,
 } from "@repos/repo_types";
 import UserRepository from "@repos/user_repository";
+import { validateId, validateText } from "./helpers";
 
 function validateUser(user: User) {
   try {
@@ -51,49 +51,47 @@ function validateUser(user: User) {
 }
 
 const create: CreateOrUpdate<"user"> = async ({ data, ctx }) => {
-  const validUser = validateUser(data);
+  const validEmail = vEmail.safeParse(data.email);
+  if (!validEmail.success) {
+    return { data: null, message: validEmail.error.message, error: true };
+  }
   const userExists = await UserRepository.findOneByEmail({
     text: data.email,
     ctx,
   });
-  if (userExists) throw emailTaken;
-  return await UserRepository.create({ data: validUser, ctx });
+
+  if (userExists.data) return emailTaken;
+  return await UserRepository.create({ data: validateUser(data), ctx });
 };
 
 const findOneById: Find<"user"> = async ({ id, ctx }) => {
-  try {
-    vId.parse(id);
-    return await UserRepository.findOneById({ id, ctx });
-  } catch (error) {
-    throw error;
-  }
+  const validId = await validateId(id);
+  if (!validId) return userNotFound;
+  return await UserRepository.findOneById({ id, ctx });
 };
 const findMany: FindMany<"user"> = async ({ id, ctx }) => {
   return await UserRepository.findMany({ id, ctx });
 };
 const findManyByName: TextSerachMany<"user"> = async ({ ctx, text }) => {
-  try {
-    vEmptyString.parse(text);
-    const users = UserRepository.findManyByName({ ctx, text });
-    return users;
-  } catch (error) {
-    throw error;
-  }
+  const validInput = validateText(text);
+  if (!validInput) return invalidSearchParam;
+  return await UserRepository.findManyByName({ ctx, text });
 };
 
 const update: CreateOrUpdate<"user"> = async ({ ctx, data }) => {
-  await checkIfUserExists({ id: data.id, ctx });
+  const userExists = await checkIfUserExists({ id: data.id, ctx });
+  if (!userExists) return userNotFound;
   return await UserRepository.update({ ctx, data: validateUser(data) });
 };
 
-const deleteOne: Delete<"user"> = async ({ ctx, id }): Promise<User> => {
-  await checkIfUserExists({ id, ctx });
-  return await UserRepository.deleteOne({ id, ctx });
+const deleteOne: Delete<"user"> = async (idFilter) => {
+  const userExists = await checkIfUserExists(idFilter);
+  if (!userExists) return userNotFound;
+  return await UserRepository.deleteOne(idFilter);
 };
-const checkIfUserExists: Find<"user"> = async ({ id, ctx }) => {
-  const userExists = await findOneById({ id: id, ctx });
-  if (!userExists) throw userNotFound;
-  return userExists;
+const checkIfUserExists = async (idFilter: IdFilter): Promise<boolean> => {
+  const userExists = await findOneById(idFilter);
+  return !!userExists.data;
 };
 
 const findAll: FindAll<"user"> = async (ctx) => {
@@ -109,8 +107,5 @@ const userInteractor = {
   update,
   deleteOne,
   checkIfUserExists,
-  errors: {
-    userNotFound,
-  },
 };
 export default userInteractor;

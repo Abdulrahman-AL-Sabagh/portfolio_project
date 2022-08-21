@@ -1,32 +1,41 @@
 /** @format */
 
-import PostEntity from "@entities/post/Post";
-import ListEntity from "@entities/todolist/List";
 import { List, User } from "@prisma/client";
 
 import { v4 } from "uuid";
-export const userData: User = {
-  name: "Abudi",
-  password: "12345678",
-  email: "test400@user.com",
-  aboutUser: null,
-  id: v4(),
-  avatar: null,
-  birthday: null,
-  gender: "M",
-  job: null,
-  location: null,
-  profileBackground: null,
-  status: null,
+
+export const objectNotFound = {
+  data: null,
+  message: undefined,
+  error: undefined,
+};
+
+export const userData: { data: User } = {
+  data: {
+    name: "Abudi",
+    password: "12345678",
+    email: "test400@user.com",
+    aboutUser: null,
+    id: v4(),
+    avatar: null,
+    birthday: null,
+    gender: "M",
+    job: null,
+    location: null,
+    profileBackground: null,
+    status: null,
+  },
 };
 
 export const postData = {
-  id: v4(),
-  description: "hello World",
-  image: "https://example.com",
-  publishedAt: new Date(),
-  title: "A title",
-  userId: userData.id,
+  data: {
+    id: v4(),
+    description: "hello World",
+    image: "https://example.com",
+    publishedAt: new Date(),
+    title: "A title",
+    userId: userData.data.id,
+  },
 };
 
 export const listData: List = {
@@ -34,5 +43,5 @@ export const listData: List = {
   title: "Superlist",
   color: "Magenta",
   titleColor: "black",
-  userId: userData.id,
+  userId: userData.data.id,
 };

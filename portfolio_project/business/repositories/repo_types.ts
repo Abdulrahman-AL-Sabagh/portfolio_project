@@ -27,7 +27,7 @@ export interface InteractionParams {
   ctx: Context;
 }
 
-type Schemas = {
+export type Schemas = {
   user: User;
   post: Post;
   list: List;
@@ -37,51 +37,71 @@ type Schemas = {
   task: Task;
 };
 
+export type ResponseError = { data: null; message: string; error: true };
+
+export type ResponseFindValue<K extends keyof Schemas> = Promise<
+  | {
+      data: Schemas[K] | null;
+      message?: undefined;
+      error?: false;
+    }
+  | ResponseError
+>;
+export type ResponseValue<K extends keyof Schemas> = Promise<
+  | {
+      data: Schemas[K];
+      message?: undefined;
+      error?: false;
+    }
+  | ResponseError
+>;
+
+export type ManyResponseValues<K extends keyof Schemas> = Promise<
+  | {
+      data: Schemas[K][];
+      message?: string;
+      error?: false;
+    }
+  | ResponseError
+>;
 type Interactions = { like: Like; bookmark: Bookmark };
 
-//Return values
-
-type ReturnValue<K extends keyof Schemas> = Promise<Schemas[K]>;
-type InteractionValue<K extends keyof Interactions> = Promise<Interactions[K]>;
-type FindManyValue<K extends keyof Schemas> = Promise<Schemas[K][]>;
-type FindValue<K extends keyof Schemas> = Promise<Schemas[K] | null>;
-type FindInteractionValue<K extends keyof Interactions> = Promise<
-  Interactions[K] | null
->;
 //Find and Delete for all
-export type Find<K extends keyof Schemas> = (filter: IdFilter) => FindValue<K>;
+export type Find<K extends keyof Schemas> = (
+  filter: IdFilter
+) => ResponseFindValue<K>;
 export type FindAll<K extends "user" | "post"> = (
   ctx: Context
-) => FindManyValue<K>;
+) => ManyResponseValues<K>;
 
 export type TextSearch<K extends keyof Schemas> = (
   filter: TextParams
-) => FindValue<K>;
+) => ResponseFindValue<K>;
 
 export type FindMany<K extends keyof Schemas> = (
   filter: IdFilter
-) => FindManyValue<K>;
+) => ManyResponseValues<K>;
 
 export type TextSerachMany<K extends keyof Schemas> = (
   filter: TextParams
-) => FindManyValue<K>;
+) => ManyResponseValues<K>;
 
 export type Delete<K extends keyof Schemas> = (
   filter: IdFilter
-) => ReturnValue<K>;
+) => ResponseValue<K>;
 
 //Find and Delete for Interactions
 
 export type DeleteInteraction<K extends keyof Interactions> = (
   filter: InteractionParams
-) => InteractionValue<K>;
+) => ResponseValue<K>;
 export type FindInteraction<K extends keyof Interactions> = (
   filter: InteractionParams
-) => FindInteractionValue<K>;
+) => ResponseFindValue<K>;
 
 export type FindManyComments<K extends "comment"> = (
   filter: InteractionParams
-) => Promise<Schemas[K][]>;
+) => ManyResponseValues<K>;
 
 // Schema CREATE AND UPDATE TYPE DEFS
 export type createAndUpdateParam<K extends keyof Schemas> = {
@@ -91,7 +111,7 @@ export type createAndUpdateParam<K extends keyof Schemas> = {
 //User
 export type CreateOrUpdate<K extends keyof Schemas> = (
   args: createAndUpdateParam<K>
-) => Promise<Schemas[K]>;
+) => ResponseValue<K>;
 
 //Post
 

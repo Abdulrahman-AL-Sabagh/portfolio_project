@@ -2,25 +2,21 @@
 
 import BookmarkRepository from "@repos/bookmark_repository";
 import { CreateOrUpdate, FindInteraction } from "@repos/repo_types";
-import postInteractor from "./post_interactor";
-import userInteractor from "./user_interactor";
+import { UserOrPostNotFound } from "./errors";
+import { checkIfUserAndPostExists } from "./helpers";
 
-const update: CreateOrUpdate<"bookmark"> = async ({ data, ctx }) => {
-  const bookmarkExists = await findOneById({ data, ctx });
-  if (!bookmarkExists) {
-    return BookmarkRepository.create({ data, ctx });
+const update: CreateOrUpdate<"bookmark"> = async (data) => {
+  const bookmarkExists = await findOneById(data);
+  if (!bookmarkExists.data) {
+    return await BookmarkRepository.create(data);
   }
-  return BookmarkRepository.deleteOne({ data, ctx });
+  return await BookmarkRepository.deleteOne(data);
 };
 
-const findOneById: FindInteraction<"bookmark"> = async ({
-  data: { userId, postId },
-  ctx,
-}) => {
-  await userInteractor.checkIfUserExists({ id: userId, ctx });
-  await postInteractor.checkIfPostExists({ id: postId, ctx });
-
-  return BookmarkRepository.findOne({ data: { userId, postId }, ctx });
+const findOneById: FindInteraction<"bookmark"> = async (data) => {
+  const userAndPostExists = await checkIfUserAndPostExists(data);
+  if (!userAndPostExists) return UserOrPostNotFound;
+  return await BookmarkRepository.findOne(data);
 };
 
 const bookmarkInteractor = {

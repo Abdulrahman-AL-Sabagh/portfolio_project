@@ -65,7 +65,9 @@
   * [x] CommentInteractor
     * [x] CRUD
     * [x] Check if exists
+--------------------------------------------------------------------------------------------------------
 
+ [] replace every try and catch with a custon error object 
 
   * [ ] BookmarkInteractor
   * [ ] LikeInteractor

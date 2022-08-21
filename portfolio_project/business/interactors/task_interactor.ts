@@ -1,16 +1,19 @@
 /** @format */
 
 import TaskEntity from "@entities/todolist/Task";
-import { vEmptyString, vId } from "@lib/validators";
+import { vEmptyString } from "@lib/validators";
 import { Task } from "@prisma/client";
 import {
   CreateOrUpdate,
   Delete,
   Find,
   FindMany,
+  IdFilter,
   TextSerachMany,
 } from "@repos/repo_types";
 import TaskRepository from "@repos/task_repository";
+import { invalidID, taskNotFound } from "./errors";
+import { validateId } from "./helpers";
 import listInteractor from "./list_interactor";
 
 const validateTask = (data: Task) => {
@@ -29,54 +32,48 @@ const create: CreateOrUpdate<"task"> = async ({ data, ctx }) => {
   return TaskRepository.create({ data: validateTask(data), ctx });
 };
 
-const findOneById: Find<"task"> = ({ id, ctx }) => {
-  try {
-    vId.parse(id);
-    return TaskRepository.findOneById({ id, ctx });
-  } catch (error) {
-    throw error;
-  }
+const findOneById: Find<"task"> = async ({ id, ctx }) => {
+  const validId = await validateId(id);
+  if (!validId) return invalidID;
+  return TaskRepository.findOneById({ id, ctx });
 };
 
 const update: CreateOrUpdate<"task"> = async ({ data, ctx }) => {
-  await checkIfTaskExists({ id: data.id, ctx });
+  const taskExists = await checkIfTaskExists({ id: data.id, ctx });
+  if (taskExists) return taskNotFound;
   return TaskRepository.update({ data: validateTask(data), ctx });
 };
 const deleteOne: Delete<"task"> = async ({ id, ctx }) => {
-  await checkIfTaskExists({ id, ctx });
+  const taskExists = await checkIfTaskExists({ id, ctx });
+  if (!taskExists) return taskNotFound;
   return TaskRepository.deleteOne({ id, ctx });
 };
 
-const findMany: FindMany<"task"> = ({ id, ctx }) => {
-  try {
-    vId.parse(id);
-    return TaskRepository.findMany({ id, ctx });
-  } catch (error) {
-    throw error;
-  }
+const findMany: FindMany<"task"> = async ({ id, ctx }) => {
+  const validId = await validateId(id);
+  if (!validId) return invalidID;
+
+  return TaskRepository.findMany({ id, ctx });
 };
 
-const findByTitle: TextSerachMany<"task"> = ({ text, ctx }) => {
-  try {
-    vEmptyString.parse(text);
-    return TaskRepository.findByTitle({ text, ctx });
-  } catch (error) {
-    throw error;
+const findByTitle: TextSerachMany<"task"> = async ({ text, ctx }) => {
+  const validInput = vEmptyString.safeParse(text);
+  if (!validInput.success) {
+    return { data: null, error: true, message: validInput.error.message };
   }
+  return await TaskRepository.findByTitle({ text, ctx });
 };
 
 const findByDescription: TextSerachMany<"task"> = async ({ text, ctx }) => {
-  try {
-    vEmptyString.parse(text);
-    return TaskRepository.findByDescription({ text, ctx });
-  } catch (error) {
-    throw error;
+  const validInput = vEmptyString.safeParse(text);
+  if (!validInput.success) {
+    return { error: true, data: null, message: validInput.error.message };
   }
+  return await TaskRepository.findByDescription({ text, ctx });
 };
-const checkIfTaskExists: Find<"task"> = async ({ id, ctx }) => {
-  const taskExists = await findOneById({ id, ctx });
-  if (!taskExists) throw new Error("Task not found");
-  return taskExists;
+const checkIfTaskExists = async (idFilter: IdFilter): Promise<boolean> => {
+  const taskExists = await findOneById(idFilter);
+  return !!taskExists.data;
 };
 
 const taskInteractor = {

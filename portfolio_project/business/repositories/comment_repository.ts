@@ -7,30 +7,35 @@ import update from "./comment/update_comment";
 import deleteOne from "./comment/delete_comment";
 import { FindMany, FindManyComments, TextSerachMany } from "./repo_types";
 
-const findByContent: TextSerachMany<"comment"> = ({ text, ctx }) => {
+const findByContent: TextSerachMany<"comment"> = async({ text, ctx }) => {
   const filter = `%${text}%`;
-  return ctx.db.$queryRaw(
-    Prisma.sql`SELECT * FROM COMMENT where content LIKE ${filter} `
-  );
+  return {
+    data:await ctx.db.$queryRaw(
+      Prisma.sql`SELECT * FROM COMMENT where content LIKE ${filter} `
+    ),
+  };
 };
 
-const findUserComments: FindMany<"comment"> = ({ id, ctx }) => {
-  return ctx.db.comment.findMany({
-    where: { userId: id },
-  });
+const findUserComments: FindMany<"comment"> = async({ id, ctx }) => {
+  return {
+    data: await ctx.db.comment.findMany({
+      where: { userId: id },
+    }),
+  };
 };
-const findPostComments: FindMany<"comment"> = ({ id, ctx }) => {
-  return ctx.db.comment.findMany({
-    where: { postId: id },
-  });
+const findPostComments: FindMany<"comment"> = async({ id, ctx }) => {
+  return {
+    data:await  ctx.db.comment.findMany({
+      where: { postId: id },
+    }),
+  };
 };
-const findUserCommentsOnPost: FindManyComments<"comment"> = ({
-  data,
-  ctx,
-}) => {
-  return ctx.db.comment.findMany({
-    where: { ...data },
-  });
+const findUserCommentsOnPost: FindManyComments<"comment"> =async ({ data, ctx }) => {
+  return {
+    data: await ctx.db.comment.findMany({
+      where: { ...data },
+    }),
+  };
 };
 const CommentRepository = {
   create,

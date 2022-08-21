@@ -1,7 +1,6 @@
 /** @format */
 
 import PostEntity from "@entities/post/Post";
-import { vEmail, vEmptyString, vId } from "@lib/validators";
 import { Post } from "@prisma/client";
 import PostRepository from "@repos/post_repository";
 import {
@@ -10,12 +9,18 @@ import {
   Find,
   FindAll,
   FindMany,
-  TextSearch,
+  IdFilter,
   TextSerachMany,
 } from "@repos/repo_types";
+import {
+  invalidID,
+  invalidSearchParam,
+  postNotFound,
+  userNotFound,
+} from "./errors";
+import { validateId, validateText } from "./helpers";
 import userInteractor from "./user_interactor";
 
-const postNotFound = new Error("Post not found");
 export const validatePost = (postData: Post) => {
   try {
     const validatedPostData = new PostEntity(postData);
@@ -32,36 +37,39 @@ export const validatePost = (postData: Post) => {
   }
 };
 
-const findOneById: Find<"post"> = ({ id, ctx }) => {
-  try {
-    vId.parse(id);
-    return PostRepository.findOneById({ id, ctx });
-  } catch (error) {
-    throw error;
-  }
+const findOneById: Find<"post"> = async (idFilter) => {
+  const validId = await validateId(idFilter.id);
+  if (!validId) return invalidID;
+  return await PostRepository.findOneById(idFilter);
 };
 
 const create: CreateOrUpdate<"post"> = async ({ data, ctx }) => {
-  await userInteractor.checkIfUserExists({ id: data.id, ctx });
-  await checkIfPostExists({ id: data.id, ctx });
+  const userExists = await userInteractor.checkIfUserExists({
+    id: data.id,
+    ctx,
+  });
+  if (!userExists) return userNotFound;
 
   return await PostRepository.create({ data: validatePost(data), ctx });
 };
 const update: CreateOrUpdate<"post"> = async ({ data, ctx }) => {
-  await checkIfPostExists({ id: data.id, ctx });
+  const postExists = await checkIfPostExists({ id: data.id, ctx });
+  if (!postExists) return postNotFound;
   return await PostRepository.update({ data: validatePost(data), ctx });
 };
 const deleteOne: Delete<"post"> = async ({ id, ctx }) => {
-  await checkIfPostExists({ id, ctx });
+  const postExists = await checkIfPostExists({ id, ctx });
+  if (!postExists) return postNotFound;
   return await PostRepository.deleteOne({ id, ctx });
 };
-const checkIfPostExists: Find<"post"> = async ({ id, ctx }) => {
-  const postExists = await findOneById({ id, ctx });
-  if (!postExists) throw postNotFound;
-  return postExists;
+const checkIfPostExists = async (idFilter: IdFilter): Promise<boolean> => {
+  const postExists = await findOneById(idFilter);
+  console.log(postExists);
+  return !!postExists.data;
 };
 const findMany: FindMany<"post"> = async ({ id, ctx }) => {
-  await checkIfPostExists({ id, ctx });
+  const postExists = await checkIfPostExists({ id, ctx });
+  if (!postExists) return postNotFound;
   return await PostRepository.findMany({ id, ctx });
 };
 const findAll: FindAll<"post"> = async (ctx) => {
@@ -69,20 +77,14 @@ const findAll: FindAll<"post"> = async (ctx) => {
 };
 
 const findByTitle: TextSerachMany<"post"> = async ({ text, ctx }) => {
-  try {
-    vEmptyString.parse(text);
-    return await PostRepository.findByTitle({ text, ctx });
-  } catch (error) {
-    throw error;
-  }
+  const validText = validateText(text);
+  if (!validText) return invalidSearchParam;
+  return await PostRepository.findByTitle({ text, ctx });
 };
 const findByContent: TextSerachMany<"post"> = async ({ text, ctx }) => {
-  try {
-    vEmptyString.parse(text);
-    return await PostRepository.findByContent({ text, ctx });
-  } catch (error) {
-    throw error;
-  }
+  const validText = validateText(text);
+  if (!validText) return invalidSearchParam;
+  return await PostRepository.findByContent({ text, ctx });
 };
 
 const postInteractor = {

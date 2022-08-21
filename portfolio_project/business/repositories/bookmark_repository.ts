@@ -6,20 +6,22 @@ import {
   FindInteraction,
   FindMany,
 } from "./repo_types";
-const create: CreateOrUpdate<"bookmark"> = ({ data, ctx }) => {
-  return ctx.db.bookmark.create({ data });
+const create: CreateOrUpdate<"bookmark"> = async({ data, ctx }) => {
+  return { data: await ctx.db.bookmark.create({ data }) };
 };
-const deleteOne: DeleteInteraction<"bookmark"> = ({ data, ctx }) => {
-  return ctx.db.bookmark.delete({ where: { ...data } });
+const deleteOne: DeleteInteraction<"bookmark"> = async ({ data, ctx }) => {
+  return { data: await ctx.db.bookmark.delete({ where: { ...data } }) };
 };
-const findOne: FindInteraction<"bookmark"> = ({ data, ctx }) => {
-  return ctx.db.bookmark.findUnique({ where: { ...data } });
+const findOne: FindInteraction<"bookmark"> =async ({ data, ctx }) => {
+  return { data: await ctx.db.bookmark.findUnique({ where: { ...data } }) };
 };
 
-const findManyByUserId: FindMany<"bookmark"> = ({ id, ctx }) => {
-  return ctx.db.bookmark.findMany({
-    where: { userId: id },
-  });
+const findManyByUserId: FindMany<"bookmark"> =async ({ id, ctx }) => {
+  return {
+    data: await ctx.db.bookmark.findMany({
+      where: { userId: id },
+    }),
+  };
 };
 
 const BookmarkRepository = {

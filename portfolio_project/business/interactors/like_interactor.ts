@@ -25,4 +25,4 @@ const likeInteractor = {
   update,
   findOneById,
 };
-export default likeInteractor
+export default likeInteractor;

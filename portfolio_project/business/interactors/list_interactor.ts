@@ -1,7 +1,7 @@
 /** @format */
 
 import ListEntity from "@entities/todolist/List";
-import { vEmptyString, vId } from "@lib/validators";
+import { vEmptyString } from "@lib/validators";
 import { List } from "@prisma/client";
 import ListRepository from "@repos/list_repository";
 import {
@@ -9,8 +9,16 @@ import {
   Delete,
   Find,
   FindMany,
+  IdFilter,
   TextSerachMany,
 } from "@repos/repo_types";
+import {
+  invalidID,
+  invalidSearchParam,
+  listNotFound,
+  userNotFound,
+} from "./errors";
+import { validateId, validateText } from "./helpers";
 import userInteractor from "./user_interactor";
 
 export const validateList = (list: List) => {
@@ -24,48 +32,44 @@ export const validateList = (list: List) => {
 };
 
 const create: CreateOrUpdate<"list"> = async ({ data, ctx }) => {
-  await userInteractor.checkIfUserExists({ id: data.userId, ctx });
+  const userExists = await userInteractor.checkIfUserExists({
+    id: data.userId,
+    ctx,
+  });
+  if (!userExists) return userNotFound;
   return await ListRepository.create({ data: validateList(data), ctx });
 };
 
-const findOneById: Find<"list"> = async ({ id, ctx }) => {
-  try {
-    vId.parse(id);
-    return await ListRepository.findOne({ id, ctx });
-  } catch (error) {
-    throw error;
-  }
+const findOneById: Find<"list"> = async (idFilter) => {
+  const validId = await validateId(idFilter.id);
+  if (!validId) return invalidID;
+  return await ListRepository.findOne(idFilter);
 };
+
 const update: CreateOrUpdate<"list"> = async ({ data, ctx }) => {
-  await checkIfListExists({ id: data.id, ctx });
+  if (!validateId(data.id)) return listNotFound;
   return await ListRepository.update({ data: validateList(data), ctx });
 };
 
-const deleteOne: Delete<"list"> = async ({ id, ctx }) => {
-  await checkIfListExists({ id, ctx });
-  return ListRepository.deleteOne({ id, ctx });
+const deleteOne: Delete<"list"> = async (idFilter) => {
+  const listExists = await checkIfListExists(idFilter);
+  if (!listExists) return listNotFound;
+  return await ListRepository.deleteOne(idFilter);
 };
-const findByTitle: TextSerachMany<"list"> = ({ text, ctx }) => {
-  try {
-    vEmptyString.parse(text);
-    return ListRepository.findByTitle({ text, ctx });
-  } catch (error) {
-    throw error;
-  }
+const findByTitle: TextSerachMany<"list"> = async ({ text, ctx }) => {
+  const validText = validateText(text);
+  if (!validText) return invalidSearchParam;
+  return await ListRepository.findByTitle({ text, ctx });
 };
-const findMany: FindMany<"list"> = ({ id, ctx }) => {
-  try {
-    vId.parse(id);
-    return ListRepository.findMany({ id, ctx });
-  } catch (error) {
-    throw error;
-  }
+const findMany: FindMany<"list"> = async (idFilter) => {
+  const validId = await validateId(idFilter.id);
+  if (!validId) return userNotFound;
+  return ListRepository.findMany(idFilter);
 };
 
-const checkIfListExists: Find<"list"> = async ({ id, ctx }) => {
-  const listExists = await findOneById({ id, ctx });
-  if (!listExists) throw new Error("List not found");
-  return listExists;
+const checkIfListExists = async (idFilter: IdFilter): Promise<boolean> => {
+  const listExists = await findOneById(idFilter);
+  return !listExists.data ? false : true;
 };
 
 const listInteractor = {

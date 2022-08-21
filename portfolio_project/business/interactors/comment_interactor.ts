@@ -1,12 +1,13 @@
 /** @format */
 
 import CommentEntity from "@entities/post/PostComment";
-import { vId } from "@lib/validators";
 import CommentRepository from "@repos/comment_repository";
-import { CreateOrUpdate, Delete, Find } from "@repos/repo_types";
+import { CreateOrUpdate, Delete, Find, IdFilter } from "@repos/repo_types";
 import postInteractor from "./post_interactor";
 import userInteractor from "./user_interactor";
 import { Comment } from "@prisma/client";
+import { validateId } from "./helpers";
+import { commentNotFound, invalidID } from "./errors";
 
 export const validateComment = (comment: Comment) => {
   try {
@@ -29,26 +30,24 @@ const create: CreateOrUpdate<"comment"> = async ({ data, ctx }) => {
 
   return await CommentRepository.create({ data: validateComment(data), ctx });
 };
-const findOneById: Find<"comment"> = ({ id, ctx }) => {
-  try {
-    vId.parse(id);
-    return CommentRepository.findOne({ id, ctx });
-  } catch (error) {
-    throw error;
-  }
+const findOneById: Find<"comment"> = async (idFilter) => {
+  const validId = await validateId(idFilter.id);
+  if (!validId) return invalidID;
+  return await CommentRepository.findOne(idFilter);
 };
 const update: CreateOrUpdate<"comment"> = async ({ data, ctx }) => {
-  await checkIfCommentExists({ id: data.id, ctx });
+  const commentExists = await checkIfCommentExists({ id: data.id, ctx });
+  if (!commentExists) return commentNotFound;
   return await CommentRepository.update({ data: validateComment(data), ctx });
 };
-const deleteOne: Delete<"comment"> = async ({ id, ctx }) => {
-  await checkIfCommentExists({ id, ctx });
-  return await CommentRepository.deleteOne({ id, ctx });
+const deleteOne: Delete<"comment"> = async (idFilter) => {
+  const commentExists = await checkIfCommentExists(idFilter);
+  if (!commentExists) return commentNotFound;
+  return await CommentRepository.deleteOne(idFilter);
 };
-const checkIfCommentExists: Find<"comment"> = async ({ id, ctx }) => {
-  const commentExists = await findOneById({ id, ctx });
-  if (!commentExists) throw new Error("Comment not found");
-  return commentExists;
+const checkIfCommentExists = async (idFilter: IdFilter): Promise<boolean> => {
+  const validComment = await findOneById(idFilter);
+  return !validComment.data ? false : true;
 };
 
 const commentInteractor = {
