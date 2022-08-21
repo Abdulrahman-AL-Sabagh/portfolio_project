@@ -82,9 +82,9 @@ const typeDefs = gql`
     task(id: ID!): Task!
   }
   type Mutation{
-    addUser:(user:AddUserInput!): User
-    updateUser:(user:AddUserInput!, id: ID!): User
-    deleteUser:(id:ID!): User
+    addUser(user:AddUserInput!): User
+    updateUser(user:AddUserInput!, id: ID!): User
+    deleteUser(id:ID!): User
   }
 
   input AddUserInput {
@@ -104,8 +104,8 @@ const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    user: (_: never, args: { id: string }, ctx: Context) =>
-      userInteractor.findOneById({ id: args.id, ctx }),
+    user: async (_: never, args: { id: string }, ctx: Context) =>
+      await userInteractor.findOneById({ id: args.id, ctx }),
     post: (_: never, args: { id: string }, ctx: Context) =>
       postInteractor.findOneById({ id: args.id, ctx }),
     task: (_: never, args: { id: string }, ctx: Context) =>
