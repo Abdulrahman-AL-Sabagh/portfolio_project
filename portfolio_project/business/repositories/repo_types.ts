@@ -40,30 +40,10 @@ export type Schemas = {
 export type ResponseError = { data: null; message: string; error: true };
 
 export type ResponseFindValue<K extends keyof Schemas> = Promise<
-  | {
-      data: Schemas[K] | null;
-      message?: undefined;
-      error?: false;
-    }
-  | ResponseError
+  Schemas[K] | null
 >;
-export type ResponseValue<K extends keyof Schemas> = Promise<
-  | {
-      data: Schemas[K];
-      message?: undefined;
-      error?: false;
-    }
-  | ResponseError
->;
-
-export type ManyResponseValues<K extends keyof Schemas> = Promise<
-  | {
-      data: Schemas[K][];
-      message?: string;
-      error?: false;
-    }
-  | ResponseError
->;
+export type ResponseValue<K extends keyof Schemas> = Promise<Schemas[K]>;
+export type ManyResponseValues<K extends keyof Schemas> = Promise<Schemas[K][]>;
 type Interactions = { like: Like; bookmark: Bookmark };
 
 //Find and Delete for all

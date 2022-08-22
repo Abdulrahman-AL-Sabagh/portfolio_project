@@ -36,40 +36,40 @@ const create: CreateOrUpdate<"list"> = async ({ data, ctx }) => {
     id: data.userId,
     ctx,
   });
-  if (!userExists) return userNotFound;
+  if (!userExists) throw userNotFound;
   return await ListRepository.create({ data: validateList(data), ctx });
 };
 
 const findOneById: Find<"list"> = async (idFilter) => {
   const validId = await validateId(idFilter.id);
-  if (!validId) return invalidID;
+  if (!validId) throw invalidID;
   return await ListRepository.findOne(idFilter);
 };
 
 const update: CreateOrUpdate<"list"> = async ({ data, ctx }) => {
-  if (!validateId(data.id)) return listNotFound;
+  if (!validateId(data.id)) throw listNotFound;
   return await ListRepository.update({ data: validateList(data), ctx });
 };
 
 const deleteOne: Delete<"list"> = async (idFilter) => {
   const listExists = await checkIfListExists(idFilter);
-  if (!listExists) return listNotFound;
+  if (!listExists) throw listNotFound;
   return await ListRepository.deleteOne(idFilter);
 };
 const findByTitle: TextSerachMany<"list"> = async ({ text, ctx }) => {
   const validText = validateText(text);
-  if (!validText) return invalidSearchParam;
+  if (!validText) throw invalidSearchParam;
   return await ListRepository.findByTitle({ text, ctx });
 };
 const findMany: FindMany<"list"> = async (idFilter) => {
   const validId = await validateId(idFilter.id);
-  if (!validId) return userNotFound;
+  if (!validId) throw userNotFound;
   return ListRepository.findMany(idFilter);
 };
 
 const checkIfListExists = async (idFilter: IdFilter): Promise<boolean> => {
   const listExists = await findOneById(idFilter);
-  return !listExists.data ? false : true;
+  return !!listExists;
 };
 
 const listInteractor = {

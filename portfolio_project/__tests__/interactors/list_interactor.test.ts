@@ -21,18 +21,18 @@ describe("List Repository", () => {
   });
 
   it("Should a list create a list", async () => {
-    mockCtx.db.user.findUnique.mockResolvedValue(userData.data);
+    mockCtx.db.user.findUnique.mockResolvedValue(userData);
     mockList.create.mockResolvedValue(listData);
 
     const list = await listInteractor.create(createOrUpdateParams);
-    expect(list.data).toEqual(listData);
+    expect(list).toEqual(listData);
   });
 
   it("Should find a list using the provided id ", async () => {
     mockList.findUnique.mockResolvedValue(listData);
 
     const list = await listInteractor.findOneById(idFilter);
-    expect(list.data).toEqual(listData);
+    expect(list).toEqual(listData);
   });
 
   it("Should update a list if it exists", async () => {
@@ -42,7 +42,7 @@ describe("List Repository", () => {
     mockList.update.mockResolvedValue(listToUpdate);
 
     const list = await listInteractor.update(createOrUpdateParams);
-    expect(list.data).toEqual(listToUpdate);
+    expect(list).toEqual(listToUpdate);
   });
 
   it("Should delete a list if it exists", async () => {
@@ -50,11 +50,11 @@ describe("List Repository", () => {
     mockList.delete.mockResolvedValue(listData);
 
     const list = await listInteractor.deleteOne(idFilter);
-    expect(list.data).toEqual(listData);
+    expect(list).toEqual(listData);
 
     mockList.findUnique.mockResolvedValue(null);
     const foundList = await listInteractor.findOneById(idFilter);
-    expect(foundList.data).toEqual(null);
+    expect(foundList).toEqual(null);
   });
   it("Should retrun an error if the list does not exist", async () => {
     mockList.findUnique.mockResolvedValue(null);

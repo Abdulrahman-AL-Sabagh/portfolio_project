@@ -12,7 +12,7 @@ import {
   TextSerachMany,
 } from "@repos/repo_types";
 import TaskRepository from "@repos/task_repository";
-import { invalidID, taskNotFound } from "./errors";
+import { invalidID, invalidSearchParam, taskNotFound } from "./errors";
 import { validateId } from "./helpers";
 import listInteractor from "./list_interactor";
 
@@ -34,46 +34,42 @@ const create: CreateOrUpdate<"task"> = async ({ data, ctx }) => {
 
 const findOneById: Find<"task"> = async ({ id, ctx }) => {
   const validId = await validateId(id);
-  if (!validId) return invalidID;
+  if (!validId) throw invalidID;
   return TaskRepository.findOneById({ id, ctx });
 };
 
 const update: CreateOrUpdate<"task"> = async ({ data, ctx }) => {
   const taskExists = await checkIfTaskExists({ id: data.id, ctx });
-  if (taskExists) return taskNotFound;
+  if (taskExists) throw taskNotFound;
   return TaskRepository.update({ data: validateTask(data), ctx });
 };
 const deleteOne: Delete<"task"> = async ({ id, ctx }) => {
   const taskExists = await checkIfTaskExists({ id, ctx });
-  if (!taskExists) return taskNotFound;
+  if (!taskExists) throw taskNotFound;
   return TaskRepository.deleteOne({ id, ctx });
 };
 
 const findMany: FindMany<"task"> = async ({ id, ctx }) => {
   const validId = await validateId(id);
-  if (!validId) return invalidID;
+  if (!validId) throw invalidID;
 
   return TaskRepository.findMany({ id, ctx });
 };
 
 const findByTitle: TextSerachMany<"task"> = async ({ text, ctx }) => {
   const validInput = vEmptyString.safeParse(text);
-  if (!validInput.success) {
-    return { data: null, error: true, message: validInput.error.message };
-  }
+  if (!validInput.success) throw invalidSearchParam;
   return await TaskRepository.findByTitle({ text, ctx });
 };
 
 const findByDescription: TextSerachMany<"task"> = async ({ text, ctx }) => {
   const validInput = vEmptyString.safeParse(text);
-  if (!validInput.success) {
-    return { error: true, data: null, message: validInput.error.message };
-  }
+  if (!validInput.success) throw invalidSearchParam;
   return await TaskRepository.findByDescription({ text, ctx });
 };
 const checkIfTaskExists = async (idFilter: IdFilter): Promise<boolean> => {
   const taskExists = await findOneById(idFilter);
-  return !!taskExists.data;
+  return !!taskExists;
 };
 
 const taskInteractor = {

@@ -32,22 +32,22 @@ const create: CreateOrUpdate<"comment"> = async ({ data, ctx }) => {
 };
 const findOneById: Find<"comment"> = async (idFilter) => {
   const validId = await validateId(idFilter.id);
-  if (!validId) return invalidID;
+  if (!validId) throw invalidID;
   return await CommentRepository.findOne(idFilter);
 };
 const update: CreateOrUpdate<"comment"> = async ({ data, ctx }) => {
   const commentExists = await checkIfCommentExists({ id: data.id, ctx });
-  if (!commentExists) return commentNotFound;
+  if (!commentExists) throw commentNotFound;
   return await CommentRepository.update({ data: validateComment(data), ctx });
 };
 const deleteOne: Delete<"comment"> = async (idFilter) => {
   const commentExists = await checkIfCommentExists(idFilter);
-  if (!commentExists) return commentNotFound;
+  if (!commentExists) throw commentNotFound;
   return await CommentRepository.deleteOne(idFilter);
 };
 const checkIfCommentExists = async (idFilter: IdFilter): Promise<boolean> => {
   const validComment = await findOneById(idFilter);
-  return !validComment.data ? false : true;
+  return !!validComment;
 };
 
 const commentInteractor = {

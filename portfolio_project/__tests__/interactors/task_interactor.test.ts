@@ -35,7 +35,7 @@ describe("Task Repository", () => {
     mockTask.create.mockResolvedValue(data);
 
     const task = await taskInteractor.create(createAndUpdateParams);
-    expect(task.data).toEqual(data);
+    expect(task).toEqual(data);
   });
   it("Should throw an Error if list does not exists", async () => {
     mockCtx.db.list.findUnique.mockResolvedValue(null);
@@ -50,13 +50,13 @@ describe("Task Repository", () => {
   it("Should find a task using the provided id", async () => {
     mockTask.findUnique.mockResolvedValue(data);
     const task = await taskInteractor.findOneById(idFilter);
-    expect(task.data).toEqual(data);
+    expect(task).toEqual(data);
   });
 
   it("Should return null if task is not found", async () => {
     mockTask.findUnique.mockResolvedValue(null);
     const task = await taskInteractor.findOneById(idFilter);
-    expect(task.data).not.toEqual(data);
+    expect(task).not.toEqual(data);
   });
 
   it("Should update a task if it exists", async () => {
@@ -76,10 +76,10 @@ describe("Task Repository", () => {
     mockTask.delete.mockResolvedValue(data);
     const task = await taskInteractor.deleteOne(idFilter);
 
-    expect(task.data).toEqual(data);
+    expect(task).toEqual(data);
     mockTask.findUnique.mockResolvedValue(null);
     const foundTask = await taskInteractor.findOneById(idFilter);
-    expect(foundTask.data).not.toEqual(data);
+    expect(foundTask).not.toEqual(data);
   });
 
   it("Should throw an error in delete if task does not exist", async () => {

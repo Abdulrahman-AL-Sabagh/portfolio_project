@@ -20,21 +20,21 @@ describe("User repository", () => {
     mockCtx = createMockContext();
     ctx = mockCtx as unknown as Context;
     mockUser = mockCtx.db.user;
-    idFilter = { id: userData.data.id, ctx };
-    createAndUpdateParams = { data: userData.data, ctx };
+    idFilter = { id: userData.id, ctx };
+    createAndUpdateParams = { data: userData, ctx };
   });
 
   it("Should create a user", async () => {
-    mockUser.create.mockResolvedValue(userData.data);
+    mockUser.create.mockResolvedValue(userData);
     mockUser.findUnique.mockResolvedValue(null);
     const user = await userInteractor.create(createAndUpdateParams);
-    expect(user.data).toEqual(userData.data);
+    expect(user).toEqual(userData);
   });
   it("Should find a user who has the provided id", async () => {
     // The return value of findUniuqe should be userToadd this time
     mockUser.findUnique.mockResolvedValue(userData);
     const user = await userInteractor.findOneById(idFilter);
-    expect(user.data).toEqual(userData);
+    expect(user).toEqual(userData);
   });
 
   it("Should delete a user if it exists", async () => {
@@ -43,19 +43,19 @@ describe("User repository", () => {
 
     const user = await userInteractor.deleteOne(idFilter);
     expect(mockUser.findUnique).toHaveBeenCalled();
-    expect(user.data).toEqual(userData);
+    expect(user).toEqual(userData);
   });
 
   it("Should update a user if it exists", async () => {
     mockUser.findUnique.mockResolvedValue(userData);
 
     const userToUpdate = userData;
-    userToUpdate.data.name = "Bob";
+    userToUpdate.name = "Bob";
 
     mockUser.update.mockResolvedValue(userToUpdate);
     const user = await userInteractor.update(createAndUpdateParams);
     expect(mockUser.findUnique).toHaveBeenCalled();
-    expect(user.data).toEqual(userToUpdate);
+    expect(user).toEqual(userToUpdate);
   });
   it("Should return false if the user does not exist", async () => {
     mockUser.findUnique.mockResolvedValue(null);

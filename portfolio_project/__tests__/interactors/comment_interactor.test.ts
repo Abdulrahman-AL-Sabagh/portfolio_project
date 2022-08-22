@@ -13,8 +13,8 @@ let createAndUpdateParams: createAndUpdateParam<"comment">;
 let mockComment: any;
 const data = {
   id: v4(),
-  userId: userData.data.id,
-  postId: postData.data.id,
+  userId: userData.id,
+  postId: postData.id,
   content: "Hello",
   publishedAt: new Date(),
 };
@@ -29,16 +29,16 @@ describe("Comment to add", () => {
   });
 
   it("Should create a comment", async () => {
-    mockCtx.db.user.findUnique.mockResolvedValue(userData.data);
-    mockCtx.db.post.findUnique.mockResolvedValue(postData.data);
+    mockCtx.db.user.findUnique.mockResolvedValue(userData);
+    mockCtx.db.post.findUnique.mockResolvedValue(postData);
     mockComment.create.mockResolvedValue(data);
     const comment = await commentInteractor.create(createAndUpdateParams);
-    expect(comment.data).toEqual(data);
+    expect(comment).toEqual(data);
   });
   it("Should find a comment using the provided id", async () => {
     mockComment.findUnique.mockResolvedValue(data);
     const comment = await commentInteractor.findOneById(idFilter);
-    expect(comment.data).toEqual(data);
+    expect(comment).toEqual(data);
   });
   it("Should  a comment if it exists", async () => {
     mockComment.findUnique.mockResolvedValue(data);
@@ -46,13 +46,13 @@ describe("Comment to add", () => {
     commentToUpdate.content = "WOW";
     mockComment.update.mockResolvedValue(data);
     const comment = await commentInteractor.update(createAndUpdateParams);
-    expect(comment.data).toEqual(commentToUpdate);
+    expect(comment).toEqual(commentToUpdate);
   });
   it("Should delete a comment if it exists", async () => {
     mockComment.findUnique.mockResolvedValue(data);
     mockComment.delete.mockResolvedValue(data);
     const comment = await commentInteractor.deleteOne(idFilter);
-    expect(comment.data).toEqual(data);
+    expect(comment).toEqual(data);
     mockComment.findUnique.mockResolvedValue(null);
     expect(commentInteractor.findOneById(idFilter)).not.toEqual(data);
   });

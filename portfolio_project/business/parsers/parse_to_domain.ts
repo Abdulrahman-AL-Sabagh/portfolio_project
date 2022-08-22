@@ -1,6 +1,14 @@
 /** @format */
-
-import { Bookmark, Like, List, Post, Task, User, Comment } from "@prisma/client";
+import { v4 } from "uuid";
+import {
+  Bookmark,
+  Like,
+  List,
+  Post,
+  Task,
+  User,
+  Comment,
+} from "@prisma/client";
 import {
   IBookmark,
   IComment,
@@ -11,7 +19,20 @@ import {
   IUser,
 } from "./api_types";
 
-const domainUser = (user: IUser) => user as User;
+const domainUser = (user: IUser) => {
+  return {
+    ...user,
+    id: user.id ?? v4(),
+    aboutUser: user.aboutUser ?? null,
+    avatar: user.avatar ?? null,
+    birthday: user.birthday ?? null,
+    job: user.job ?? null,
+    gender: user.gender ?? null,
+    location: user.location ?? null,
+    profileBackground: user.profileBackground ?? null,
+    status: user.status ?? null,
+  };
+};
 const domainPost = (post: IPost) => post as Post;
 const domainTask = (task: ITask) => task as Task;
 const domainList = (list: IList) => list as List;

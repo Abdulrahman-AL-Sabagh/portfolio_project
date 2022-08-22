@@ -5,7 +5,7 @@ import { Status, Gender } from "@prisma/client";
 /** @format */
 
 export interface IUser {
-  id: string;
+  id: string
   name: string;
   email: string;
   password: string;

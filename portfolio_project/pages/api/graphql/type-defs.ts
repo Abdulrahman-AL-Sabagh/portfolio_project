@@ -3,13 +3,14 @@
 import { gql } from "apollo-server-micro";
 import { GraphQLScalarType, Kind } from "graphql";
 import { Context } from "@repos/prismaContext";
-import { User } from "@prisma/client";
+import mutation from "business/resolvers/mutation";
 import userInteractor from "business/interactors/user_interactor";
 import postInteractor from "business/interactors/post_interactor";
 import taskInteractor from "business/interactors/task_interactor";
 import listInteractor from "business/interactors/list_interactor";
-
-const typeDefs = gql`
+import toDomainValueParser from "business/parsers/parse_to_domain";
+import toApiValuePrser from "business/parsers/parse_to_api";
+export const typeDefs = gql`
   scalar Date
 
   type User {
@@ -76,36 +77,58 @@ const typeDefs = gql`
   }
 
   type Query {
-    user(id: ID!): User!
+    user(id: ID!): User
     post(id: ID!): Post!
     list(id: ID!): List!
     task(id: ID!): Task!
   }
   type Mutation {
     addUser(user: AddUserInput!): User
-    updateUser(user: AddUserInput!, id: ID!): User
-    deleteUser(id: ID!): User
+    updateUser(user: UpdateUserInput!): User
+    deleteUser(id: String!): User
+  }
+  input UpdateUserInput {
+    id: String!
+    name: String
+    email: String
+    password: String
+    job: String
+    aboutUser: String
+    avatar: String
+    birthday: Date
+    gender: String
+    location: String
+    profileBackground: String
+    status: String
   }
 
   input AddUserInput {
+    id: String
     name: String!
     email: String!
     password: String!
-    avatar: String
-    profileBackground: String
-    dateOfBirth: Date
     job: String
-    status: String
     aboutUser: String
-    location: String
+    avatar: String
+    birthday: Date
     gender: String
+    location: String
+    profileBackground: String
+    status: String
   }
 `;
 
 export const resolvers = {
   Query: {
-    user: async (_: never, args: { id: string }, ctx: Context) =>
-      await userInteractor.findOneById({ id: args.id, ctx }),
+    user: async (_: never, args, ctx) => {
+      console.log({ args, ctx });
+      const user = await userInteractor.findOneById({
+        id: args.id,
+        ctx: ctx.db,
+      });
+      console.table({ user });
+      return user ? toApiValuePrser.apiUser(user) : null;
+    },
     post: (_: never, args: { id: string }, ctx: Context) =>
       postInteractor.findOneById({ id: args.id, ctx }),
     task: (_: never, args: { id: string }, ctx: Context) =>
@@ -113,21 +136,7 @@ export const resolvers = {
     list: (_: never, args: { id: string }, ctx: Context) =>
       listInteractor.findOneById({ id: args.id, ctx }),
   },
-  Mutation: {
-    addUser: async (_: never, args: { user: User }, ctx: Context) => {
-      console.log(args);
-      const { error, data, message } = await userInteractor.create({
-        data: args.user,
-        ctx,
-      });
-      console.table({ error, data, message });
-      return data;
-    },
-    updateUser: (_: never, args: { user: User }, ctx: Context) =>
-      userInteractor.update({ data: args.user, ctx }),
-    deleteUser: (_: never, args: { id: string }, ctx: Context) =>
-      userInteractor.deleteOne({ id: args.id, ctx }),
-  },
+  Mutation: mutation,
 };
 
 export const dateScalar = new GraphQLScalarType({

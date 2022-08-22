@@ -7,9 +7,7 @@ import deleteOne from "./user/delete_user";
 import { FindAll } from "./repo_types";
 
 const findAll: FindAll<"user"> = async (ctx) => {
-  return {
-    data: await ctx.db.user.findMany(),
-  };
+  return await ctx.db.user.findMany();
 };
 
 const UserRepository = {

@@ -8,40 +8,36 @@ import {
   TextSerachMany,
 } from "./repo_types";
 
-const create: CreateOrUpdate<"task"> = async({ data, ctx }) => {
-  return { data: await ctx.db.task.create({ data }) };
+const create: CreateOrUpdate<"task"> = async ({ data, ctx }) => {
+  return await ctx.db.task.create({ data });
 };
 
-const findOneById: Find<"task"> = async({ id, ctx }) => {
-  return { data: await ctx.db.task.findUnique({ where: { id } }) };
+const findOneById: Find<"task"> = async ({ id, ctx }) => {
+  return await ctx.db.task.findUnique({ where: { id } });
 };
 
-const update: CreateOrUpdate<"task"> = async({ data, ctx }) => {
-  return {
-    data: await ctx.db.task.update({
-      where: { id: data.id },
-      data,
-    }),
-  };
+const update: CreateOrUpdate<"task"> = async ({ data, ctx }) => {
+  return await ctx.db.task.update({
+    where: { id: data.id },
+    data,
+  });
 };
 
-const deleteOne: Delete<"task"> =async ({ id, ctx }) => {
-  return { data: await ctx.db.task.delete({ where: { id } }) };
+const deleteOne: Delete<"task"> = async ({ id, ctx }) => {
+  return await ctx.db.task.delete({ where: { id } });
 };
 
-const findMany: FindMany<"task"> = async({ id, ctx }) => {
-  return { data: await ctx.db.task.findMany({ where: { listId: id } }) };
+const findMany: FindMany<"task"> = async ({ id, ctx }) => {
+  return await ctx.db.task.findMany({ where: { listId: id } });
 };
-const findByTitle: TextSerachMany<"task"> =async ({ text, ctx }) => {
+const findByTitle: TextSerachMany<"task"> = async ({ text, ctx }) => {
   const filter = `%${text}%`;
-  return {
-    data: await ctx.db.$queryRaw(
-      Prisma.sql`SELECT * FROM TASK WHERE title LIKE ${filter} `
-    ),
-  };
+  return await ctx.db.$queryRaw(
+    Prisma.sql`SELECT * FROM TASK WHERE title LIKE ${filter} `
+  );
 };
 
-const findByDescription: TextSerachMany<"task"> =async ({ text, ctx }) => {
+const findByDescription: TextSerachMany<"task"> = async ({ text, ctx }) => {
   const filter = `%${text}%`;
   return {
     data: await ctx.db.$queryRaw(

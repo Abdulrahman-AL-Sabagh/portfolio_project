@@ -7,7 +7,7 @@ import { checkIfUserAndPostExists } from "./helpers";
 
 const update: CreateOrUpdate<"bookmark"> = async (data) => {
   const bookmarkExists = await findOneById(data);
-  if (!bookmarkExists.data) {
+  if (!bookmarkExists) {
     return await BookmarkRepository.create(data);
   }
   return await BookmarkRepository.deleteOne(data);
@@ -15,7 +15,7 @@ const update: CreateOrUpdate<"bookmark"> = async (data) => {
 
 const findOneById: FindInteraction<"bookmark"> = async (data) => {
   const userAndPostExists = await checkIfUserAndPostExists(data);
-  if (!userAndPostExists) return UserOrPostNotFound;
+  if (!userAndPostExists) throw UserOrPostNotFound;
   return await BookmarkRepository.findOne(data);
 };
 
