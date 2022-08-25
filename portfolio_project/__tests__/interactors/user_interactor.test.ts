@@ -1,6 +1,6 @@
 /** @format */
 
-import { userData } from "test_data";
+import { userData } from "test_data/test_data";
 import userInteractor from "@interactors/user_interactor";
 import { MockContext, Context, createMockContext } from "@repos/prismaContext";
 import { createAndUpdateParam, IdFilter } from "@repos/repo_types";

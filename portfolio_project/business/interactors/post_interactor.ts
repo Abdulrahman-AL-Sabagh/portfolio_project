@@ -39,37 +39,36 @@ export const validatePost = (postData: Post) => {
 
 const findOneById: Find<"post"> = async (idFilter) => {
   const validId = await validateId(idFilter.id);
-  if (!validId) return invalidID;
+  if (!validId) throw invalidID;
   return await PostRepository.findOneById(idFilter);
 };
 
 const create: CreateOrUpdate<"post"> = async ({ data, ctx }) => {
   const userExists = await userInteractor.checkIfUserExists({
-    id: data.id,
+    id: data.userId,
     ctx,
   });
-  if (!userExists) return userNotFound;
+  if (!userExists) throw userNotFound;
 
   return await PostRepository.create({ data: validatePost(data), ctx });
 };
 const update: CreateOrUpdate<"post"> = async ({ data, ctx }) => {
   const postExists = await checkIfPostExists({ id: data.id, ctx });
-  if (!postExists) return postNotFound;
+  if (!postExists) throw postNotFound;
   return await PostRepository.update({ data: validatePost(data), ctx });
 };
 const deleteOne: Delete<"post"> = async ({ id, ctx }) => {
   const postExists = await checkIfPostExists({ id, ctx });
-  if (!postExists) return postNotFound;
+  if (!postExists) throw postNotFound;
   return await PostRepository.deleteOne({ id, ctx });
 };
 const checkIfPostExists = async (idFilter: IdFilter): Promise<boolean> => {
   const postExists = await findOneById(idFilter);
-  console.log(postExists);
-  return !!postExists.data;
+  return !!postExists;
 };
 const findMany: FindMany<"post"> = async ({ id, ctx }) => {
   const postExists = await checkIfPostExists({ id, ctx });
-  if (!postExists) return postNotFound;
+  if (!postExists) throw postNotFound;
   return await PostRepository.findMany({ id, ctx });
 };
 const findAll: FindAll<"post"> = async (ctx) => {
@@ -78,12 +77,12 @@ const findAll: FindAll<"post"> = async (ctx) => {
 
 const findByTitle: TextSerachMany<"post"> = async ({ text, ctx }) => {
   const validText = validateText(text);
-  if (!validText) return invalidSearchParam;
+  if (!validText) throw invalidSearchParam;
   return await PostRepository.findByTitle({ text, ctx });
 };
 const findByContent: TextSerachMany<"post"> = async ({ text, ctx }) => {
   const validText = validateText(text);
-  if (!validText) return invalidSearchParam;
+  if (!validText) throw invalidSearchParam;
   return await PostRepository.findByContent({ text, ctx });
 };
 

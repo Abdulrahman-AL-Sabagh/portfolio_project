@@ -15,7 +15,7 @@ export const userData: User = {
   password: "12345678",
   email: "test400@user.com",
   aboutUser: null,
-  id: v4(),
+  id: "10ca4e2d-0482-4fab-b984-84721dec6028",
   avatar: null,
   birthday: null,
   gender: "M",
@@ -26,7 +26,7 @@ export const userData: User = {
 };
 
 export const postData = {
-  id: v4(),
+  id: "7c9a1277-29bf-4dbf-86ae-5a5837abd091",
   description: "hello World",
   image: "https://example.com",
   publishedAt: new Date(),
@@ -40,4 +40,12 @@ export const listData: List = {
   color: "Magenta",
   titleColor: "black",
   userId: userData.id,
+};
+
+export const commentData = {
+  id: v4(),
+  userId: userData.id,
+  postId: postData.id,
+  content: "Hello",
+  publishedAt: new Date(),
 };

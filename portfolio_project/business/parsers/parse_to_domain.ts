@@ -19,7 +19,7 @@ import {
   IUser,
 } from "./api_types";
 
-const domainUser = (user: IUser) => {
+const domainFullUser = (user: IUser) => {
   return {
     ...user,
     id: user.id ?? v4(),
@@ -31,8 +31,37 @@ const domainUser = (user: IUser) => {
     location: user.location ?? null,
     profileBackground: user.profileBackground ?? null,
     status: user.status ?? null,
-  };
+  } as User;
 };
+
+export const domainFullPost = (post: IPost) => {
+  return {
+    ...post,
+    id: post.id ?? v4(),
+    title: post.title ?? null,
+    image: post.image ?? null,
+    publishedAt: post.publishedAt ? new Date(post.publishedAt) : new Date(),
+  } as Post;
+};
+export const domainFullTask = (task: ITask) => {
+  return {
+    ...task,
+    id: task.id ?? v4(),
+    deadLine: task.deadLine ?? null,
+    description: task.deadLine ?? null,
+  } as Task;
+};
+
+export const domainFullList = (list: IList) => {
+  return {
+    ...list,
+    id: list.id ?? v4(),
+    titleColor: list.titleColor ?? null,
+    color: list.color ?? null,
+  } as List;
+};
+
+const domainUser = (user: IUser) => user as User;
 const domainPost = (post: IPost) => post as Post;
 const domainTask = (task: ITask) => task as Task;
 const domainList = (list: IList) => list as List;
@@ -41,13 +70,17 @@ const domainBookmark = (bookmark: IBookmark) => bookmark as Bookmark;
 const domainComment = (comment: IComment) => comment as Comment;
 
 const toDomainValueParser = {
-  domainUser,
+  domainFullUser,
+  domainFullTask,
   domainPost,
   domainTask,
   domainList,
   domainLike,
   domainBookmark,
   domainComment,
+  domainUser,
+  domainFullPost,
+  domainFullList,
 };
 
 export default toDomainValueParser;

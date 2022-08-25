@@ -8,6 +8,7 @@ const createJestConfig = nextJest({
 });
 
 const customJestConfig = {
+  setupFiles: ["dotenv/config"],
   modulePaths: ["<rootDir>"],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   testEnvironment: "node",

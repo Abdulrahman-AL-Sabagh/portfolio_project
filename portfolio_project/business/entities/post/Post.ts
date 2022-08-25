@@ -27,7 +27,7 @@ export default class PostEntity {
     this.title = title;
     this.description = description;
     this.image = image;
-    this.#publishedAt = publishedAt ?? new Date(Date.now());
+    this.#publishedAt = publishedAt  ?? new Date(Date.now());
     this.#likes = [];
     this.#bookmarks = [];
     this.#comments = [];

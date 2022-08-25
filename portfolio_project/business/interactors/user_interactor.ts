@@ -67,7 +67,6 @@ const create: CreateOrUpdate<"user"> = async ({ data, ctx }) => {
 };
 
 const findOneById: Find<"user"> = async ({ id, ctx }) => {
-  console.log(id);
   const validId = await validateId(id);
   if (!validId) throw invalidID;
   return await UserRepository.findOneById({ id, ctx });

@@ -2,7 +2,7 @@
 
 import { Context, MockContext, createMockContext } from "@repos/prismaContext";
 import likeInteractor from "@interactors/like_interactor";
-import { postData, userData } from "../../test_data";
+import { postData, userData } from "../../test_data/test_data";
 import { InteractionParams } from "@repos/repo_types";
 
 let mockCtx: MockContext;

@@ -1,6 +1,6 @@
 -- AlterTable
 ALTER TABLE "User" ADD COLUMN     "aboutUser" TEXT,
-ADD COLUMN     "dateOfBirth" TIMESTAMP(3),
+ADD COLUMN     "birthday" TIMESTAMP(3),
 ADD COLUMN     "gender" TEXT,
 ADD COLUMN     "job" TEXT,
 ADD COLUMN     "location" TEXT,

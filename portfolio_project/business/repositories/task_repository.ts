@@ -39,11 +39,9 @@ const findByTitle: TextSerachMany<"task"> = async ({ text, ctx }) => {
 
 const findByDescription: TextSerachMany<"task"> = async ({ text, ctx }) => {
   const filter = `%${text}%`;
-  return {
-    data: await ctx.db.$queryRaw(
-      Prisma.sql`SELECT * FROM TASK WHERE description LIKE ${filter} `
-    ),
-  };
+  return await ctx.db.$queryRaw(
+    Prisma.sql`SELECT * FROM TASK WHERE description LIKE ${filter} `
+  );
 };
 
 const TaskRepository = {

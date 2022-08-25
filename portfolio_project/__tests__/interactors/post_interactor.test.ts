@@ -3,7 +3,7 @@
 import postInteractor from "@interactors/post_interactor";
 import { MockContext, Context, createMockContext } from "@repos/prismaContext";
 import { createAndUpdateParam, IdFilter } from "@repos/repo_types";
-import { userData, postData } from "test_data";
+import { userData, postData } from "test_data/test_data";
 
 let mockCtx: MockContext;
 let ctx: Context;

@@ -2,7 +2,7 @@
 
 import { Context, createMockContext, MockContext } from "@repos/prismaContext";
 import { v4 } from "uuid";
-import { listData } from "test_data";
+import { listData } from "test_data/test_data";
 import taskInteractor from "@interactors/task_interactor";
 import { Task } from "@prisma/client";
 import { createAndUpdateParam, IdFilter } from "@repos/repo_types";

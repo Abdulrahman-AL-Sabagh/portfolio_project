@@ -10,6 +10,7 @@ import taskInteractor from "business/interactors/task_interactor";
 import listInteractor from "business/interactors/list_interactor";
 import toDomainValueParser from "business/parsers/parse_to_domain";
 import toApiValuePrser from "business/parsers/parse_to_api";
+import { DBContext, IdArgs } from "business/resolvers/resolver_types";
 export const typeDefs = gql`
   scalar Date
 
@@ -20,7 +21,7 @@ export const typeDefs = gql`
     password: String!
     avatar: String
     profileBackground: String
-    dateOfBirth: Date
+    birthday: Date
     job: String
     status: String
     aboutUser: String
@@ -34,6 +35,7 @@ export const typeDefs = gql`
   }
   type Post {
     id: ID!
+    userId: ID!
     user: User!
     title: String
     description: String!
@@ -47,6 +49,7 @@ export const typeDefs = gql`
   type List {
     id: ID!
     user: User!
+    userId: ID!
     title: String!
     tasks: [Task!]!
     color: String
@@ -62,8 +65,11 @@ export const typeDefs = gql`
   }
 
   type Comment {
-    publishedBy: User!
+    id: ID!
+    user: User!
     post: Post!
+    userId: ID!
+    postId: ID!
     publishedAt: Date!
     content: String!
   }
@@ -85,7 +91,72 @@ export const typeDefs = gql`
   type Mutation {
     addUser(user: AddUserInput!): User
     updateUser(user: UpdateUserInput!): User
-    deleteUser(id: String!): User
+    deleteUser(id: ID!): User
+
+    addPost(post: PostToAdd!): Post
+    updatePost(post: PostToUpdate!): Post
+    deletePost(id: ID!): Post
+
+    addList(list: ListToAdd!): List
+    updateList(list: ListToUpdate): List
+    deleteList(id: ID!): List
+
+    addTask(task: TaskToAdd!): Task
+    updateTask(task: TaskToUpdate): Task
+    deleteTask(id: ID!): Task
+
+    addComment(comment: CommentToAdd!): Comment
+    updateComment(comment: CommentToUpdate!): Comment
+    deleteComment(id: ID!): Comment
+  }
+  input ListToAdd {
+    id: ID
+    userId: ID!
+    title: String!
+    titleColor: String
+    color: String
+  }
+  input ListToUpdate {
+    id: ID!
+    titleColor: String
+    title: String
+    color: String
+  }
+
+  input CommentToAdd {
+    id: ID
+    userId: ID!
+    postId: ID!
+    publishedAt: Date
+    content: String!
+  }
+  input CommentToUpdate {
+    id: ID!
+    content: String!
+  }
+
+  input TaskToAdd {
+    id: ID
+  }
+  input TaskToUpdate {
+    id: ID!
+  }
+
+  input PostToAdd {
+    id: ID
+    userId: ID!
+    title: String
+    description: String!
+    image: String
+    publishedAt: Date
+  }
+
+  input PostToUpdate {
+    id: ID!
+    userId: ID
+    title: String
+    description: String
+    image: String
   }
   input UpdateUserInput {
     id: String!
@@ -103,7 +174,7 @@ export const typeDefs = gql`
   }
 
   input AddUserInput {
-    id: String
+    id: ID!
     name: String!
     email: String!
     password: String!
@@ -120,21 +191,20 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    user: async (_: never, args, ctx) => {
-      console.log({ args, ctx });
-      const user = await userInteractor.findOneById({
-        id: args.id,
-        ctx: ctx.db,
-      });
-      console.table({ user });
-      return user ? toApiValuePrser.apiUser(user) : null;
+    user: async (_: never, { id }: IdArgs, { db }: DBContext) => {
+      return await userInteractor.findOneById({ id, ctx: db });
     },
-    post: (_: never, args: { id: string }, ctx: Context) =>
-      postInteractor.findOneById({ id: args.id, ctx }),
-    task: (_: never, args: { id: string }, ctx: Context) =>
-      taskInteractor.findOneById({ id: args.id, ctx }),
-    list: (_: never, args: { id: string }, ctx: Context) =>
-      listInteractor.findOneById({ id: args.id, ctx }),
+    post: async (_: never, args: { id: string }, { db }: DBContext) => {
+      const post = await postInteractor.findOneById({ id: args.id, ctx: db });
+      console.log(post);
+      return post;
+    },
+    task: async (_: never, args: { id: string }, { db }: DBContext) => {
+      return await taskInteractor.findOneById({ id: args.id, ctx: db });
+    },
+    list: async (_: never, args: { id: string }, ctx: Context) => {
+      return await listInteractor.findOneById({ id: args.id, ctx });
+    },
   },
   Mutation: mutation,
 };
@@ -143,7 +213,8 @@ export const dateScalar = new GraphQLScalarType({
   name: "Date",
   description: "Date custom scalar type",
   serialize(value: any) {
-    return new Date(value); //  outgoing
+    console.log(value);
+    return Date.parse(value); //  outgoing
   },
   parseValue(value: any) {
     return new Date(value); //  incoming

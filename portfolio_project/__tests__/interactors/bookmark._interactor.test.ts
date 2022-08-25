@@ -1,7 +1,7 @@
 /** @format */
 
 import { Context, MockContext, createMockContext } from "@repos/prismaContext";
-import { postData, userData } from "test_data";
+import { postData, userData } from "test_data/test_data";
 import bookmarkInteractor from "@interactors/bookmark_interactor";
 import { InteractionParams } from "@repos/repo_types";
 
