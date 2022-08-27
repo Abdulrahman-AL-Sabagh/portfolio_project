@@ -44,7 +44,8 @@ describe("Comment mutation", () => {
       mutation: updateComment,
       variables: { comment },
     });
-    const result = data.__typename;
+    console.log(data);
+    const result = data.updateComment;
     delete result.__typename;
     result.publishedAt = new Date(result.publishedAt);
     expect(result).toEqual(comment);
