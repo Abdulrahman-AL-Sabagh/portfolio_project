@@ -8,8 +8,6 @@ import userInteractor from "business/interactors/user_interactor";
 import postInteractor from "business/interactors/post_interactor";
 import taskInteractor from "business/interactors/task_interactor";
 import listInteractor from "business/interactors/list_interactor";
-import toDomainValueParser from "business/parsers/parse_to_domain";
-import toApiValuePrser from "business/parsers/parse_to_api";
 import { DBContext, IdArgs } from "business/resolvers/resolver_types";
 export const typeDefs = gql`
   scalar Date
@@ -57,9 +55,10 @@ export const typeDefs = gql`
   }
   type Task {
     id: ID!
-    title: String!
-    deadLine: String!
+    listId: ID!
     list: List!
+    title: String!
+    deadLine: String
     titleColor: String
     description: String
   }
@@ -118,6 +117,7 @@ export const typeDefs = gql`
   }
   input ListToUpdate {
     id: ID!
+    userId: ID!
     titleColor: String
     title: String
     color: String
@@ -132,14 +132,27 @@ export const typeDefs = gql`
   }
   input CommentToUpdate {
     id: ID!
-    content: String!
+    userId: ID!
+    postId: ID!
+    publishedAt: Date
+    content: String
   }
 
   input TaskToAdd {
     id: ID
+    listId: ID!
+    deadLine: Date
+    title: String!
+    description: String
+    titleColor: String
   }
   input TaskToUpdate {
     id: ID!
+    listId: ID
+    deadLine: Date
+    description: String
+    title: String
+    titleColor: String
   }
 
   input PostToAdd {
@@ -157,6 +170,7 @@ export const typeDefs = gql`
     title: String
     description: String
     image: String
+    publishedAt: Date
   }
   input UpdateUserInput {
     id: String!
@@ -196,7 +210,6 @@ export const resolvers = {
     },
     post: async (_: never, args: { id: string }, { db }: DBContext) => {
       const post = await postInteractor.findOneById({ id: args.id, ctx: db });
-      console.log(post);
       return post;
     },
     task: async (_: never, args: { id: string }, { db }: DBContext) => {
@@ -213,7 +226,6 @@ export const dateScalar = new GraphQLScalarType({
   name: "Date",
   description: "Date custom scalar type",
   serialize(value: any) {
-    console.log(value);
     return Date.parse(value); //  outgoing
   },
   parseValue(value: any) {

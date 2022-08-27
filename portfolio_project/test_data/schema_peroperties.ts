@@ -31,3 +31,10 @@ userId
 postId
 publishedAt
 content`;
+
+export const taskProperties = ` id
+listId
+title
+deadLine
+titleColor
+description`;

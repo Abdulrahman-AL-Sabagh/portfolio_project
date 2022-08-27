@@ -5,14 +5,14 @@ import { commentNotFound } from "@interactors/errors";
 import toDomainValueParser from "business/parsers/parse_to_domain";
 import { CommentArgs, IdArgs, DBContext } from "./resolver_types";
 
-const { domainComment } = toDomainValueParser;
+const { domainComment, domainFullComment } = toDomainValueParser;
 const { create, update, deleteOne, findOneById } = commentInteractor;
 const addComment = async (
   parent: never,
   args: CommentArgs,
   { db }: DBContext
 ) => {
-  const data = domainComment(args.comment);
+  const data = domainFullComment(args.comment);
   return await create({ data, ctx: db });
 };
 

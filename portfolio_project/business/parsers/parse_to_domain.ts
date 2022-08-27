@@ -48,7 +48,8 @@ export const domainFullTask = (task: ITask) => {
     ...task,
     id: task.id ?? v4(),
     deadLine: task.deadLine ?? null,
-    description: task.deadLine ?? null,
+    description: task.description ?? null,
+    titleColor: task.titleColor ?? null,
   } as Task;
 };
 
@@ -59,6 +60,16 @@ export const domainFullList = (list: IList) => {
     titleColor: list.titleColor ?? null,
     color: list.color ?? null,
   } as List;
+};
+
+export const domainFullComment = (comment: IComment) => {
+  return {
+    ...comment,
+    id: comment.id ?? v4(),
+    publishedAt: comment.publishedAt
+      ? new Date(comment.publishedAt)
+      : new Date(),
+  } as Comment;
 };
 
 const domainUser = (user: IUser) => user as User;
@@ -81,6 +92,7 @@ const toDomainValueParser = {
   domainUser,
   domainFullPost,
   domainFullList,
+  domainFullComment,
 };
 
 export default toDomainValueParser;

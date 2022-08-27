@@ -25,7 +25,6 @@ const Nav: FC = () => {
           ? ACTIVATED_ICONS_SETTINGS[name]
           : DEFAULT_ICONS_SETTINGS[name],
     }));
-    console.log(iconChanges);
   };
 
   return (

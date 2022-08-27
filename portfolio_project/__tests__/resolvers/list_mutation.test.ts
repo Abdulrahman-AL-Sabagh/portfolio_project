@@ -11,16 +11,15 @@ import {
   deleteTestList,
   deleteTestUser,
 } from "test_data/test_delete_mutations";
+import { testServerConfig } from "test_data/test_config";
+import { listProperties } from "test_data/schema_peroperties";
+import mutation from "business/resolvers/mutation";
 
 let server: ApolloClient<any>;
 
 describe("List mutation", () => {
   beforeAll(async () => {
-    server = new ApolloClient({
-      cache: new InMemoryCache(),
-      uri: process.env.NEXT_PUBLIC_API,
-    });
-    // await deleteTestUser(server);
+    server = new ApolloClient(testServerConfig);
   });
   beforeEach(async () => {
     const userExists = await getTestUser(server);
@@ -42,7 +41,24 @@ describe("List mutation", () => {
     delete result.__typename;
     expect(result).toEqual(listData);
   });
-  it("Should update a list", async () => {});
+  it("Should update a list", async () => {
+    await createTestList(server);
+    const list = { ...listData, color: "magenta" };
+    const updateList = gql`
+      mutation updateList($list: ListToUpdate!) {
+        updateList(list: $list) {
+          ${listProperties}
+        }
+      }
+    `;
+    const { data } = await server.mutate({
+      mutation: updateList,
+      variables: { list },
+    });
+    const result = data.updateList;
+    delete result.__typename;
+    expect(result).toEqual(list);
+  });
   it("Should delete a list", async () => {
     await createTestList(server);
     const { data } = await deleteTestList(server);

@@ -5,9 +5,16 @@ import {
   commentProperties,
   listProperties,
   postProperties,
+  taskProperties,
   userProperties,
 } from "./schema_peroperties";
-import { userData, postData, listData, commentData } from "./test_data";
+import {
+  userData,
+  postData,
+  listData,
+  commentData,
+  taskData,
+} from "./test_data";
 
 export function createTestUser(server: ApolloClient<any>) {
   const createUser = gql`mutation createUser($user:AddUserInput!) {
@@ -53,4 +60,16 @@ ${commentProperties}
     mutation: createComment,
     variables: { comment: commentData },
   });
+}
+
+export function createTestTask(server: ApolloClient<any>) {
+  const createTask = gql`
+    mutation AddTask($task: TaskToAdd!) {
+      addTask(task: $task) {
+        ${taskProperties}
+      }
+    }
+  `;
+
+  return server.mutate({ mutation: createTask, variables: { task: taskData } });
 }

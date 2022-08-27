@@ -39,8 +39,6 @@ const findOneById: Find<"task"> = async ({ id, ctx }) => {
 };
 
 const update: CreateOrUpdate<"task"> = async ({ data, ctx }) => {
-  const taskExists = await checkIfTaskExists({ id: data.id, ctx });
-  if (taskExists) throw taskNotFound;
   return TaskRepository.update({ data: validateTask(data), ctx });
 };
 const deleteOne: Delete<"task"> = async ({ id, ctx }) => {

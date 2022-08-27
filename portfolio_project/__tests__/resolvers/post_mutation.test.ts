@@ -11,16 +11,15 @@ import {
   deleteTestPost,
   deleteTestUser,
 } from "test_data/test_delete_mutations";
+import { testServerConfig } from "test_data/test_config";
+import { postProperties } from "test_data/schema_peroperties";
 
 jest.setTimeout(1000000);
 
 let server: ApolloClient<any>;
 describe("Post mutation", () => {
   beforeAll(async () => {
-    server = new ApolloClient({
-      cache: new InMemoryCache(),
-      uri: process.env.NEXT_PUBLIC_API,
-    });
+    server = new ApolloClient(testServerConfig);
     // await deleteUser(server);
   });
   afterAll(async () => {
@@ -49,18 +48,23 @@ describe("Post mutation", () => {
 
   it("Should update a post", async () => {
     await createTestPost(server);
+    const post = { ...postData, description: "post To Update desc" };
     const updatePost = gql`
       mutation updatePost($post: PostToUpdate!) {
         updatePost(post: $post) {
-          id
-          title
-          publishedAt
-          description
-          image
-          publishedAt
+        ${postProperties}
         }
       }
     `;
+
+    const { data } = await server.mutate({
+      mutation: updatePost,
+      variables: { post },
+    });
+    const result = data.updatePost;
+    delete result.__typename;
+    result.publishedAt = new Date(result.publishedAt);
+    expect(result).toEqual(post);
   });
 
   it("Should delete a post", async () => {

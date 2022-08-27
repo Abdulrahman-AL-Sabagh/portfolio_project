@@ -8,6 +8,7 @@ import { userNotFound } from "@interactors/errors";
 import postMutations from "./post_mutation";
 import listMutations from "./list_mutation";
 import commentMutations from "./comment_mutation";
+import taskMutations from "./task_mutation";
 /** @format */
 
 type DBContext = { db: Context };
@@ -42,7 +43,7 @@ const mutation = {
   },
   ...postMutations,
   ...commentMutations,
-  // ...taskMutations,
+  ...taskMutations,
   ...listMutations,
 };
 

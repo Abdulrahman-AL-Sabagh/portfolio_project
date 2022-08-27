@@ -1,6 +1,6 @@
 /** @format */
 
-import { List, User } from "@prisma/client";
+import { List, Task, User } from "@prisma/client";
 
 import { v4 } from "uuid";
 
@@ -35,7 +35,7 @@ export const postData = {
 };
 
 export const listData: List = {
-  id: v4(),
+  id: "9575b5f1-e24b-4f6d-a439-c099869fc8ce",
   title: "Superlist",
   color: "Magenta",
   titleColor: "black",
@@ -43,9 +43,18 @@ export const listData: List = {
 };
 
 export const commentData = {
-  id: v4(),
+  id: "7bdee966-dfa1-4735-8018-70ad52a74c3b",
   userId: userData.id,
   postId: postData.id,
   content: "Hello",
   publishedAt: new Date(),
+};
+
+export const taskData: Task = {
+  id: "40f7cf38-97b6-4667-ba34-2bf5f342e472",
+  deadLine: null,
+  description: "hello",
+  title: "Hello",
+  titleColor: "red",
+  listId: listData.id,
 };
