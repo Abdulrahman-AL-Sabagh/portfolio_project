@@ -9,6 +9,8 @@ import postInteractor from "business/interactors/post_interactor";
 import taskInteractor from "business/interactors/task_interactor";
 import listInteractor from "business/interactors/list_interactor";
 import { DBContext, IdArgs } from "business/resolvers/resolver_types";
+import { idText } from "typescript";
+import commentInteractor from "@interactors/comment_interactor";
 export const typeDefs = gql`
   scalar Date
 
@@ -86,6 +88,7 @@ export const typeDefs = gql`
     post(id: ID!): Post!
     list(id: ID!): List!
     task(id: ID!): Task!
+    comment(id: ID!): Comment!
   }
   type Mutation {
     addUser(user: AddUserInput!): User
@@ -208,15 +211,18 @@ export const resolvers = {
     user: async (_: never, { id }: IdArgs, { db }: DBContext) => {
       return await userInteractor.findOneById({ id, ctx: db });
     },
-    post: async (_: never, args: { id: string }, { db }: DBContext) => {
-      const post = await postInteractor.findOneById({ id: args.id, ctx: db });
+    post: async (_: never, { id }: IdArgs, { db }: DBContext) => {
+      const post = await postInteractor.findOneById({ id, ctx: db });
       return post;
     },
-    task: async (_: never, args: { id: string }, { db }: DBContext) => {
-      return await taskInteractor.findOneById({ id: args.id, ctx: db });
+    task: async (_: never, { id }: IdArgs, { db }: DBContext) => {
+      return await taskInteractor.findOneById({ id, ctx: db });
     },
-    list: async (_: never, args: { id: string }, ctx: Context) => {
-      return await listInteractor.findOneById({ id: args.id, ctx });
+    list: async (_: never, { id }: IdArgs, { db }: DBContext) => {
+      return await listInteractor.findOneById({ id, ctx: db });
+    },
+    comment: async (_: never, { id }: IdArgs, { db }: DBContext) => {
+      return await commentInteractor.findOneById({ id, ctx: db });
     },
   },
   Mutation: mutation,
