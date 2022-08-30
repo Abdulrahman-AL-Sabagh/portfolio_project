@@ -2,7 +2,6 @@
 
 import { Context, createMockContext, MockContext } from "@repos/prismaContext";
 import commentInteractor from "@interactors/comment_interactor";
-import { v4 } from "uuid";
 import { postData, userData, commentData } from "test_data/test_data";
 import { createAndUpdateParam, IdFilter } from "@repos/repo_types";
 

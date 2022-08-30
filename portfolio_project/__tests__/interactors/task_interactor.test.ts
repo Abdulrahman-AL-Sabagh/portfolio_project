@@ -50,7 +50,11 @@ describe("Task Repository", () => {
   });
 
   it("Should update a task if it exists", async () => {
+    const taskToUpdate = { ...taskData, title: "A task to update" };
     mockTask.findUnique.mockResolvedValue(taskData);
+    mockTask.update.mockResolvedValue(taskToUpdate);
+    const task = await taskInteractor.update(createAndUpdateParams);
+    expect(task).toEqual(taskToUpdate);
   });
   it("Should throw an error in update if task does not exist", async () => {
     mockTask.findUnique.mockResolvedValue(null);

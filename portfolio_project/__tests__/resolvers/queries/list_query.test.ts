@@ -6,7 +6,6 @@ import {
 import { listData } from "test_data/test_data";
 import { testServerConfig } from "test_data/test_config";
 import { deleteTestUser } from "test_data/test_delete_mutations";
-import { result } from "lodash";
 import { ApolloClient, gql } from "@apollo/client";
 import { getTestUser } from "test_data/test_queries";
 import { listProperties } from "test_data/schema_peroperties";
