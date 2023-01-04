@@ -9,6 +9,7 @@ services:
     environment:
       POSTGRES_USER: app
       POSTGRES_PASSWORD: app
+      POSTGRES_DATABASE: auth
 
     ports:
       - "5432:5432"

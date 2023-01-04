@@ -1,5 +1,7 @@
+import styles from "./Post.module.scss";
 const PostReactions = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex gap-4 p-1">{children}</div>;
+  return <div className={styles.postReactions}>{children}</div>;
 };
 
 export default PostReactions;
+  	

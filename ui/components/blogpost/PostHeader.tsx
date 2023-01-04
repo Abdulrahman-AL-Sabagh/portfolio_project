@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import styles from "./Post.module.scss";
 interface Props {
   title: string;
   author: string;
@@ -8,17 +9,17 @@ interface Props {
 }
 const PostHeader = ({ title, author, date, avatar }: Props) => {
   return (
-    <div className="w-full flex justify-between gap-1 p-1">
-      <h1 className="text-2xl">{title}</h1>
-      <div className="flex items-center gap-2">
-        <div className="flex flex-col ">
+    <div className={styles.postHeader}>
+      <h1>{title}</h1>
+      <div className={styles.info}>
+        <div>
           <b>{author}</b>
-          <em className="text-slate-400 -m-1">{date.toLocaleDateString()}</em>
+          <em>{date.toLocaleDateString()}</em>
         </div>
         {avatar ? (
           <Image src={avatar} alt={"avatar"} />
         ) : (
-          <div className="w-8 h-8 bg-gray-400 rounded-full" />
+          <div className={styles.avatar} />
         )}
       </div>
     </div>

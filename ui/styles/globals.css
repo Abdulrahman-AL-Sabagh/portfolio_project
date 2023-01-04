@@ -1,13 +1,48 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 * {
   box-sizing: border-box;
 }
+html,
 body {
+  background-color: #b1b1b130;
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
+  height: fit-content;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  line-height: 1.4;
+}
+
+h1 {
+  line-height: 1.5rem;
+  font-size: 2rem;
+}
+
+h1,
+ul,
+em {
+  font-family: sans-serif;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  vertical-align: middle;
+}
+p,
+article,
+label,
+{
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.75rem; /* 28px */
 }

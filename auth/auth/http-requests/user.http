@@ -1,0 +1,58 @@
+### Create a user
+
+POST http://localhost:8080/user
+Content-Type: application/json
+
+{
+  "name": "Abudi",
+  "email": "abdsabagh87@gmail.com",
+  "password": "secret"
+}
+
+### Create a user via signup
+POST http://localhost:8080/api/signup
+Content-Type: application/json
+
+{
+"name": "Abudi",
+"email": "abdsabagh87@gmail.com",
+"password": "secret"
+}
+
+
+
+
+### Get all users
+GET http://localhost:8080/user
+
+### Get User
+GET  http://localhost:8080/user/1
+
+### update a user
+
+PUT  http://localhost:8080/user/1
+Content-Type: application/json
+
+{
+  "name": "Abdulrahman",
+
+  "password": "secret"
+}
+
+### Delete a User
+
+DELETE http://localhost:8080/user/2
+
+
+### check authentication
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+
+{
+  "email": "abdsabagh87@gmail.com",
+  "password": "secret"
+}
+
+### check if still authenticated
+GET http://localhost:8080/api/me
