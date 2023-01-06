@@ -1,0 +1,6 @@
+*.md
+.git
+.gradle
+build
+.idea
+http-requests

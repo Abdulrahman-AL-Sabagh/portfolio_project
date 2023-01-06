@@ -1,3 +1,4 @@
+import { PropsWithChildren } from "react";
 import styles from "./Modal.module.scss";
 const Modal = ({
   open,
@@ -6,7 +7,7 @@ const Modal = ({
 }: {
   title: string;
   open: boolean;
-  children: JSX.Element[];
+  children: React.ReactNode;
 }) => {
   console.log(open);
   return open ? (

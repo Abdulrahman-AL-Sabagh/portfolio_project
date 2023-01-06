@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(exclude = [SecurityAutoConfiguration::class])
+//@EnableSwagger2
 class AuthApplication
-
 fun main(args: Array<String>) {
     runApplication<AuthApplication>(*args)
 }

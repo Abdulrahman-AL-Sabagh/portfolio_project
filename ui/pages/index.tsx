@@ -22,7 +22,7 @@ const Home: NextPage = () => {
   });
 
   function authenticateUser() {
-    postToTheServer("http://localhost:8080/api/login", credentials, {
+    postToTheServer("http://localhost:8000/auth/login", credentials, {
       mode: "cors",
       credentials: "include",
     })
@@ -36,7 +36,7 @@ const Home: NextPage = () => {
   }
 
   async function register() {
-    await postToTheServer("http://localhost:8080/api/signup", registerData, {
+    await postToTheServer("http://localhost:8000/auth/signup", registerData, {
       mode: "cors",
       credentials: "include",
     })

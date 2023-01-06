@@ -107,7 +107,7 @@ const Home = ({}) => {
         <Button
           handler={() => {
             console.log(blogPostData);
-            postToTheServer("http://localhost:8090/blog", blogPostData);
+            postToTheServer("http://localhost:8000/blog", blogPostData);
           }}
         >
           Create a new post

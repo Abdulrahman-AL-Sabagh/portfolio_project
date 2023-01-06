@@ -40,23 +40,21 @@ class BlogController(val service: BlogService) {
     @PostMapping
     @Transactional
     fun createABlog(
-        @CookieValue("token") token: String?,
         @RequestBody blog: Blog,
         response: HttpServletResponse,
         request: HttpServletRequest
     ): ResponseEntity<Message> {
 
-        return if (token === null) {
-            ResponseEntity.badRequest().body(Message("UNAUTHENTICATED"))
-        } else {
-            val createdBlog = service.createBlog(blog)
-            val location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(createdBlog.id)
-                .toUri()
-            ResponseEntity.created(location).body(Message("Success"))
-        }
+
+        ResponseEntity.badRequest().body(Message("UNAUTHENTICATED"))
+
+        val createdBlog = service.createBlog(blog)
+        val location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(createdBlog.id)
+            .toUri()
+        return ResponseEntity.created(location).body(Message("Success"))
 
 
     }

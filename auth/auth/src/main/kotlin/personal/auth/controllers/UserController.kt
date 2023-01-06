@@ -6,7 +6,7 @@ import personal.auth.dto.RegisterDTO
 import personal.auth.entities.User
 import personal.auth.services.UserService
 
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RestController
 
 class UserController(val service: UserService) {
@@ -20,6 +20,7 @@ class UserController(val service: UserService) {
     @PostMapping
     @Transactional
     fun createUser(@RequestBody body: RegisterDTO) {
+        println(body)
         service.createUser(body)
 
     }

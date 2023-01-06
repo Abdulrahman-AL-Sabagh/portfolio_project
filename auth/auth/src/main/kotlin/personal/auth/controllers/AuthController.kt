@@ -11,6 +11,7 @@ import personal.auth.entities.Message
 import personal.auth.services.UserService
 
 import jakarta.servlet.http.HttpServletResponse
+import org.hibernate.cache.spi.support.SimpleTimestamper
 import org.springframework.web.bind.annotation.CookieValue
 
 
@@ -22,7 +23,7 @@ import personal.auth.dto.RegisterDTO
 import java.util.*
 
 
-@RequestMapping("/api")
+@RequestMapping("/auth")
 @RestController
 class AuthController(private val service: UserService) {
 

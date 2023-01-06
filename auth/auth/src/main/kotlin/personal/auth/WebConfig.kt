@@ -15,8 +15,9 @@ class WebConfig : WebMvcConfigurer {
             .allowedOrigins(
                 "http://localhost:3000",
                 "http://localhost:8080",
-                "http://localhost:8090"
-            )
+                "http://localhost:8090",
+                "http://localhost:8000"
+            ).allowedMethods("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS")
             .allowCredentials(true).maxAge(System.currentTimeMillis() + 1000 * 3600 * 8)
 
 
